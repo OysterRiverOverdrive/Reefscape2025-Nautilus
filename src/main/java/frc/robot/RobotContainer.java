@@ -11,9 +11,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
+import frc.robot.commands.CoralIntakeForwardCommand;
+import frc.robot.commands.CoralIntakeReverseCommand;
+import frc.robot.commands.CoralIntakeStopCommand;
 // import frc.robot.auto.plans.*;
 import frc.robot.commands.TeleopCmd;
 import frc.robot.subsystems.AlgaeArmSubsystem;
+import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -38,6 +42,7 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
   private final LimelightSubsystem limelight = new LimelightSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
+  private final CoralIntakeSubsystem coralIntake = new CoralIntakeSubsystem();
   private final AlgaeArmSubsystem algaeArm = new AlgaeArmSubsystem();
 
   // Commands
@@ -85,6 +90,17 @@ public class RobotContainer {
     cutil
         .supplier(Controllers.xbox_options, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> elevator.toBase()));
+
+    // Coral Intake Bindings
+    cutil
+        .supplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new CoralIntakeForwardCommand(coralIntake))
+        .onFalse(new CoralIntakeStopCommand(coralIntake));
+    cutil
+        .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new CoralIntakeReverseCommand(coralIntake))
+        .onFalse(new CoralIntakeStopCommand(coralIntake));
+
     // Algae Arm Bindings
     cutil
         .supplier(Controllers.xbox_b, DriveConstants.joysticks.OPERATOR)

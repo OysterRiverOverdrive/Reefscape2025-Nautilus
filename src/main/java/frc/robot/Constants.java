@@ -112,6 +112,8 @@ public final class Constants {
     public static final int kElevator1CanId = 10;
     public static final int kElevator2CanId = 11;
 
+    public static final int kCoralIntakeCanId = 12;
+
     public static final int kAlgaeArmCanId = 13;
 
     // Used to declare Navx as upside down
@@ -122,6 +124,9 @@ public final class Constants {
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
+
+    // Coral Intake constants
+    public static final double kCoralIntakeSpeed = 0.5;
 
     public static final class AlgaeArmConstants {
       // Algae Arm gear ratio, 15 to 1, so motor rotations to arm rotations is 1 to 15
