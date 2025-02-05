@@ -116,6 +116,8 @@ public final class Constants {
 
     public static final int kAlgaeArmCanId = 13;
 
+    public static final int kAlgaeSpinnerCanId = 14;
+
     // Used to declare Navx as upside down
     public static final boolean kGyroReversed = true;
 
@@ -124,6 +126,9 @@ public final class Constants {
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
+
+    // Algae Spinner constants
+    public static final double kAlgaeSpinnerSpeed = 0.5;
 
     // Coral Intake constants
     public static final double kCoralIntakeSpeed = 0.5;

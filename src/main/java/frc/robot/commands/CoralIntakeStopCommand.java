@@ -10,7 +10,7 @@ import frc.robot.subsystems.CoralIntakeSubsystem;
 /** An example command that uses an example subsystem. */
 public class CoralIntakeStopCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final CoralIntakeSubsystem m_subsystem;
+  private final CoralIntakeSubsystem coralIntake_subsystem;
 
   /**
    * Creates a new ExampleCommand.
@@ -18,7 +18,7 @@ public class CoralIntakeStopCommand extends Command {
    * @param subsystem The subsystem used by this command.
    */
   public CoralIntakeStopCommand(CoralIntakeSubsystem subsystem) {
-    m_subsystem = subsystem;
+    coralIntake_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -30,7 +30,7 @@ public class CoralIntakeStopCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.coralIntakeStopCmd();
+    coralIntake_subsystem.coralIntakeStopCmd();
   }
 
   // Called once the command ends or is interrupted.

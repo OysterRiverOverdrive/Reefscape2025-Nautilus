@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
+import frc.robot.commands.AlgaeSpinnerForwardCommand;
+import frc.robot.commands.AlgaeSpinnerReverseCommand;
+import frc.robot.commands.AlgaeSpinnerStopCommand;
 import frc.robot.commands.CoralIntakeForwardCommand;
 import frc.robot.commands.CoralIntakeReverseCommand;
 import frc.robot.commands.CoralIntakeStopCommand;
@@ -77,6 +80,23 @@ public class RobotContainer {
     cutil
         .supplier(Controllers.ps4_RB, DriveConstants.joysticks.DRIVER)
         .onTrue(new InstantCommand(() -> drivetrain.zeroHeading()));
+
+    // Algae Spinner Bindings
+    cutil
+        .supplier(Controllers.xbox_rb, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new AlgaeSpinnerForwardCommand(algaeArm))
+        .onFalse(
+            cutil.getTriggerButton(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
+                ? new AlgaeSpinnerReverseCommand(algaeArm)
+                : new AlgaeSpinnerStopCommand(algaeArm));
+
+    cutil
+        .triggerSupplier(Controllers.xbox_rt, 0.2, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new AlgaeSpinnerReverseCommand(algaeArm))
+        .onFalse(
+            cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
+                ? new AlgaeSpinnerForwardCommand(algaeArm)
+                : new AlgaeSpinnerStopCommand(algaeArm));
 
     // Elevator Bindings
     cutil.POVsupplier(0, DriveConstants.joysticks.OPERATOR)
