@@ -66,17 +66,6 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 6.8;
     public static final double kMaxAngularSpeed = 1.25 * 2 * Math.PI; // radians per second
 
-    // Drive Mode Speeds
-    // High
-    public static final double kSpeedHighDrive = 6.0;
-    public static final double kSpeedHighTurn = kMaxAngularSpeed;
-
-    // Medium is Default Speeds
-
-    // Slow
-    public static final double kSpeedSlowDrive = 2.1;
-    public static final double kSpeedSlowTurn = 1.8;
-
     public static final double kDirectionSlewRate = 4; // radians per second
     public static final double kMagnitudeSlewRate = 2; // percent per second (1 = 100%)
     public static final double kRotationalSlewRate = 5; // percent per second (1 = 100%)

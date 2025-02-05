@@ -28,10 +28,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private final SparkMaxConfig m_elevator2Config;
 
-  private double elevatorSpeed;
-
   private final PIDController elevatorPID =
       new PIDController(PIDConstants.kElevatorP, PIDConstants.kElevatorI, PIDConstants.kElevatorD);
+
+  private double setpoint;
+  private double safetysetpoint;
 
   public ElevatorSubsystem() {
 
@@ -46,27 +47,27 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void toBase() {
-    elevatorPID.setSetpoint(ElevatorConstants.kElevatorStopsTested[0]);
+    setpoint = ElevatorConstants.kElevatorStopsTested[0];
   }
 
   public void toL1() {
-    elevatorPID.setSetpoint(ElevatorConstants.kElevatorStopsTested[1]);
+    setpoint = ElevatorConstants.kElevatorStopsTested[1];
   }
 
   public void toL2() {
-    elevatorPID.setSetpoint(ElevatorConstants.kElevatorStopsTested[2]);
+    setpoint = ElevatorConstants.kElevatorStopsTested[2];
   }
 
   public void toL3() {
-    elevatorPID.setSetpoint(ElevatorConstants.kElevatorStopsTested[3]);
+    setpoint = ElevatorConstants.kElevatorStopsTested[3];
   }
 
   public void toL4() {
-    elevatorPID.setSetpoint(ElevatorConstants.kElevatorStopsTested[4]);
+    setpoint = ElevatorConstants.kElevatorStopsTested[4];
   }
 
   public void toIntake() {
-    elevatorPID.setSetpoint(ElevatorConstants.kElevatorStopsTested[5]);
+    setpoint = ElevatorConstants.kElevatorStopsTested[5];
   }
 
   // Logs print encoder and corresponding elevator height values
@@ -75,23 +76,27 @@ public class ElevatorSubsystem extends SubsystemBase {
         + ElevatorConstants.kElevatorLowestHeight);
   }
 
-  // Possible print method for heightGet:
-  /*
-  System.out.println("Encoder: " + m_elevator1Encoder.getPosition() + " rotations");
-  System.out.println(
-      "Elevator Relative Height: "
-          + (m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot)
-          + " inches");
-  System.out.println(
-      "Elevator Height: "
-          + ((m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot)
-              + ElevatorConstants.kElevatorLowestHeight)
-          + " inches"); */
+  // Calculated equation based on demo speeds and heights
+  // Sheet used for calculation in software drive
+  public double safetyheight(double x) {
+    return (70.3 + 142 * x + -943 * Math.pow(x, 2) + 1250 * Math.pow(x, 3) + -511 * Math.pow(x, 4));
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    elevatorSpeed =
+    double drivespeed = DrivetrainSubsystem.maxSpeedCmd;
+
+    safetysetpoint = safetyheight(drivespeed);
+    double location;
+    if (safetysetpoint < setpoint) {
+      location = safetysetpoint;
+    } else {
+      location = setpoint;
+    }
+
+    elevatorPID.setSetpoint(location);
+    double elevatorSpeed =
         elevatorPID.calculate(
             m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot);
     m_elevator1SparkMax.set(elevatorSpeed);
