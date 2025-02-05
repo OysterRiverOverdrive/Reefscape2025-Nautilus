@@ -79,7 +79,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   // Calculated equation based on demo speeds and heights
   // Sheet used for calculation in software drive
   public double safetyheight(double x) {
-    return (70.3 + 142 * x + -943 * Math.pow(x, 2) + 1250 * Math.pow(x, 3) + -511 * Math.pow(x, 4));
+    return (79.1 + 28.4 * x + -725 * Math.pow(x, 2) + 1160 * Math.pow(x, 3) + -536 * Math.pow(x, 4));
   }
 
   @Override
