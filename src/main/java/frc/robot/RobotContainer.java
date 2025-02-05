@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
 import frc.robot.commands.CoralIntakeForwardCommand;
 import frc.robot.commands.CoralIntakeReverseCommand;
 import frc.robot.commands.CoralIntakeStopCommand;
 // import frc.robot.auto.plans.*;
+import frc.robot.auto.plans.*;
 import frc.robot.commands.TeleopCmd;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
@@ -51,14 +51,19 @@ public class RobotContainer {
           drivetrain,
           () -> cutil.Boolsupplier(Controllers.ps4_LB, DriveConstants.joysticks.DRIVER));
 
+  // AUTOS
+  private final CoolTwoCoralAutoPlan coolTwoCOrealAuto = new CoolTwoCoralAutoPlan(drivetrain);
+  private final LeftOneCoralPlan leftOneCoralPlan = new LeftOneCoralPlan(drivetrain);
+  private final LeftThreeCoralPlan leftThreeCoralPlan = new LeftThreeCoralPlan(drivetrain);
+
   public RobotContainer() {
     // Declare default command during Teleop Period as TeleopCmd(Driving Command)
     drivetrain.setDefaultCommand(teleopCmd);
 
     // Add Auto options to dropdown and push to dashboard
-    m_chooser.setDefaultOption("Auto[Rename Me]", auto1);
-    m_chooser.addOption("Auto[Rename Me]", auto2);
-    m_chooser.addOption("Auto[Rename Me]", auto3);
+    m_chooser.setDefaultOption("CoolTwoCoralAutoPlanYay!!", auto1);
+    m_chooser.addOption("LeftOneCoralPlan", auto2);
+    m_chooser.addOption("LeftThreeCoralPlan", auto3);
     m_chooser.addOption("Auto[Rename Me]", auto4);
     m_chooser.addOption("Auto[Rename Me]", auto5);
     m_chooser.addOption("Auto[Rename Me]", auto6);
@@ -129,10 +134,13 @@ public class RobotContainer {
     switch (m_chooser.getSelected()) {
       default:
       case auto1:
+        auto = coolTwoCOrealAuto;
         break;
       case auto2:
+        auto = leftOneCoralPlan;
         break;
       case auto3:
+        auto = leftThreeCoralPlan;
         break;
       case auto4:
         break;
@@ -143,11 +151,7 @@ public class RobotContainer {
       case auto7:
         break;
     }
-    // Create sequential command with the wait command first then run selected auto
-    auto =
-        new SequentialCommandGroup(
-            new BeginSleepCmd(drivetrain, SmartDashboard.getNumber("Auto Wait Time (Sec)", 0)),
-            auto);
+
     return auto;
   }
 }
