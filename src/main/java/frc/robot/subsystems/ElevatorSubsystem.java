@@ -13,8 +13,12 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.*;
 import frc.robot.Constants.RobotConstants.ElevatorConstants;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+import org.apache.commons.math3.fitting.PolynomialCurveFitter;
+import org.apache.commons.math3.fitting.WeightedObservedPoints;
 
 public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
@@ -23,25 +27,34 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private final SparkMax m_elevator2SparkMax =
       new SparkMax(RobotConstants.kElevator2CanId, MotorType.kBrushless);
-
   private final AbsoluteEncoder m_elevator1Encoder;
-
   private final SparkMaxConfig m_elevator2Config;
-
   private final PIDController elevatorPID =
       new PIDController(PIDConstants.kElevatorP, PIDConstants.kElevatorI, PIDConstants.kElevatorD);
 
   private double setpoint;
   private double safetysetpoint;
+  private final PolynomialFunction polynomial;
 
   public ElevatorSubsystem() {
+    WeightedObservedPoints elevSafetyPoints = new WeightedObservedPoints();
+    // Load points from Constants
+    for (double[] point : Constants.RobotConstants.ElevatorConstants.ELEV_SAFETY_POINTS) {
+      elevSafetyPoints.add(point[0], point[1]);
+    }
+
+    // Fit polynomial of defined degree
+    PolynomialCurveFitter fitter =
+        PolynomialCurveFitter.create(Constants.RobotConstants.ElevatorConstants.POLYNOMIAL_DEGREE);
+    double[] coefficients = fitter.fit(elevSafetyPoints.toList());
+
+    // Store polynomial function
+    polynomial = new PolynomialFunction(coefficients);
+    System.out.println("Polynomial Equation: " + polynomial);
 
     m_elevator2Config = new SparkMaxConfig();
-
     m_elevator1Encoder = m_elevator1SparkMax.getAbsoluteEncoder();
-
     m_elevator2Config.follow(m_elevator1SparkMax);
-
     m_elevator2SparkMax.configure(
         m_elevator2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
@@ -79,11 +92,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   // Calculated equation based on demo speeds and heights
   // Sheet used for calculation in software drive
   public double safetyheight(double x) {
-    return (79.1
-        + 28.4 * x
-        + -725 * Math.pow(x, 2)
-        + 1160 * Math.pow(x, 3)
-        + -536 * Math.pow(x, 4));
+    return polynomial.value(x);
   }
 
   @Override

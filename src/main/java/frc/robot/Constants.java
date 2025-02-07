@@ -215,6 +215,23 @@ public final class Constants {
       // Height difference between pivot point and end of coral bucket for elevator
       public static final double kElevatorCoralBucketHeightDifference =
           8 * Math.sin(kElevatorCoralBucketAngleRadians);
+
+      public static final double[][] ELEV_SAFETY_POINTS = {
+        {0.0, 78.0},
+        {0.1, 76.0},
+        {0.2, 65.0},
+        {0.3, 45.0},
+        {0.4, 30.0},
+        {0.5, 25.0},
+        {0.6, 20.0},
+        {0.7, 15.0},
+        {0.8, 10.0},
+        {0.9, 5.0},
+        {1.0, 3.0}
+      };
+
+      // Polynomial degree (adjust as needed)
+      public static final int POLYNOMIAL_DEGREE = 4;
     }
   }
 
@@ -222,7 +239,7 @@ public final class Constants {
   public static final class PIDConstants {
 
     // Elevator PID
-    public static final double kElevatorP = 0.1;
+    public static final double kElevatorP = 0.2;
     // guess??? maybe? not accurate check when elevator attatched
     public static final double kElevatorI = 0;
     // guess??? maybe? not accurate check when elevator attatched
@@ -230,7 +247,7 @@ public final class Constants {
     // guess??? maybe? not accurate check when elevator attatched
 
     // Algae Arm PID
-    public static final double kAlgaeArmP = 0.1;
+    public static final double kAlgaeArmP = 0.2;
     // guess??? maybe? not accurate check when algae arm attatched
     public static final double kAlgaeArmI = 0;
     // guess??? maybe? not accurate check when algae arm attatched
