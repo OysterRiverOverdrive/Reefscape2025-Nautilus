@@ -90,11 +90,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     double drivespeed = DrivetrainSubsystem.maxSpeedCmd;
-
+    boolean safetyActive = false;
     safetysetpoint = safetyheight(drivespeed);
     double location;
     if (safetysetpoint < setpoint) {
       location = safetysetpoint;
+      safetyActive = true;
     } else {
       location = setpoint;
     }
@@ -104,7 +105,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorPID.calculate(
             m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot);
     m_elevator1SparkMax.set(elevatorSpeed);
-
+    SmartDashboard.putBoolean("Safety Active", safetyActive);
     SmartDashboard.putNumber("Elevator Height", getHeight());
   }
 }
