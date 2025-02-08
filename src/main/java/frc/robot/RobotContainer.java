@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +22,7 @@ import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.PowerSubsystem;
 import frc.utils.ControllerUtils;
 
 public class RobotContainer {
@@ -44,6 +46,7 @@ public class RobotContainer {
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
   private final CoralIntakeSubsystem coralIntake = new CoralIntakeSubsystem();
   private final AlgaeArmSubsystem algaeArm = new AlgaeArmSubsystem();
+  private final PowerSubsystem battery = new PowerSubsystem();
 
   // Commands
   private final TeleopCmd teleopCmd =
@@ -52,6 +55,9 @@ public class RobotContainer {
           () -> cutil.Boolsupplier(Controllers.ps4_LB, DriveConstants.joysticks.DRIVER));
 
   public RobotContainer() {
+
+    DataLogManager.start();
+
     // Declare default command during Teleop Period as TeleopCmd(Driving Command)
     drivetrain.setDefaultCommand(teleopCmd);
 
