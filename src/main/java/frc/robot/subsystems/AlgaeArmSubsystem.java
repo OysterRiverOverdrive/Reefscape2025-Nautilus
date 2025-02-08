@@ -27,6 +27,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   private final PIDController algaeArmPID =
       new PIDController(PIDConstants.kAlgaeArmP, PIDConstants.kAlgaeArmI, PIDConstants.kAlgaeArmD);
 
+  private double algaeArmPIDSetPoint;
+
   public AlgaeArmSubsystem() {
     m_AlgaeArmEncoder = m_AlgaeArmSparkMax.getEncoder();
   }
@@ -44,19 +46,27 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   public void toDown() {
-    algaeArmPID.setSetpoint(AlgaeArmConstants.kAlgaeArmStopRotations[0]);
+    algaeArmPIDSetPoint = (AlgaeArmConstants.kAlgaeArmStopRotations[0]);
   }
 
   public void toFlat() {
-    algaeArmPID.setSetpoint(AlgaeArmConstants.kAlgaeArmStopRotations[1]);
+    algaeArmPIDSetPoint = (AlgaeArmConstants.kAlgaeArmStopRotations[1]);
   }
 
   public void toRemoveAlgae() {
-    algaeArmPID.setSetpoint(AlgaeArmConstants.kAlgaeArmStopRotations[2]);
+    algaeArmPIDSetPoint = (AlgaeArmConstants.kAlgaeArmStopRotations[2]);
   }
 
   public void toUp() {
-    algaeArmPID.setSetpoint(AlgaeArmConstants.kAlgaeArmStopRotations[3]);
+    algaeArmPIDSetPoint = (AlgaeArmConstants.kAlgaeArmStopRotations[3]);
+  }
+
+  public double getRelativeRotation() {
+    return (m_AlgaeArmEncoder.getPosition() * AlgaeArmConstants.kAlgaeArmGearRatio);
+  }
+
+  public double getSetPoint() {
+    return algaeArmPIDSetPoint;
   }
 
   @Override
@@ -66,5 +76,6 @@ public class AlgaeArmSubsystem extends SubsystemBase {
         algaeArmPID.calculate(
             m_AlgaeArmEncoder.getPosition() * AlgaeArmConstants.kAlgaeArmGearRatio);
     m_AlgaeArmSparkMax.set(elevatorSpeed);
+    algaeArmPID.setSetpoint(algaeArmPIDSetPoint);
   }
 }
