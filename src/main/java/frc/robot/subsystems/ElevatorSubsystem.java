@@ -71,6 +71,18 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[5]);
   }
 
+  public void elevatorUpCmd() {
+    m_elevator1SparkMax.set(0.3);
+  }
+
+  public void elevatorDownCmd() {
+    m_elevator1SparkMax.set(-0.3);
+  }
+
+  public void elevatorStopCmd() {
+    m_elevator1SparkMax.stopMotor();
+  }
+
   public void toAboveIntake() {
     elevatorPIDSetPoint =
         (ElevatorConstants.kElevatorStopsTested[5]
@@ -113,6 +125,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevator1SparkMax.set(elevatorSpeed);
     elevatorPID.setSetpoint(elevatorPIDSetPoint);
 
-    SmartDashboard.putNumber("Elevator Height", getHeight());
+    SmartDashboard.putNumber("Elevator Encoder", m_elevator1Encoder.getPosition());
   }
 }

@@ -8,6 +8,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 import frc.robot.Constants.RobotConstants.AlgaeArmConstants;
@@ -69,6 +70,18 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     return algaeArmPIDSetPoint;
   }
 
+  public void algaeArmUpCmd() {
+    m_AlgaeArmSparkMax.set(0.3);
+  }
+
+  public void algaeArmDownCmd() {
+    m_AlgaeArmSparkMax.set(-0.3);
+  }
+
+  public void algaeArmStopCmd() {
+    m_AlgaeArmSparkMax.stopMotor();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -77,5 +90,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
             m_AlgaeArmEncoder.getPosition() * AlgaeArmConstants.kAlgaeArmGearRatio);
     m_AlgaeArmSparkMax.set(elevatorSpeed);
     algaeArmPID.setSetpoint(algaeArmPIDSetPoint);
+
+    SmartDashboard.putNumber(
+        "Algae Arm Angle", m_AlgaeArmEncoder.getPosition() * AlgaeArmConstants.kAlgaeArmGearRatio);
   }
 }
