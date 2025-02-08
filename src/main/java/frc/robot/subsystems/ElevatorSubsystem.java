@@ -33,6 +33,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final PIDController elevatorPID =
       new PIDController(PIDConstants.kElevatorP, PIDConstants.kElevatorI, PIDConstants.kElevatorD);
 
+  private double elevatorPIDSetPoint;
+
   public ElevatorSubsystem() {
 
     m_elevator2Config = new SparkMaxConfig();
@@ -46,35 +48,49 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void toBase() {
-    elevatorPID.setSetpoint(ElevatorConstants.kElevatorStopsTested[0]);
+    elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[0]);
   }
 
   public void toL1() {
-    elevatorPID.setSetpoint(ElevatorConstants.kElevatorStopsTested[1]);
+    elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[1]);
   }
 
   public void toL2() {
-    elevatorPID.setSetpoint(ElevatorConstants.kElevatorStopsTested[2]);
+    elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[2]);
   }
 
   public void toL3() {
-    elevatorPID.setSetpoint(ElevatorConstants.kElevatorStopsTested[3]);
+    elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[3]);
   }
 
   public void toL4() {
-    elevatorPID.setSetpoint(ElevatorConstants.kElevatorStopsTested[4]);
+    elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[4]);
   }
 
   public void toIntake() {
-    elevatorPID.setSetpoint(ElevatorConstants.kElevatorStopsTested[5]);
+    elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[5]);
   }
 
-  // Logs print encoder and corresponding elevator height values
+  public void toAboveIntake() {
+    elevatorPIDSetPoint =
+        (ElevatorConstants.kElevatorStopsTested[5]
+            + ElevatorConstants.kElevatorAboveIntakeHeightDifference);
+  }
+
   public double getHeight() {
     return ((m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot)
         + ElevatorConstants.kElevatorLowestHeight);
   }
 
+  public double getRelativeHeight() {
+    return (m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot);
+  }
+
+  public double getSetPoint() {
+    return elevatorPIDSetPoint;
+  }
+
+  // Logs print encoder and corresponding elevator height values
   // Possible print method for heightGet:
   /*
   System.out.println("Encoder: " + m_elevator1Encoder.getPosition() + " rotations");
@@ -95,6 +111,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorPID.calculate(
             m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot);
     m_elevator1SparkMax.set(elevatorSpeed);
+    elevatorPID.setSetpoint(elevatorPIDSetPoint);
 
     SmartDashboard.putNumber("Elevator Height", getHeight());
   }

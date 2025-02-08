@@ -2,23 +2,23 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.algaeArm;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.AlgaeArmSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class CoralIntakeForwardCommand extends Command {
+public class AlgaeArmToDownCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final CoralIntakeSubsystem coralIntake_subsystem;
+  private final AlgaeArmSubsystem algaeArm_subsystem;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public CoralIntakeForwardCommand(CoralIntakeSubsystem subsystem) {
-    coralIntake_subsystem = subsystem;
+  public AlgaeArmToDownCommand(AlgaeArmSubsystem subsystem) {
+    algaeArm_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -30,7 +30,7 @@ public class CoralIntakeForwardCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralIntake_subsystem.coralIntakeForwardCmd();
+    algaeArm_subsystem.toDown();
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +40,7 @@ public class CoralIntakeForwardCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return (algaeArm_subsystem.getSetPoint() - 0.5 <= algaeArm_subsystem.getRelativeRotation()
+        && algaeArm_subsystem.getRelativeRotation() <= algaeArm_subsystem.getSetPoint() + 0.5);
   }
 }
