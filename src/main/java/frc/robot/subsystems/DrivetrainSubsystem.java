@@ -213,7 +213,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_gyro.reset();
   }
 
-  /** Zeroes the heading of the robot. */
+  /** gives total yaw rotation */
   public double gyroangle() {
     return m_gyro.getAngle() * (RobotConstants.kGyroReversed ? -1.0 : 1.0);
   }

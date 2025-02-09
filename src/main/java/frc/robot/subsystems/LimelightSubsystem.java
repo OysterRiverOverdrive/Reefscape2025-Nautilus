@@ -6,16 +6,14 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.LimeLightConstants;
 import frc.utils.LimelightHelpers;
 import java.util.Optional;
-
-import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class LimelightSubsystem extends SubsystemBase {
   private final SendableChooser<String> led_chooser = new SendableChooser<>();
@@ -33,6 +31,16 @@ public class LimelightSubsystem extends SubsystemBase {
     led_chooser.addOption("On", leds_on);
     led_chooser.addOption("Flash", leds_flash);
     SmartDashboard.putData("Limelight LEDs", led_chooser);
+
+    // makes camera poses returned relative to the robots pose
+    LimelightHelpers.setCameraPose_RobotSpace(
+        "",
+        LimeLightConstants.CameraForwardOffset,
+        LimeLightConstants.CameraSideOffset,
+        LimeLightConstants.CameraUpOffest,
+        LimeLightConstants.CameraRollOffset,
+        LimeLightConstants.CameraPitchOffset,
+        LimeLightConstants.CameraYawOffset);
   }
 
   public void setLEDsOn() {
@@ -97,6 +105,14 @@ public class LimelightSubsystem extends SubsystemBase {
     return LimelightHelpers.getTA("");
   }
 
+  /**
+   * @param limelight name of the limelight (default name is "")
+   * @return if there a april tag visible to the limelight
+   */
+  public boolean isAprilTag(String limelight) {
+    return LimelightHelpers.getTV(limelight);
+  }
+
   @Override
   public void periodic() {
     // Turn camera LEDs off or on
@@ -108,7 +124,22 @@ public class LimelightSubsystem extends SubsystemBase {
       LimelightHelpers.setLEDMode_PipelineControl("");
     }
 
-    drivetrain.resetOdometry(getPose2d());
-    
+    /*when an april tag is seen, the robot should compare its current pose2d with the pose2d retrieved from the limelight
+     *this comparison is put into smartdashboard
+     * [0] = x
+     * [1] = y
+     * [2] = z (set to 0)
+     * [3] = roll (set to 0)
+     * [4] = pitch (set to 0)
+     * [5] = yaw
+     */
+    if (isAprilTag("")) {
+      double[] aprilTagPose2d = LimelightHelpers.pose2dToArray(getPose2d());
+      double[] robotPose2d = LimelightHelpers.pose2dToArray(drivetrain.getPose());
+      double ErrorOfDistance =
+          Math.hypot(robotPose2d[1] - aprilTagPose2d[1], robotPose2d[0] - aprilTagPose2d[0]);
+
+      SmartDashboard.putNumber("Pose2d error", ErrorOfDistance);
+    }
   }
 }
