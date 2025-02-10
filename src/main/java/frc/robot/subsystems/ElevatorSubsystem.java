@@ -105,7 +105,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public double getSetPoint() {
-    return elevatorPIDSetPoint;
+    return setpoint;
   }
 
   @Override
