@@ -2,23 +2,23 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class CoralIntakeReverseCommand extends Command {
+public class ElevatorToIntakeCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final CoralIntakeSubsystem coralIntake_subsystem;
+  private final ElevatorSubsystem elevator_subsystem;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public CoralIntakeReverseCommand(CoralIntakeSubsystem subsystem) {
-    coralIntake_subsystem = subsystem;
+  public ElevatorToIntakeCommand(ElevatorSubsystem subsystem) {
+    elevator_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -30,7 +30,7 @@ public class CoralIntakeReverseCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralIntake_subsystem.coralIntakeForwardCmd();
+    elevator_subsystem.toIntake();
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +40,7 @@ public class CoralIntakeReverseCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return (elevator_subsystem.getSetPoint() - 0.5 <= elevator_subsystem.getRelativeHeight()
+        && elevator_subsystem.getRelativeHeight() <= elevator_subsystem.getSetPoint() + 0.5);
   }
 }

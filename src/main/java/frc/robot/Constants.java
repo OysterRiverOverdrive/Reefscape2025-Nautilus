@@ -208,6 +208,10 @@ public final class Constants {
       // Height of coral bucket hinge for coral intake
       public static final double kElevatorIntakeHeight = 25;
       // guess??? maybe? not accurate check when elevator attatched
+      // Elevator goes above intake before algae arm goes up,
+      // then elevator goes to intake height,
+      // this is height difference (inches)
+      public static final double kElevatorAboveIntakeHeightDifference = 8;
       // Offset of elevator for coral to line up with reef branch (inches)
       // Center of coral lines up with top of branch
       // Signed, negative moves down, positive moves up

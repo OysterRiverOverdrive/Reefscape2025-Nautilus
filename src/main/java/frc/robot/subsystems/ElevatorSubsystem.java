@@ -83,7 +83,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     setpoint = ElevatorConstants.kElevatorStopsTested[5];
   }
 
-  // Logs print encoder and corresponding elevator height values
+  public void toAboveIntake() {
+    setpoint =
+        (ElevatorConstants.kElevatorStopsTested[5]
+            + ElevatorConstants.kElevatorAboveIntakeHeightDifference);
+  }
+
   public double getHeight() {
     return ((m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot)
         + ElevatorConstants.kElevatorLowestHeight);
@@ -93,6 +98,14 @@ public class ElevatorSubsystem extends SubsystemBase {
   // Sheet used for calculation in software drive
   public double safetyheight(double x) {
     return polynomial.value(x);
+  }
+
+  public double getRelativeHeight() {
+    return (m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot);
+  }
+
+  public double getSetPoint() {
+    return elevatorPIDSetPoint;
   }
 
   @Override
