@@ -28,8 +28,8 @@ public class MiddleOneCoralAuto extends ParallelCommandGroup {
 
     // Driving groups
     addCommands(
-    Taxi
-      .andThen(new AutoSleepCmd(0.25));
+        Taxi
+            .andThen(new AutoSleepCmd(0.25));
     )
   }
 }
