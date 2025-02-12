@@ -23,12 +23,13 @@ public class MiddleOneCoralAuto extends ParallelCommandGroup {
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(0.5, 0)),
-            new Pose2d(1.5, 0, new Rotation2d(0)));
+            new Pose2d(1.5, 0, new Rotation2d(0))); //check these points
     //put coral on branch
 
     // Driving groups
-
+    addCommands(
     drive1
-        .andThen(new AutoSleepCmd(0.25));
+      .andThen(new AutoSleepCmd(0.25));
+    )
   }
 }
