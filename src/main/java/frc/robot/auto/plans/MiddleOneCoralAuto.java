@@ -19,7 +19,7 @@ public class MiddleOneCoralAuto extends ParallelCommandGroup {
 
     // Auto Driving Commands
 
-    Command drive1 = // leaves zone
+    Command Taxi = // leaves zone
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(0.5, 0)),
@@ -28,7 +28,7 @@ public class MiddleOneCoralAuto extends ParallelCommandGroup {
 
     // Driving groups
     addCommands(
-    drive1
+    Taxi
       .andThen(new AutoSleepCmd(0.25));
     )
   }

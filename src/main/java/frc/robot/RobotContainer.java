@@ -52,7 +52,7 @@ public class RobotContainer {
     m_chooser.setDefaultOption("Auto[Rename Me]", auto1);
     m_chooser.addOption("Auto[Rename Me]", auto2);
     m_chooser.addOption("Auto[Rename Me]", auto3);
-    m_chooser.addOption("Auto[Rename Me]", auto4);
+    m_chooser.addOption("MiddleOneCoralAuto", auto4);
     m_chooser.addOption("Auto[Rename Me]", auto5);
     m_chooser.addOption("Auto[Rename Me]", auto6);
     m_chooser.addOption("Auto[Rename Me]", auto7);
