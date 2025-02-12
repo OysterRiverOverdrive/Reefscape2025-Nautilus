@@ -11,18 +11,18 @@ import java.util.List;
 
 // STARTS ON THE RIGHT SIDE
 
-public class LeftOneCoralPlan extends ParallelCommandGroup {
+public class MiddleOneCoralPlan extends ParallelCommandGroup {
 
-  public LeftOneCoralPlan(DrivetrainSubsystem drivetrain) {
+  public MiddleOneCoralPlan(DrivetrainSubsystem drivetrain) {
     AutoCreationCmd autodrive = new AutoCreationCmd();
 
     // Auto Driving Commands
 
-    Command showyDrive1 = // goes from left side to reef, then turns to face the reef
+    Command showyDrive1 = // goes from the middle to the middle
         autodrive.AutoDriveCmd(
             drivetrain,
-            List.of(new Translation2d(1, 0.5)),
-            new Pose2d(1.76, 1.01, new Rotation2d(Math.PI * 1 / 3)));
+            List.of(new Translation2d(1, 0.01)),
+            new Pose2d(1.21, .02, new Rotation2d(0)));
     // Place coral
 
     // Driving groups

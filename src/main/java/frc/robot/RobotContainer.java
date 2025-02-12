@@ -47,6 +47,7 @@ public class RobotContainer {
   private final CoolTwoCoralAutoPlan coolTwoCOrealAuto = new CoolTwoCoralAutoPlan(drivetrain);
   private final LeftOneCoralPlan leftOneCoralPlan = new LeftOneCoralPlan(drivetrain);
   private final LeftThreeCoralPlan leftThreeCoralPlan = new LeftThreeCoralPlan(drivetrain);
+  private final MiddleOneCoralPlan middleOneCoralPlan = new MiddleOneCoralPlan(drivetrain);
 
   public RobotContainer() {
     // Declare default command during Teleop Period as TeleopCmd(Driving Command)
@@ -56,7 +57,7 @@ public class RobotContainer {
     m_chooser.setDefaultOption("CoolTwoCoralAutoPlanYay!!", auto1);
     m_chooser.addOption("LeftOneCoralPlan", auto2);
     m_chooser.addOption("LeftThreeCoralPlan", auto3);
-    m_chooser.addOption("Auto[Rename Me]", auto4);
+    m_chooser.addOption("MiddleOneCoralPlan", auto4);
     m_chooser.addOption("Auto[Rename Me]", auto5);
     m_chooser.addOption("Auto[Rename Me]", auto6);
     m_chooser.addOption("Auto[Rename Me]", auto7);
@@ -103,6 +104,7 @@ public class RobotContainer {
         auto = leftThreeCoralPlan;
         break;
       case auto4:
+        auto = middleOneCoralPlan;
         break;
       case auto5:
         break;

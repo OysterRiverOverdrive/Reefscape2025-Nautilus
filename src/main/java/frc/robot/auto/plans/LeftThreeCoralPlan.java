@@ -23,31 +23,46 @@ public class LeftThreeCoralPlan extends ParallelCommandGroup {
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(2, 0.5)),
-            new Pose2d(3.52, 1.01, new Rotation2d(Math.PI * 2 / 3)));
+            new Pose2d(3.82, 1.04, new Rotation2d(Math.PI * 2 / 3)));
     // Place coral and get algae
-    Command showyDrive2 = // goes backwards to get coral, turns to face the coral getting place
-        autodrive.AutoDriveCmd(
-            drivetrain,
-            List.of(new Translation2d(-2.3, -0.5)),
-            new Pose2d(-2.98, -1.04, new Rotation2d(Math.PI)));
+    Command
+        showyDrive2 = // goes backwards to get coral, turns to face the coral getting place
+            autodrive.AutoDriveCmd(
+                drivetrain,
+                List.of(new Translation2d(-2, -1)),
+                new Pose2d(-2.7, -1.7, new Rotation2d(Math.PI)));
     // Get coral
-    Command showyDrive3 = // goes back to the reef and turns to face the reef again
-        autodrive.AutoDriveCmd(
-            drivetrain,
-            List.of(new Translation2d(-0.68, -0.5)),
-            new Pose2d(-1.77, -1.09, new Rotation2d(Math.PI)));
+    Command
+        showyDrive3 = // goes back and turns to face the reef again (it's the same thing
+            // because the robot turns backwards)
+            autodrive.AutoDriveCmd(
+                drivetrain,
+                List.of(new Translation2d(-2, -1)),
+                new Pose2d(-2.7, -1.7, new Rotation2d(Math.PI)));
     // after going back, place coral
 
-    // Driving groups
+    Command showyDrive2two = // andthen doesn't like multiple of the same command
+        autodrive.AutoDriveCmd(
+            drivetrain,
+            List.of(new Translation2d(-2, -1)),
+            new Pose2d(-2.7, -1.7, new Rotation2d(Math.PI)));
+    // Get coral
+    Command showyDrive3two =
+        autodrive.AutoDriveCmd(
+            drivetrain,
+            List.of(new Translation2d(-2, -1)),
+            new Pose2d(-2.8, -1.60, new Rotation2d(Math.PI)));
 
-    showyDrive1
-        .andThen(new AutoSleepCmd(0.25))
-        .andThen(showyDrive2)
-        .andThen(new AutoSleepCmd(0.25))
-        .andThen(showyDrive3)
-        .andThen(new AutoSleepCmd(0.25))
-        .andThen(showyDrive2)
-        .andThen(new AutoSleepCmd(0.25))
-        .andThen(showyDrive3);
+    // Driving groups
+    addCommands(
+        showyDrive1
+            .andThen(new AutoSleepCmd(0.25))
+            .andThen(showyDrive2)
+            .andThen(new AutoSleepCmd(0.25))
+            .andThen(showyDrive3)
+            .andThen(new AutoSleepCmd(0.25))
+            .andThen(showyDrive2two)
+            .andThen(new AutoSleepCmd(0.25))
+            .andThen(showyDrive3two));
   }
 }

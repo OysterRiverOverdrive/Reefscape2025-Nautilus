@@ -23,31 +23,43 @@ public class CoolTwoCoralAutoPlan extends ParallelCommandGroup {
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(2, 0.5)),
-            new Pose2d(3.52, -1.01, new Rotation2d(-Math.PI * 2 / 3)));
+            new Pose2d(3.82, -1.01, new Rotation2d(-Math.PI * 2 / 3)));
     // Place coral and get algae
     Command showyDrive2 = // goes backwards to get coral, turns to face the coral getting place
         autodrive.AutoDriveCmd(
             drivetrain,
-            List.of(new Translation2d(-2.3, 0.5)),
-            new Pose2d(-2.98, 1.04, new Rotation2d(Math.PI)));
+            List.of(new Translation2d(-2, 1)),
+            new Pose2d(-2.7, 1.7, new Rotation2d(Math.PI)));
     // Get coral
-    Command showyDrive3 = // goes back to the reef and turns to face the reef again
+    Command showyDrive3 = // goes back to the reef and turns to face the reef again (it's the same
+        // thing)
         autodrive.AutoDriveCmd(
             drivetrain,
-            List.of(new Translation2d(-0.68, 0.5)),
-            new Pose2d(-1.77, 1.09, new Rotation2d(Math.PI)));
+            List.of(new Translation2d(-2, 1)),
+            new Pose2d(-2.7, 1.7, new Rotation2d(Math.PI)));
     // after going back, place coral
 
-    // Driving groups
+    Command showyDrive2two = // andthen doesn't like mutliple of the same command
+        autodrive.AutoDriveCmd(
+            drivetrain,
+            List.of(new Translation2d(-2, 1)),
+            new Pose2d(-2.7, 1.7, new Rotation2d(Math.PI)));
+    Command showyDrive3two =
+        autodrive.AutoDriveCmd(
+            drivetrain,
+            List.of(new Translation2d(-2, 1)),
+            new Pose2d(-2.7, 1.7, new Rotation2d(Math.PI)));
 
-    showyDrive1
-        .andThen(new AutoSleepCmd(0.25))
-        .andThen(showyDrive2)
-        .andThen(new AutoSleepCmd(0.25))
-        .andThen(showyDrive3)
-        .andThen(new AutoSleepCmd(0.25))
-        .andThen(showyDrive2)
-        .andThen(new AutoSleepCmd(0.25))
-        .andThen(showyDrive3);
+    // Driving groups
+    addCommands(
+        showyDrive1
+            .andThen(new AutoSleepCmd(0.25))
+            .andThen(showyDrive2)
+            .andThen(new AutoSleepCmd(0.25))
+            .andThen(showyDrive3)
+            .andThen(new AutoSleepCmd(0.25))
+            .andThen(showyDrive2two)
+            .andThen(new AutoSleepCmd(0.25))
+            .andThen(showyDrive3two));
   }
 }
