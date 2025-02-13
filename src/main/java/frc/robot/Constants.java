@@ -115,7 +115,6 @@ public final class Constants {
     public static final int kCoralIntakeCanId = 12;
 
     public static final int kAlgaeArmCanId = 13;
-
     public static final int kAlgaeSpinnerCanId = 14;
 
     // Used to declare Navx as upside down

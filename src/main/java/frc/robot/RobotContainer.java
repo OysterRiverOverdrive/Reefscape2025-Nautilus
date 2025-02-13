@@ -150,7 +150,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> algaeArm.toDown()));
     cutil
         .supplier(Controllers.xbox_x, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> algaeArm.toFlat()));
+        .onTrue(new InstantCommand(() -> algaeArm.toLoad()));
     cutil
         .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> algaeArm.toRemoveAlgae()));
