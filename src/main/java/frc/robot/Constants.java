@@ -160,25 +160,24 @@ public final class Constants {
         AlgaeArmConstants.kAlgaeArmRemoveAlgaeAngle / 360,
         AlgaeArmConstants.kAlgaeArmTopAngle / 360
       };
-      
+
       public static final double kDownAngle = 0.1;
       public static final double kAlgaeAngle = 0.203;
       public static final double kLoadingAngle = 0.31;
-
     }
 
     public static final class ElevatorConstants {
-      
+
       // All measurements are from ground to the top blue beam on the carriage
       // Lowest Height is confirmed, rest are guesses
-      public static final double kElevLowestHeight = 18;
+      public static final double kElevLowHt = 18;
       public static final double kElevL1Ht = 22;
       public static final double kElevL2Ht = 31.875;
       public static final double kElevL3Ht = 47.625;
-      public static final double kElevL4t = 72;
+      public static final double kElevL4Ht = 72;
       public static final double kElevIntakeHt = 25;
       public static final double kElevatorAboveIntakeHeightDifference = 8;
-      
+
       public static final double kElevatorReefOffset = -2;
       // Coral bucket downward angle from flat, degrees
       public static final double kElevatorCoralBucketAngleDegrees = 28;

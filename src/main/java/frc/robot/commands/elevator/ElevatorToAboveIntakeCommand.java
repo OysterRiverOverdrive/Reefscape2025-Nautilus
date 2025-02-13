@@ -40,7 +40,7 @@ public class ElevatorToAboveIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (elevator_subsystem.getSetPoint() - 0.5 <= elevator_subsystem.getRelativeHeight()
-        && elevator_subsystem.getRelativeHeight() <= elevator_subsystem.getSetPoint() + 0.5);
+    return (elevator_subsystem.getSetPoint() - 0.5 <= elevator_subsystem.getHeight()
+        && elevator_subsystem.getHeight() <= elevator_subsystem.getSetPoint() + 0.5);
   }
 }

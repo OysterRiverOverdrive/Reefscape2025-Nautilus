@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -24,95 +24,102 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final SparkMax m_elevator2SparkMax =
       new SparkMax(RobotConstants.kElevator2CanId, MotorType.kBrushless);
 
-  private final AbsoluteEncoder m_elevator1Encoder;
+  private final SparkAbsoluteEncoder m_elevator1Encoder;
 
+  private final SparkMaxConfig m_elevator1Config;
   private final SparkMaxConfig m_elevator2Config;
-
-  private double elevatorSpeed;
 
   private final PIDController elevatorPID =
       new PIDController(PIDConstants.kElevatorP, PIDConstants.kElevatorI, PIDConstants.kElevatorD);
 
+  // Logic Variables
   private double elevatorPIDSetPoint;
+  private double encoderRot;
+  private double prevRot;
+  private double rot;
+  private double rotcount = 0;
 
   public ElevatorSubsystem() {
 
+    // Leading motor config
+    m_elevator1Config = new SparkMaxConfig();
+    m_elevator1Config.inverted(true);
+    m_elevator1Config.absoluteEncoder.positionConversionFactor(30).inverted(true);
+    m_elevator1SparkMax.configure(
+        m_elevator1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    // Slave motor config
     m_elevator2Config = new SparkMaxConfig();
-
-    m_elevator1Encoder = m_elevator1SparkMax.getAbsoluteEncoder();
-
     m_elevator2Config.follow(m_elevator1SparkMax);
-
+    m_elevator2Config.inverted(true);
     m_elevator2SparkMax.configure(
         m_elevator2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    m_elevator1Encoder = m_elevator1SparkMax.getAbsoluteEncoder();
+    prevRot = m_elevator1Encoder.getPosition();
+
+    // Set starting height to bottom height
+    toBase();
+  }
+
+  public double getEncoder() {
+    return ((rotcount * 30) + m_elevator1Encoder.getPosition());
+  }
+
+  public double getHeight() {
+    return (0.555 * getEncoder() + 17.7);
   }
 
   public void toBase() {
-    elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[0]);
+    elevatorPIDSetPoint = (ElevatorConstants.kElevLowHt);
   }
 
   public void toL1() {
-    elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[1]);
+    elevatorPIDSetPoint = (ElevatorConstants.kElevL1Ht);
   }
 
   public void toL2() {
-    elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[2]);
+    elevatorPIDSetPoint = (ElevatorConstants.kElevL2Ht);
   }
 
   public void toL3() {
-    elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[3]);
+    elevatorPIDSetPoint = (ElevatorConstants.kElevL3Ht);
   }
 
   public void toL4() {
-    elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[4]);
+    elevatorPIDSetPoint = (ElevatorConstants.kElevL4Ht);
   }
 
   public void toIntake() {
-    elevatorPIDSetPoint = (ElevatorConstants.kElevatorStopsTested[5]);
+    elevatorPIDSetPoint = (ElevatorConstants.kElevIntakeHt);
   }
 
   public void toAboveIntake() {
     elevatorPIDSetPoint =
-        (ElevatorConstants.kElevatorStopsTested[5]
-            + ElevatorConstants.kElevatorAboveIntakeHeightDifference);
-  }
-
-  public double getHeight() {
-    return ((m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot)
-        + ElevatorConstants.kElevatorLowestHeight);
-  }
-
-  public double getRelativeHeight() {
-    return (m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot);
+        (ElevatorConstants.kElevIntakeHt + ElevatorConstants.kElevatorAboveIntakeHeightDifference);
   }
 
   public double getSetPoint() {
     return elevatorPIDSetPoint;
   }
 
-  // Logs print encoder and corresponding elevator height values
-  // Possible print method for heightGet:
-  /*
-  System.out.println("Encoder: " + m_elevator1Encoder.getPosition() + " rotations");
-  System.out.println(
-      "Elevator Relative Height: "
-          + (m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot)
-          + " inches");
-  System.out.println(
-      "Elevator Height: "
-          + ((m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot)
-              + ElevatorConstants.kElevatorLowestHeight)
-          + " inches"); */
-
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    elevatorSpeed =
-        elevatorPID.calculate(
-            m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot);
-    m_elevator1SparkMax.set(elevatorSpeed);
-    elevatorPID.setSetpoint(elevatorPIDSetPoint);
+    // Logic to track looping encoder
+    rot = m_elevator1Encoder.getPosition();
+    if ((rot - prevRot) < -25) {
+      rotcount += 1;
+    } else if ((rot - prevRot) > 25) {
+      rotcount -= 1;
+    }
+    prevRot = rot;
 
-    SmartDashboard.putNumber("Elevator Height", getHeight());
+    // Calculate PID according to set point
+    elevatorPID.setSetpoint(elevatorPIDSetPoint);
+    double elevatorSpeed = elevatorPID.calculate(getHeight());
+    m_elevator1SparkMax.set(elevatorSpeed);
+
+    SmartDashboard.putNumber("Elev Height", getHeight());
+    SmartDashboard.putNumber("Elev Setpoint", elevatorPIDSetPoint);
   }
 }
