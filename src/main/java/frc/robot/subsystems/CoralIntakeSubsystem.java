@@ -20,7 +20,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   }
 
   public void coralIntakeReverseCmd() {
-    Motor.set(-1*RobotConstants.kCoralIntakeSpeed);
+    Motor.set(-1 * RobotConstants.kCoralIntakeSpeed);
   }
 
   public void coralIntakeStopCmd() {

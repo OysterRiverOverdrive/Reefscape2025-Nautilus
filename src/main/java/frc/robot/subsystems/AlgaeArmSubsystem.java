@@ -5,17 +5,16 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 import frc.robot.Constants.RobotConstants.AlgaeArmConstants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.SparkRelativeEncoder;
-import com.revrobotics.spark.SparkBase.ResetMode;
 
 public class AlgaeArmSubsystem extends SubsystemBase {
 
@@ -29,7 +28,6 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   private final PIDController algaeArmPID =
       new PIDController(PIDConstants.kAlgaeArmP, PIDConstants.kAlgaeArmI, PIDConstants.kAlgaeArmD);
 
-  
   private SparkMaxConfig m_ArmConfig;
   private SparkMaxConfig m_SpinnerConfig;
 
@@ -40,7 +38,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     m_AlgaeArmEncoder.setPosition(0);
     m_ArmConfig = new SparkMaxConfig();
     m_ArmConfig.inverted(true);
-    m_AlgaeArmSparkMax.configure(m_ArmConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_AlgaeArmSparkMax.configure(
+        m_ArmConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public double getEncoder() {
@@ -52,7 +51,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   public void algaeSpinnerReverseCmd() {
-    m_AlgaeSpinnerSparkMax.set(-1* RobotConstants.kAlgaeSpinnerSpeed);
+    m_AlgaeSpinnerSparkMax.set(-1 * RobotConstants.kAlgaeSpinnerSpeed);
   }
 
   public void algaeSpinnerStopCmd() {
@@ -82,9 +81,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double armSpeed =
-        algaeArmPID.calculate(
-            getEncoder());
+    double armSpeed = algaeArmPID.calculate(getEncoder());
     m_AlgaeArmSparkMax.set(armSpeed);
     algaeArmPID.setSetpoint(algaeArmPIDSetPoint);
 
