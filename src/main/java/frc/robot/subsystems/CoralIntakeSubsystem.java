@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
 
 public class CoralIntakeSubsystem extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
+
   private SparkMax Motor = new SparkMax(RobotConstants.kCoralIntakeCanId, MotorType.kBrushless);
 
   public CoralIntakeSubsystem() {}
@@ -20,7 +20,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   }
 
   public void coralIntakeReverseCmd() {
-    Motor.set(0 - RobotConstants.kCoralIntakeSpeed);
+    Motor.set(-1*RobotConstants.kCoralIntakeSpeed);
   }
 
   public void coralIntakeStopCmd() {

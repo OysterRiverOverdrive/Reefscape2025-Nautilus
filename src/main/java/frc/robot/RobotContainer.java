@@ -86,19 +86,12 @@ public class RobotContainer {
 
     // Algae Spinner Bindings
     cutil
-        .supplier(Controllers.xbox_rb, DriveConstants.joysticks.OPERATOR)
+        .supplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
         .onTrue(new AlgaeSpinnerForwardCommand(algaeArm))
-        .onFalse(
-            cutil.getTriggerButton(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
-                ? new AlgaeSpinnerReverseCommand(algaeArm)
-                : new AlgaeSpinnerStopCommand(algaeArm));
+        .onFalse(new AlgaeSpinnerStopCommand(algaeArm));
     cutil
-        .triggerSupplier(Controllers.xbox_rt, 0.2, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new AlgaeSpinnerReverseCommand(algaeArm))
-        .onFalse(
-            cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
-                ? new AlgaeSpinnerForwardCommand(algaeArm)
-                : new AlgaeSpinnerStopCommand(algaeArm));
+        .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new AlgaeSpinnerStopCommand(algaeArm));
 
     // Elevator Bindings
     cutil.POVsupplier(0, DriveConstants.joysticks.OPERATOR)
@@ -130,19 +123,13 @@ public class RobotContainer {
 
     // Coral Intake Bindings
     cutil
-        .supplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
+        .supplier(Controllers.xbox_rb, DriveConstants.joysticks.OPERATOR)
         .onTrue(new CoralIntakeForwardCommand(coralIntake))
-        .onFalse(
-            cutil.getTriggerButton(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
-                ? new CoralIntakeReverseCommand(coralIntake)
-                : new CoralIntakeStopCommand(coralIntake));
+        .onFalse(new CoralIntakeStopCommand(coralIntake));
     cutil
-        .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
+        .triggerSupplier(Controllers.xbox_rt, 0.2, DriveConstants.joysticks.OPERATOR)
         .onTrue(new CoralIntakeReverseCommand(coralIntake))
-        .onFalse(
-            cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
-                ? new CoralIntakeForwardCommand(coralIntake)
-                : new CoralIntakeStopCommand(coralIntake));
+        .onFalse(new CoralIntakeStopCommand(coralIntake));
 
     // Algae Arm Bindings
     cutil
