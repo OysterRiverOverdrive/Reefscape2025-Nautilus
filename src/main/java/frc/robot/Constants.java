@@ -160,72 +160,25 @@ public final class Constants {
         AlgaeArmConstants.kAlgaeArmRemoveAlgaeAngle / 360,
         AlgaeArmConstants.kAlgaeArmTopAngle / 360
       };
+      
+      public static final double kDownAngle = 0.1;
+      public static final double kAlgaeAngle = 0.203;
+      public static final double kLoadingAngle = 0.31;
+
     }
 
     public static final class ElevatorConstants {
-      // Elevator Height to Rotations of Elevator Motor in inches/rotation
-      public static final double kElevatorHeightToRot = 10;
-      // guess??? maybe? not accurate check when elevator attatched
-
-      // Array of heights of elevator stops relative to base height in inches
-      // These hieghts are of the hinge for the coral bucket,
-      // recieved by taking Reef Level height,
-      // adding height difference between bottom and top of the coral bucket,
-      // and subtracting the lowest height reachable by the elevator,
-      // making all heights relative to the lowest point on the elevator
-      // After, it adds the in the offset so the coral center is lined up
-      // Indicies 1-4 are corresponding reef levels, index 0 is base
-      // Index 5 is height of elevator for coral intake
-      public static final double[] kElevatorStopsCalculated = {
-        0,
-        ElevatorConstants.kElevatorReefL1Height
-            + ElevatorConstants.kElevatorCoralBucketHeightDifference
-            - ElevatorConstants.kElevatorLowestHeight
-            + ElevatorConstants.kElevatorReefOffset,
-        ElevatorConstants.kElevatorReefL2Height
-            + ElevatorConstants.kElevatorCoralBucketHeightDifference
-            - ElevatorConstants.kElevatorLowestHeight
-            + ElevatorConstants.kElevatorReefOffset,
-        ElevatorConstants.kElevatorReefL3Height
-            + ElevatorConstants.kElevatorCoralBucketHeightDifference
-            - ElevatorConstants.kElevatorLowestHeight
-            + ElevatorConstants.kElevatorReefOffset,
-        ElevatorConstants.kElevatorReefL4Height
-            + ElevatorConstants.kElevatorCoralBucketHeightDifference
-            - ElevatorConstants.kElevatorLowestHeight
-            + ElevatorConstants.kElevatorReefOffset,
-        ElevatorConstants.kElevatorIntakeHeight - ElevatorConstants.kElevatorLowestHeight
-      };
-
-      // Heights for elevator as tested, last one is still guess
-      public static final double[] kElevatorStopsTested = {
-        0 - ElevatorConstants.kElevatorLowestHeight,
-        26 - ElevatorConstants.kElevatorLowestHeight,
-        35.5 - ElevatorConstants.kElevatorLowestHeight,
-        51.5 - ElevatorConstants.kElevatorLowestHeight,
-        76.5 - ElevatorConstants.kElevatorLowestHeight,
-        25 - ElevatorConstants.kElevatorLowestHeight
-      };
-
-      // Heights for elevator (inches)
-      // Height of bottom of elevator
-      public static final double kElevatorLowestHeight = 10;
-      // guess??? maybe? not accurate check when elevator attatched
-      // Heights of tops of reef pipes
-      public static final double kElevatorReefL1Height = 18;
-      public static final double kElevatorReefL2Height = 31.875;
-      public static final double kElevatorReefL3Height = 47.625;
-      public static final double kElevatorReefL4Height = 72;
-      // Height of coral bucket hinge for coral intake
-      public static final double kElevatorIntakeHeight = 25;
-      // guess??? maybe? not accurate check when elevator attatched
-      // Elevator goes above intake before algae arm goes up,
-      // then elevator goes to intake height,
-      // this is height difference (inches)
+      
+      // All measurements are from ground to the top blue beam on the carriage
+      // Lowest Height is confirmed, rest are guesses
+      public static final double kElevLowestHeight = 18;
+      public static final double kElevL1Ht = 22;
+      public static final double kElevL2Ht = 31.875;
+      public static final double kElevL3Ht = 47.625;
+      public static final double kElevL4t = 72;
+      public static final double kElevIntakeHt = 25;
       public static final double kElevatorAboveIntakeHeightDifference = 8;
-      // Offset of elevator for coral to line up with reef branch (inches)
-      // Center of coral lines up with top of branch
-      // Signed, negative moves down, positive moves up
+      
       public static final double kElevatorReefOffset = -2;
       // Coral bucket downward angle from flat, degrees
       public static final double kElevatorCoralBucketAngleDegrees = 28;
@@ -242,20 +195,14 @@ public final class Constants {
   public static final class PIDConstants {
 
     // Elevator PID
-    public static final double kElevatorP = 0.1;
-    // guess??? maybe? not accurate check when elevator attatched
-    public static final double kElevatorI = 0;
-    // guess??? maybe? not accurate check when elevator attatched
-    public static final double kElevatorD = 0;
-    // guess??? maybe? not accurate check when elevator attatched
+    public static final double kElevatorP = 0.008;
+    public static final double kElevatorI = 0.002;
+    public static final double kElevatorD = 0.001;
 
     // Algae Arm PID
-    public static final double kAlgaeArmP = 0.1;
-    // guess??? maybe? not accurate check when algae arm attatched
-    public static final double kAlgaeArmI = 0;
-    // guess??? maybe? not accurate check when algae arm attatched
+    public static final double kAlgaeArmP = 0.8;
+    public static final double kAlgaeArmI = 0.5;
     public static final double kAlgaeArmD = 0;
-    // guess??? maybe? not accurate check when algae arm attatched
   }
 
   // Constants specifically for Swerve Module
