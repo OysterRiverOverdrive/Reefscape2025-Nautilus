@@ -127,10 +127,10 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // Algae Spinner constants
-    public static final double kAlgaeSpinnerSpeed = 0.5;
+    public static final double kAlgaeSpinnerSpeed = 0.2;
 
     // Coral Intake constants
-    public static final double kCoralIntakeSpeed = 0.5;
+    public static final double kCoralIntakeSpeed = 0.2;
 
     public static final class AlgaeArmConstants {
       // Algae Arm gear ratio, 15 to 1, so motor rotations to arm rotations is 1 to 15
