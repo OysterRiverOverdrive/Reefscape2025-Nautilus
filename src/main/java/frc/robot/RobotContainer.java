@@ -94,13 +94,13 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> drivetrain.zeroHeading()));
 
     // Algae Spinner Bindings
-    cutil
-        .supplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new AlgaeSpinnerForwardCommand(algaeArm))
-        .onFalse(new AlgaeSpinnerStopCommand(algaeArm));
-    cutil
-        .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new AlgaeSpinnerStopCommand(algaeArm));
+    // cutil
+    //     .supplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new AlgaeSpinnerForwardCommand(algaeArm))
+    //     .onFalse(new AlgaeSpinnerStopCommand(algaeArm));
+    // cutil
+    //     .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new AlgaeSpinnerStopCommand(algaeArm));
 
     // Elevator Bindings
     cutil.POVsupplier(0, DriveConstants.joysticks.OPERATOR)
@@ -112,8 +112,15 @@ public class RobotContainer {
     cutil.POVsupplier(270, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> elevator.toL4()));
     cutil
-        .supplier(Controllers.xbox_options, DriveConstants.joysticks.OPERATOR)
+        .supplier(Controllers.xbox_share, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> elevator.toBase()));
+    cutil
+        .supplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> elevator.toAboveIntake()));
+    cutil
+        .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> elevator.toIntake()));
+    
 
     // Intake sequential command binding
     cutil
@@ -123,7 +130,7 @@ public class RobotContainer {
                 new ElevatorToAboveIntakeCommand(elevator),
                 new AlgaeArmToUpCommand(algaeArm),
                 new ElevatorToIntakeCommand(elevator),
-                new CoralIntakeForwardCommand(coralIntake)))
+                new CoralIntakeReverseCommand(coralIntake)))
         .onFalse(
             new SequentialCommandGroup(
                 new CoralIntakeStopCommand(coralIntake),

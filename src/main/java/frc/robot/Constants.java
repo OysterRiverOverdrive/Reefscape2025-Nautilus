@@ -130,7 +130,7 @@ public final class Constants {
     public static final double kAlgaeSpinnerSpeed = 0.2;
 
     // Coral Intake constants
-    public static final double kCoralIntakeSpeed = 0.2;
+    public static final double kCoralIntakeSpeed = 0.4;
 
     public static final class AlgaeArmConstants {
       // Algae Arm gear ratio, 15 to 1, so motor rotations to arm rotations is 1 to 15
@@ -160,9 +160,9 @@ public final class Constants {
         AlgaeArmConstants.kAlgaeArmTopAngle / 360
       };
 
-      public static final double kDownAngle = 0.1;
+      public static final double kDownAngle = 0.03;
       public static final double kAlgaeAngle = 0.203;
-      public static final double kLoadingAngle = 0.31;
+      public static final double kLoadingAngle = 0.44;
     }
 
     public static final class ElevatorConstants {
@@ -171,10 +171,10 @@ public final class Constants {
       // Lowest Height is confirmed, rest are guesses
       public static final double kElevLowHt = 18;
       public static final double kElevL1Ht = 22;
-      public static final double kElevL2Ht = 31.875;
-      public static final double kElevL3Ht = 47.625;
-      public static final double kElevL4Ht = 72;
-      public static final double kElevIntakeHt = 25;
+      public static final double kElevL2Ht = 32;
+      public static final double kElevL3Ht = 47.5;
+      public static final double kElevL4Ht = 72.5;
+      public static final double kElevIntakeHt = 27.5;
       public static final double kElevatorAboveIntakeHeightDifference = 8;
 
       public static final double kElevatorReefOffset = -2;
@@ -193,14 +193,14 @@ public final class Constants {
   public static final class PIDConstants {
 
     // Elevator PID
-    public static final double kElevatorP = 0.005;
-    public static final double kElevatorI = 0.002;
+    public static final double kElevatorP = 0.0065;
+    public static final double kElevatorI = 0.003;
     public static final double kElevatorD = 0.001;
 
     // Algae Arm PID
-    public static final double kAlgaeArmP = 0.5;
+    public static final double kAlgaeArmP = 0.8;
     public static final double kAlgaeArmI = 0.5;
-    public static final double kAlgaeArmD = 0;
+    public static final double kAlgaeArmD = 0.1;
   }
 
   // Constants specifically for Swerve Module
