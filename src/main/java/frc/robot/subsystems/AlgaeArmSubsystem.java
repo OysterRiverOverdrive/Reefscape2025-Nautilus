@@ -78,13 +78,13 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     return algaeArmPIDSetPoint;
   }
 
+  public void setAlgaArmSpeed(double speed) {
+    m_AlgaeArmSparkMax.set(speed);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double armSpeed = algaeArmPID.calculate(getEncoder());
-    m_AlgaeArmSparkMax.set(armSpeed);
-    algaeArmPID.setSetpoint(algaeArmPIDSetPoint);
-
     SmartDashboard.putNumber("Algae Arm Angle", getEncoder());
   }
 }

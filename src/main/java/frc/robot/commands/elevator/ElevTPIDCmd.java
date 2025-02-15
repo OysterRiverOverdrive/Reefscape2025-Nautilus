@@ -10,13 +10,13 @@ import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TelePIDCmd extends Command {
+public class ElevTPIDCmd extends Command {
   ElevatorSubsystem elevator;
 
   private final PIDController elevatorPID =
       new PIDController(PIDConstants.kElevatorP, PIDConstants.kElevatorI, PIDConstants.kElevatorD);
   /** Creates a new TelePIDCmd. */
-  public TelePIDCmd(ElevatorSubsystem elevators) {
+  public ElevTPIDCmd(ElevatorSubsystem elevators) {
     // Use addRequirements() here to declare subsystem dependencies
     elevator = elevators;
     addRequirements(elevators);
