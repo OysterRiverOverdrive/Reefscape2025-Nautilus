@@ -18,7 +18,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
       new SparkMax(RobotConstants.kAlgaeArmCanId, MotorType.kBrushless);
 
   private final SparkMax m_AlgaeSpinnerSparkMax =
-      new SparkMax(RobotConstants.kAlgaeArmCanId, MotorType.kBrushless);
+      new SparkMax(RobotConstants.kAlgaeSpinnerCanId, MotorType.kBrushless);
 
   private final RelativeEncoder m_AlgaeArmEncoder;
 

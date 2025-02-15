@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimeLightConstants;
 import frc.utils.LimelightHelpers;
+import frc.utils.LimelightHelpers.PoseEstimate;
+import frc.utils.LimelightHelpers.RawFiducial;
 import java.util.Optional;
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -21,10 +23,12 @@ public class LimelightSubsystem extends SubsystemBase {
   private final String leds_off = "leds_off";
   private final String leds_flash = "leds_flash";
 
-  private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
+  DrivetrainSubsystem drivetrain;
 
   /** Creates a new LimelightSubSys. */
-  public LimelightSubsystem() {
+  public LimelightSubsystem(DrivetrainSubsystem drivetrain) {
+
+    this.drivetrain = drivetrain;
 
     // Default to LEDs off.
     led_chooser.setDefaultOption("Off", leds_off);
@@ -56,11 +60,19 @@ public class LimelightSubsystem extends SubsystemBase {
    *
    * @return Pose2d
    */
-  public Pose2d getPose2d() {
+  public Pose2d getPose2dMegaTag1() {
     if (DriverStation.getAlliance().equals(Optional.of(Alliance.Blue))) {
       return LimelightHelpers.getBotPose2d_wpiBlue("");
     } else {
       return LimelightHelpers.getBotPose2d_wpiRed("");
+    }
+  }
+
+  public PoseEstimate getPose2dMegaTag2() {
+    if (DriverStation.getAlliance().equals(Optional.of(Alliance.Blue))) {
+      return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
+    } else {
+      return LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2("");
     }
   }
 
@@ -124,6 +136,22 @@ public class LimelightSubsystem extends SubsystemBase {
       LimelightHelpers.setLEDMode_PipelineControl("");
     }
 
+    PoseEstimate CurPose = getPose2dMegaTag2();
+
+    if (LimelightHelpers.validPoseEstimate(CurPose)) {
+      LimelightHelpers.printPoseEstimate(CurPose);
+
+      SmartDashboard.putNumber("tag area", CurPose.avgTagArea);
+      SmartDashboard.putNumber("average tag distance", CurPose.avgTagDist);
+
+      for (int i = 0; i < CurPose.rawFiducials.length; i++) {
+        RawFiducial fiducial = CurPose.rawFiducials[i];
+        SmartDashboard.putNumber("distance to camera", fiducial.distToCamera);
+        SmartDashboard.putNumber("apriltag x", fiducial.txnc);
+        SmartDashboard.putNumber("apriltag y", fiducial.tync);
+      }
+    }
+
     /*when an april tag is seen, the robot should compare its current pose2d with the pose2d retrieved from the limelight
      *this comparison is put into smartdashboard
      * [0] = x
@@ -134,7 +162,7 @@ public class LimelightSubsystem extends SubsystemBase {
      * [5] = yaw
      */
     if (isAprilTag("")) {
-      double[] aprilTagPose2d = LimelightHelpers.pose2dToArray(getPose2d());
+      double[] aprilTagPose2d = LimelightHelpers.pose2dToArray(getPose2dMegaTag2().pose);
       double[] robotPose2d = LimelightHelpers.pose2dToArray(drivetrain.getPose());
       double ErrorOfDistance =
           Math.hypot(robotPose2d[1] - aprilTagPose2d[1], robotPose2d[0] - aprilTagPose2d[0]);
