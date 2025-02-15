@@ -52,7 +52,7 @@ public class RobotContainer {
   private final TeleopCmd teleopCmd =
       new TeleopCmd(
           drivetrain,
-          () -> cutil.Boolsupplier(Controllers.ps4_LB, DriveConstants.joysticks.DRIVER));
+          () -> cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.DRIVER));
   private final ElevTPIDCmd elevTPIDCmd = new ElevTPIDCmd(elevator);
   private final AlgaTPIDCmd algaTPIDCmd = new AlgaTPIDCmd(algaeArm);
 
