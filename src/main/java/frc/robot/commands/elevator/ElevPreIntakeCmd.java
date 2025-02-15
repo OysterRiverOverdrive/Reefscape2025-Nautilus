@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class ElevatorToAboveIntakeCommand extends Command {
+public class ElevPreIntakeCmd extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ElevatorSubsystem elevator_subsystem;
 
@@ -17,7 +17,7 @@ public class ElevatorToAboveIntakeCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ElevatorToAboveIntakeCommand(ElevatorSubsystem subsystem) {
+  public ElevPreIntakeCmd(ElevatorSubsystem subsystem) {
     elevator_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);

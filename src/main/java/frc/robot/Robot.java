@@ -78,6 +78,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
+    // Sets elevator to bottom at the beginning of teleop
     m_robotContainer.toBase();
   }
 

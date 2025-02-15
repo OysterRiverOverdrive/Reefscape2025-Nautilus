@@ -60,11 +60,10 @@ public class RobotContainer {
 
     DataLogManager.start();
 
-    // Declare default command during Teleop Period as TeleopCmd(Driving Command)
+    // Default Commands to be run all the time, only one per subsystem
     drivetrain.setDefaultCommand(teleopCmd);
     elevator.setDefaultCommand(elevTPIDCmd);
     algaeArm.setDefaultCommand(algaTPIDCmd);
-
 
     // Add Auto options to dropdown and push to dashboard
     m_chooser.setDefaultOption("Auto[Rename Me]", auto1);
@@ -81,6 +80,7 @@ public class RobotContainer {
     configureBindings();
   }
 
+  // Continuation of method to prevent double instanciation
   public void toBase() {
     elevator.toBase();
   }
@@ -120,21 +120,20 @@ public class RobotContainer {
     cutil
         .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> elevator.toIntake()));
-    
 
     // Intake sequential command binding
     cutil
         .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
         .onTrue(
             new SequentialCommandGroup(
-                new ElevatorToAboveIntakeCommand(elevator),
+                new ElevPreIntakeCmd(elevator),
                 new AlgaeArmToUpCommand(algaeArm),
-                new ElevatorToIntakeCommand(elevator),
+                new ElevIntakeCmd(elevator),
                 new CoralIntakeReverseCommand(coralIntake)))
         .onFalse(
             new SequentialCommandGroup(
                 new CoralIntakeStopCommand(coralIntake),
-                new ElevatorToAboveIntakeCommand(elevator),
+                new ElevPreIntakeCmd(elevator),
                 new AlgaeArmToDownCommand(algaeArm)));
 
     // Coral Intake Bindings

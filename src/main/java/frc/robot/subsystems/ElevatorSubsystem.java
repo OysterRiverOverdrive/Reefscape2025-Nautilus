@@ -10,7 +10,6 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
@@ -28,7 +27,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private final SparkMaxConfig m_elevator1Config;
   private final SparkMaxConfig m_elevator2Config;
-
 
   // Logic Variables
   private double elevatorPIDSetPoint;
@@ -61,10 +59,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public double getEncoder() {
+    // Rotations Translated to Total Distance Travelled
     return ((rotcount * 30) + m_elevator1Encoder.getPosition());
   }
 
   public double getHeight() {
+    // Function to convert Encoder to Carriage Height approximately in inches
     return (0.555 * getEncoder() + 17.7);
   }
 

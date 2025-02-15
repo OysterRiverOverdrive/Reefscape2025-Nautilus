@@ -12,10 +12,9 @@ import frc.robot.subsystems.AlgaeArmSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlgaTPIDCmd extends Command {
   /** Creates a new AlgaTPIDCmd. */
-
   private AlgaeArmSubsystem alga;
 
-   private final PIDController algaeArmPID =
+  private final PIDController algaeArmPID =
       new PIDController(PIDConstants.kAlgaeArmP, PIDConstants.kAlgaeArmI, PIDConstants.kAlgaeArmD);
 
   public AlgaTPIDCmd(AlgaeArmSubsystem algae) {

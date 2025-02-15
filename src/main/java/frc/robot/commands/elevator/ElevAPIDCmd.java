@@ -4,23 +4,13 @@
 
 package frc.robot.commands.elevator;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.PIDConstants;
-import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevTPIDCmd extends Command {
-  ElevatorSubsystem elevator;
-
-  private final PIDController elevatorPID =
-      new PIDController(PIDConstants.kElevatorP, PIDConstants.kElevatorI, PIDConstants.kElevatorD);
-
-  /** Creates a new TelePIDCmd. */
-  public ElevTPIDCmd(ElevatorSubsystem elevators) {
-    // Use addRequirements() here to declare subsystem dependencies
-    elevator = elevators;
-    addRequirements(elevators);
+public class ElevAPIDCmd extends Command {
+  /** Creates a new AutoPIDCmd. */
+  public ElevAPIDCmd() {
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -29,11 +19,7 @@ public class ElevTPIDCmd extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    elevatorPID.setSetpoint(elevator.getSetPoint());
-    double elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
-    elevator.setElevatorSpeed(elevatorSpeed);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
