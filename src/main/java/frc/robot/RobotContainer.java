@@ -76,6 +76,10 @@ public class RobotContainer {
     configureBindings();
   }
 
+  public void toBase() {
+    elevator.toBase();
+  }
+
   private void configureBindings() {
     // Configure buttons
     // Prior Reference:
