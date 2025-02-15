@@ -29,8 +29,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final SparkMaxConfig m_elevator1Config;
   private final SparkMaxConfig m_elevator2Config;
 
-  private final PIDController elevatorPID =
-      new PIDController(PIDConstants.kElevatorP, PIDConstants.kElevatorI, PIDConstants.kElevatorD);
 
   // Logic Variables
   private double elevatorPIDSetPoint;
@@ -103,6 +101,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     return elevatorPIDSetPoint;
   }
 
+  public void setElevatorSpeed(double speed) {
+    m_elevator1SparkMax.set(speed);
+  }
+
   @Override
   public void periodic() {
     // Logic to track looping encoder
@@ -113,11 +115,6 @@ public class ElevatorSubsystem extends SubsystemBase {
       rotcount -= 1;
     }
     prevRot = rot;
-
-    // Calculate PID according to set point
-    elevatorPID.setSetpoint(elevatorPIDSetPoint);
-    double elevatorSpeed = elevatorPID.calculate(getHeight());
-    m_elevator1SparkMax.set(elevatorSpeed);
 
     SmartDashboard.putNumber("Elev Height", getHeight());
     SmartDashboard.putNumber("Elev Setpoint", elevatorPIDSetPoint);

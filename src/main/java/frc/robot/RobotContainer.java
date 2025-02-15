@@ -53,6 +53,7 @@ public class RobotContainer {
       new TeleopCmd(
           drivetrain,
           () -> cutil.Boolsupplier(Controllers.ps4_LB, DriveConstants.joysticks.DRIVER));
+  private final TelePIDCmd elevTelePIDCmd = new TelePIDCmd(elevator);
 
   public RobotContainer() {
 
@@ -60,6 +61,7 @@ public class RobotContainer {
 
     // Declare default command during Teleop Period as TeleopCmd(Driving Command)
     drivetrain.setDefaultCommand(teleopCmd);
+    elevator.setDefaultCommand(elevTelePIDCmd);
 
     // Add Auto options to dropdown and push to dashboard
     m_chooser.setDefaultOption("Auto[Rename Me]", auto1);
