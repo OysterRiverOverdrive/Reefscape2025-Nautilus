@@ -226,19 +226,19 @@ public final class Constants {
       public static final double[][] ELEV_SAFETY_POINTS = {
         {0.0, 78.0},
         {0.1, 76.0},
-        {0.2, 65.0},
-        {0.3, 45.0},
-        {0.4, 30.0},
-        {0.5, 25.0},
-        {0.6, 20.0},
-        {0.7, 15.0},
-        {0.8, 10.0},
-        {0.9, 5.0},
-        {1.0, 3.0}
+        {0.2, 74.0},
+        {0.3, 50.0},
+        {0.4, 40.0},
+        {0.5, 30.0},
+        {0.6, 28.0},
+        {0.7, 25.0},
+        {0.8, 23.0},
+        {0.9, 20.0},
+        {1.0, 20.0}
       };
 
       // Polynomial degree (adjust as needed)
-      public static final int POLYNOMIAL_DEGREE = 4;
+      public static final int POLYNOMIAL_DEGREE = 5;
     }
   }
 
