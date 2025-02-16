@@ -127,7 +127,7 @@ public class RobotContainer {
         .onTrue(
             new SequentialCommandGroup(
                 new ElevPreIntakeCmd(elevator),
-                new AlgaeArmToUpCommand(algaeArm),
+                new AlgaeArmToLoadCommand(algaeArm),
                 new ElevIntakeCmd(elevator),
                 new CoralIntakeReverseCommand(coralIntake)))
         .onFalse(

@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class AlgaeArmToUpCommand extends Command {
+public class AlgaeArmToLoadCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final AlgaeArmSubsystem algaeArm_subsystem;
 
@@ -17,7 +17,7 @@ public class AlgaeArmToUpCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AlgaeArmToUpCommand(AlgaeArmSubsystem subsystem) {
+  public AlgaeArmToLoadCommand(AlgaeArmSubsystem subsystem) {
     algaeArm_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
