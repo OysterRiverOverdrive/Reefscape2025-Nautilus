@@ -30,7 +30,7 @@ public class CoralIntakeReverseCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralIntake_subsystem.coralIntakeForwardCmd();
+    coralIntake_subsystem.coralIntakeReverseCmd();
   }
 
   // Called once the command ends or is interrupted.
