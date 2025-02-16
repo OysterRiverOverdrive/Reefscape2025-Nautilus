@@ -27,27 +27,28 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final SparkMax m_elevator2SparkMax =
       new SparkMax(RobotConstants.kElevator2CanId, MotorType.kBrushless);
 
-
   private final SparkAbsoluteEncoder m_elevator1Encoder;
 
   private final SparkMaxConfig m_elevator1Config;
   private final SparkMaxConfig m_elevator2Config;
 
+  private DrivetrainSubsystem drivetrain;
+
   // Logic Variables
   private double elevatorPIDSetPoint; // Elevator commanded setpoint
   private double prevRot; // prior enc value for comparison
-  private double rot; // enc 
+  private double rot; // enc
   private double rotcount = 0; // # of rotations completed by abs enc
-  private double safetysetpoint; // Calculated Max Height
   private final PolynomialFunction polynomial; // Max Height Function
+  public boolean safetyActive = false; // Bool for dashboard on height override
 
-
-  public ElevatorSubsystem() {
+  public ElevatorSubsystem(DrivetrainSubsystem drivetrain) {
     WeightedObservedPoints elevSafetyPoints = new WeightedObservedPoints();
     // Load points from Constants
     for (double[] point : Constants.RobotConstants.ElevatorConstants.ELEV_SAFETY_POINTS) {
       elevSafetyPoints.add(point[0], point[1]);
     }
+    this.drivetrain = drivetrain;
 
     // Fit polynomial of defined degree
     PolynomialCurveFitter fitter =
@@ -91,8 +92,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   // Calculated equation based on demo speeds and heights
   // Sheet used for calculation in software drive
-  public double safetyheight(double x) {
-    return polynomial.value(x);
+  public double safetyheight() {
+    double drivespeed = drivetrain.maxSpeedCmd;
+    return polynomial.value(drivespeed);
   }
 
   public void toBase() {
@@ -135,17 +137,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // double drivespeed = DrivetrainSubsystem.maxSpeedCmd;
-    // boolean safetyActive = false;
-    // safetysetpoint = safetyheight(drivespeed);
-    // double location;
-    // if (safetysetpoint < setpoint) {
-    //   location = safetysetpoint;
-    //   safetyActive = true;
-    // } else {
-    //   location = setpoint;
-    // }
-  
+
     // Logic to track looping encoder
     rot = m_elevator1Encoder.getPosition();
     if ((rot - prevRot) < -25) {
