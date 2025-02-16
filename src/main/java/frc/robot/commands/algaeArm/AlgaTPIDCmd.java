@@ -13,7 +13,7 @@ public class AlgaTPIDCmd extends Command {
 
   private AlgaeArmSubsystem alga;
 
-   private final PIDController algaeArmPID =
+  private final PIDController algaeArmPID =
       new PIDController(PIDConstants.kAlgaeArmP, PIDConstants.kAlgaeArmI, PIDConstants.kAlgaeArmD);
 
   public AlgaTPIDCmd(AlgaeArmSubsystem alga) {

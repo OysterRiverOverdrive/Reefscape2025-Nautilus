@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 
-
 public class AlgaAPIDCmd extends Command {
 
   private AlgaeArmSubsystem alga;
@@ -18,7 +17,7 @@ public class AlgaAPIDCmd extends Command {
 
   private final PIDController algaeArmPID =
       new PIDController(PIDConstants.kAutoAlgaP, PIDConstants.kAutoAlgaI, PIDConstants.kAutoAlgaD);
-  
+
   /**
    * Autonomous Method of moving elevator
    *
