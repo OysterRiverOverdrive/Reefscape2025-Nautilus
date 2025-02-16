@@ -4,13 +4,12 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -27,14 +26,21 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private final SparkMax m_elevator2SparkMax =
       new SparkMax(RobotConstants.kElevator2CanId, MotorType.kBrushless);
-  private final AbsoluteEncoder m_elevator1Encoder;
-  private final SparkMaxConfig m_elevator2Config;
-  private final PIDController elevatorPID =
-      new PIDController(PIDConstants.kElevatorP, PIDConstants.kElevatorI, PIDConstants.kElevatorD);
 
-  private double setpoint;
-  private double safetysetpoint;
-  private final PolynomialFunction polynomial;
+
+  private final SparkAbsoluteEncoder m_elevator1Encoder;
+
+  private final SparkMaxConfig m_elevator1Config;
+  private final SparkMaxConfig m_elevator2Config;
+
+  // Logic Variables
+  private double elevatorPIDSetPoint; // Elevator commanded setpoint
+  private double prevRot; // prior enc value for comparison
+  private double rot; // enc 
+  private double rotcount = 0; // # of rotations completed by abs enc
+  private double safetysetpoint; // Calculated Max Height
+  private final PolynomialFunction polynomial; // Max Height Function
+
 
   public ElevatorSubsystem() {
     WeightedObservedPoints elevSafetyPoints = new WeightedObservedPoints();
@@ -52,46 +58,35 @@ public class ElevatorSubsystem extends SubsystemBase {
     polynomial = new PolynomialFunction(coefficients);
     System.out.println("Polynomial Equation: " + polynomial);
 
+    // Leading motor config
+    m_elevator1Config = new SparkMaxConfig();
+    m_elevator1Config.inverted(true);
+    m_elevator1Config.absoluteEncoder.positionConversionFactor(30).inverted(true);
+    m_elevator1SparkMax.configure(
+        m_elevator1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    // Slave motor config
     m_elevator2Config = new SparkMaxConfig();
-    m_elevator1Encoder = m_elevator1SparkMax.getAbsoluteEncoder();
     m_elevator2Config.follow(m_elevator1SparkMax);
+    m_elevator2Config.inverted(true);
     m_elevator2SparkMax.configure(
         m_elevator2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    m_elevator1Encoder = m_elevator1SparkMax.getAbsoluteEncoder();
+    prevRot = m_elevator1Encoder.getPosition();
+
+    // Set starting height to bottom height
+    toBase();
   }
 
-  public void toBase() {
-    setpoint = ElevatorConstants.kElevatorStopsTested[0];
-  }
-
-  public void toL1() {
-    setpoint = ElevatorConstants.kElevatorStopsTested[1];
-  }
-
-  public void toL2() {
-    setpoint = ElevatorConstants.kElevatorStopsTested[2];
-  }
-
-  public void toL3() {
-    setpoint = ElevatorConstants.kElevatorStopsTested[3];
-  }
-
-  public void toL4() {
-    setpoint = ElevatorConstants.kElevatorStopsTested[4];
-  }
-
-  public void toIntake() {
-    setpoint = ElevatorConstants.kElevatorStopsTested[5];
-  }
-
-  public void toAboveIntake() {
-    setpoint =
-        (ElevatorConstants.kElevatorStopsTested[5]
-            + ElevatorConstants.kElevatorAboveIntakeHeightDifference);
+  public double getEncoder() {
+    // Rotations Translated to Total Distance Travelled
+    return ((rotcount * 30) + m_elevator1Encoder.getPosition());
   }
 
   public double getHeight() {
-    return ((m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot)
-        + ElevatorConstants.kElevatorLowestHeight);
+    // Function to convert Encoder to Carriage Height approximately in inches
+    return (0.555 * getEncoder() + 17.7);
   }
 
   // Calculated equation based on demo speeds and heights
@@ -100,34 +95,68 @@ public class ElevatorSubsystem extends SubsystemBase {
     return polynomial.value(x);
   }
 
-  public double getRelativeHeight() {
-    return (m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot);
+  public void toBase() {
+    elevatorPIDSetPoint = (ElevatorConstants.kElevLowHt);
+  }
+
+  public void toL1() {
+    elevatorPIDSetPoint = (ElevatorConstants.kElevL1Ht);
+  }
+
+  public void toL2() {
+    elevatorPIDSetPoint = (ElevatorConstants.kElevL2Ht);
+  }
+
+  public void toL3() {
+    elevatorPIDSetPoint = (ElevatorConstants.kElevL3Ht);
+  }
+
+  public void toL4() {
+    elevatorPIDSetPoint = (ElevatorConstants.kElevL4Ht);
+  }
+
+  public void toIntake() {
+    elevatorPIDSetPoint = (ElevatorConstants.kElevIntakeHt);
+  }
+
+  public void toAboveIntake() {
+    elevatorPIDSetPoint =
+        (ElevatorConstants.kElevIntakeHt + ElevatorConstants.kElevatorAboveIntakeHeightDifference);
   }
 
   public double getSetPoint() {
-    return setpoint;
+    return elevatorPIDSetPoint;
+  }
+
+  public void setElevatorSpeed(double speed) {
+    m_elevator1SparkMax.set(speed);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double drivespeed = DrivetrainSubsystem.maxSpeedCmd;
-    boolean safetyActive = false;
-    safetysetpoint = safetyheight(drivespeed);
-    double location;
-    if (safetysetpoint < setpoint) {
-      location = safetysetpoint;
-      safetyActive = true;
-    } else {
-      location = setpoint;
+    // double drivespeed = DrivetrainSubsystem.maxSpeedCmd;
+    // boolean safetyActive = false;
+    // safetysetpoint = safetyheight(drivespeed);
+    // double location;
+    // if (safetysetpoint < setpoint) {
+    //   location = safetysetpoint;
+    //   safetyActive = true;
+    // } else {
+    //   location = setpoint;
+    // }
+  
+    // Logic to track looping encoder
+    rot = m_elevator1Encoder.getPosition();
+    if ((rot - prevRot) < -25) {
+      rotcount += 1;
+    } else if ((rot - prevRot) > 25) {
+      rotcount -= 1;
     }
+    prevRot = rot;
 
-    elevatorPID.setSetpoint(location);
-    double elevatorSpeed =
-        elevatorPID.calculate(
-            m_elevator1Encoder.getPosition() * ElevatorConstants.kElevatorHeightToRot);
-    m_elevator1SparkMax.set(elevatorSpeed);
     SmartDashboard.putBoolean("Safety Active", safetyActive);
-    SmartDashboard.putNumber("Elevator Height", getHeight());
+    SmartDashboard.putNumber("Elev Height", getHeight());
+    SmartDashboard.putNumber("Elev Setpoint", elevatorPIDSetPoint);
   }
 }
