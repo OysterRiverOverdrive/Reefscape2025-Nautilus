@@ -9,28 +9,27 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlgaTPIDCmd extends Command {
-  /** Creates a new AlgaTPIDCmd. */
+
   private AlgaeArmSubsystem alga;
 
-  private final PIDController algaeArmPID =
+   private final PIDController algaeArmPID =
       new PIDController(PIDConstants.kAlgaeArmP, PIDConstants.kAlgaeArmI, PIDConstants.kAlgaeArmD);
 
-  public AlgaTPIDCmd(AlgaeArmSubsystem algae) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    alga = algae;
+  public AlgaTPIDCmd(AlgaeArmSubsystem alga) {
+    this.alga = alga;
     addRequirements(alga);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    algaeArmPID.setSetpoint(alga.getSetPoint());
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    algaeArmPID.setSetpoint(alga.getSetPoint());
     double armSpeed = algaeArmPID.calculate(alga.getEncoder());
     alga.setAlgaArmSpeed(armSpeed);
   }

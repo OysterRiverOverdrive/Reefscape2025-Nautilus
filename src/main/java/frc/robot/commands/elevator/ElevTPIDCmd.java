@@ -17,20 +17,21 @@ public class ElevTPIDCmd extends Command {
       new PIDController(PIDConstants.kElevatorP, PIDConstants.kElevatorI, PIDConstants.kElevatorD);
 
   /** Creates a new TelePIDCmd. */
-  public ElevTPIDCmd(ElevatorSubsystem elevators) {
+  public ElevTPIDCmd(ElevatorSubsystem elevator) {
     // Use addRequirements() here to declare subsystem dependencies
-    elevator = elevators;
-    addRequirements(elevators);
+    this.elevator = elevator;
+    addRequirements(elevator);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    elevatorPID.setSetpoint(elevator.getSetPoint());
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevatorPID.setSetpoint(elevator.getSetPoint());
     double elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
     elevator.setElevatorSpeed(elevatorSpeed);
   }

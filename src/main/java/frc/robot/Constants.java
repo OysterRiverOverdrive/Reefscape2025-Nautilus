@@ -232,11 +232,19 @@ public final class Constants {
     public static final double kElevatorP = 0.0065;
     public static final double kElevatorI = 0.003;
     public static final double kElevatorD = 0.001;
+    // Autonomous Elevator PID
+    public static final double kAutoElevP = 0.0065;
+    public static final double kAutoElevI = 0.003;
+    public static final double kAutoElevD = 0.001;
 
     // Algae Arm PID
     public static final double kAlgaeArmP = 0.8;
     public static final double kAlgaeArmI = 0.5;
     public static final double kAlgaeArmD = 0.1;
+    // Autonomous Algae Arm PID
+    public static final double kAutoAlgaP = 0.8;
+    public static final double kAutoAlgaI = 0.5;
+    public static final double kAutoAlgaD = 0.1;
   }
 
   // Constants specifically for Swerve Module
