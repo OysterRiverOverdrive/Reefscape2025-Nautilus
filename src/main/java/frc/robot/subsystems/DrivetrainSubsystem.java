@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotConstants;
+import frc.utils.LimelightHelpers;
+import frc.utils.LimelightHelpers.PoseEstimate;
 import frc.utils.SwerveModule;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -68,6 +71,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private SlewRateLimiter m_magLimiter1 = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+
+  // PoseEstimator class for tracking robot pose
+  SwerveDrivePoseEstimator m_poseEstimator =
+      new SwerveDrivePoseEstimator(
+          DriveConstants.kDriveKinematics,
+          Rotation2d.fromDegrees(getHeading()),
+          new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+          },
+          new Pose2d());
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry =
@@ -295,5 +311,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
         });
+
+    PoseEstimate CurPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
+
+    if (LimelightHelpers.validPoseEstimate(CurPose)) {
+      m_odometry.update(
+          Rotation2d.fromDegrees(CurPose.pose.getRotation().getDegrees()),
+          new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+          });
+    }
   }
 }
