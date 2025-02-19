@@ -25,9 +25,7 @@ public class ElevTPIDCmd extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    elevatorPID.setSetpoint(elevator.getSetPoint());
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
