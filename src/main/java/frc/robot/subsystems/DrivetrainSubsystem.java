@@ -50,12 +50,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private AHRS m_gyro = new AHRS(NavXComType.kUSB1);
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
-  private double m_currentTranslationDir = 0.0;
-  private double m_currentTranslationMag = 0.0;
-
-  private double x;
-  private double y;
-  private double r;
 
   private boolean waiting = false;
   private double maxSpeedDrive;
@@ -109,10 +103,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     double ySpeedDelivered = ySpeedCommanded * maxSpeedDrive;
     double rotDelivered = m_currentRotation * maxSpeedTurn;
 
-    x = xSpeedDelivered;
-    y = ySpeedDelivered;
-    r = rotDelivered;
-
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
             ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -151,10 +141,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     double xSpeedDelivered = xSpeedCommanded * maxSpeedDrive;
     double ySpeedDelivered = ySpeedCommanded * maxSpeedDrive;
     double rotDelivered = m_currentRotation * maxSpeedTurn;
-
-    x = xSpeedDelivered;
-    y = ySpeedDelivered;
-    r = rotDelivered;
 
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
