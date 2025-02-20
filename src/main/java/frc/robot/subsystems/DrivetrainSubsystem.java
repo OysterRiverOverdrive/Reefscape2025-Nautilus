@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -303,7 +304,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Auto is Waiting", waiting);
 
     // Update the odometry in the periodic block
-    m_odometry.update(
+    m_poseEstimator.update(
         Rotation2d.fromDegrees(getHeading()),
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
@@ -314,15 +315,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     PoseEstimate CurPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
 
+    LimelightHelpers.SetRobotOrientation(
+        "",
+        m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
+        0,
+        0,
+        0,
+        0,
+        0);
+    LimelightHelpers.PoseEstimate ATag =
+        LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+
     if (LimelightHelpers.validPoseEstimate(CurPose)) {
-      m_odometry.update(
-          Rotation2d.fromDegrees(CurPose.pose.getRotation().getDegrees()),
-          new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-          });
+      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
+      m_poseEstimator.addVisionMeasurement(ATag.pose, ATag.timestampSeconds);
     }
   }
 }

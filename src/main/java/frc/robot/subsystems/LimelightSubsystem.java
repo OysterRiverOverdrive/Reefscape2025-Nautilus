@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.estimator.PoseEstimator;
 import frc.robot.Constants.LimeLightConstants;
 import frc.utils.LimelightHelpers;
 import frc.utils.LimelightHelpers.PoseEstimate;
@@ -46,7 +45,7 @@ public class LimelightSubsystem extends SubsystemBase {
         LimeLightConstants.CameraRollOffset,
         LimeLightConstants.CameraPitchOffset,
         LimeLightConstants.CameraYawOffset);
-    
+
     // PoseEstimator PEstimator = new PoseEstimator<>(null, null, null, null); Pose Estimator, idk.
   }
 
@@ -142,8 +141,6 @@ public class LimelightSubsystem extends SubsystemBase {
     PoseEstimate CurPose = getPose2dMegaTag2();
 
     if (LimelightHelpers.validPoseEstimate(CurPose)) {
-      
-      LimelightHelpers.SetRobotOrientation("", CurPose.pose.getRotation().getDegrees(), 0, 0, 0, 0, 0);
 
       LimelightHelpers.printPoseEstimate(CurPose);
 
