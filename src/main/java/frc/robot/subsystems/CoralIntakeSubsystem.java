@@ -24,8 +24,8 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   public CoralIntakeSubsystem() {
     // Digital Configuration for later
     m_actuConfig = new SparkMaxConfig();
-    m_actuConfig.inverted(false);
-    m_actuConfig.smartCurrentLimit(1);
+    m_actuConfig.inverted(RobotConstants.kCoralActuInverted);
+    m_actuConfig.smartCurrentLimit(RobotConstants.kCoralActuCurrentLimit);
     linActuator.configure(
         m_actuConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }

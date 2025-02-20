@@ -116,7 +116,7 @@ public final class Constants {
     // Coral Intake constants
     public static final double kCoralIntakeSpeed = 0.4;
     public static final boolean kCoralActuInverted = false;
-    public static final double kCoralActuCurrentLimit = 1.0; // Amps
+    public static final int kCoralActuCurrentLimit = 1; // Amps
     // Actuator Rates
     public static final double kCoralActuStrokeLength = 2.4; // Inches
     public static final double kCoralActuStrokeTime = 7.8; // Seconds
