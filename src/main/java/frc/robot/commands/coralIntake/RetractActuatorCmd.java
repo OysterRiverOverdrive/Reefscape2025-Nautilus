@@ -44,7 +44,8 @@ public class RetractActuatorCmd extends Command {
   public boolean isFinished() {
     boolean retVal = false;
     double currTime = timer.get();
-    if (currTime >= runtime) {
+    // Add a little to ensure completely down
+    if (currTime >= runtime + 0.2) {
       retVal = true;
     }
 
