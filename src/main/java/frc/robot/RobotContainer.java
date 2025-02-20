@@ -143,10 +143,9 @@ public class RobotContainer {
                 new ElevIntakeCmd(elevator),
                 new ExtendActuatorCmd(coralIntake),
                 new CoralIntakeReverseCommand(coralIntake)))
-        .onFalse(new ParallelCommandGroup(
-          new RetractActuatorCmd(coralIntake),
-          new CoralIntakeStopCommand(coralIntake)
-        ));
+        .onFalse(
+            new ParallelCommandGroup(
+                new RetractActuatorCmd(coralIntake), new CoralIntakeStopCommand(coralIntake)));
 
     // Coral Intake Bindings
     cutil
