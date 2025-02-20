@@ -86,5 +86,6 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Algae Arm Angle", getEncoder());
+    SmartDashboard.putNumber("Algae Arm Set", getSetPoint());
   }
 }
