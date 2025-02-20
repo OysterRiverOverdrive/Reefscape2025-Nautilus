@@ -96,6 +96,7 @@ public final class Constants {
     public static final int kElevator2CanId = 11;
 
     public static final int kCoralIntakeCanId = 12;
+    public static final int kCoralActuatorCanId = 15;
 
     public static final int kAlgaeArmCanId = 13;
     public static final int kAlgaeSpinnerCanId = 14;
@@ -114,6 +115,16 @@ public final class Constants {
 
     // Coral Intake constants
     public static final double kCoralIntakeSpeed = 0.4;
+    public static final boolean kCoralActuInverted = false;
+    public static final double kCoralActuCurrentLimit = 1.0; // Amps
+    // Actuator Rates
+    public static final double kCoralActuStrokeLength = 2.4; // Inches
+    public static final double kCoralActuStrokeTime = 7.8; // Seconds
+    public static final double kCoralActuSpeedRate =
+        kCoralActuStrokeLength / kCoralActuStrokeTime; // Inches Per Second
+    // Potential Actuator Stats
+    // public static final double kCoralActuSpeedRate = 0.6; // Inches per second
+    public static final double kCoralActuDistance = 1.0; // Inches
 
     public static final class AlgaeArmConstants {
       // Algae Arm gear ratio, 15 to 1, so motor rotations to arm rotations is 1 to 15
