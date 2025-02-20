@@ -23,13 +23,12 @@ public class AlgaTPIDCmd extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    algaeArmPID.setSetpoint(alga.getSetPoint());
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    algaeArmPID.setSetpoint(alga.getSetPoint());
     double armSpeed = algaeArmPID.calculate(alga.getEncoder());
     alga.setAlgaArmSpeed(armSpeed);
   }
