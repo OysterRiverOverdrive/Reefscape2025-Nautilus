@@ -23,6 +23,8 @@ public class LimelightSubsystem extends SubsystemBase {
   private final String leds_off = "leds_off";
   private final String leds_flash = "leds_flash";
 
+  public double leastDistToCrosshair;
+
   DrivetrainSubsystem drivetrain;
 
   /** Creates a new LimelightSubSys. */
@@ -152,6 +154,17 @@ public class LimelightSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("distance to camera", fiducial.distToCamera);
         SmartDashboard.putNumber("apriltag x", fiducial.txnc);
         SmartDashboard.putNumber("apriltag y", fiducial.tync);
+
+        double distToCrosshair = Math.hypot(fiducial.txnc, fiducial.tync);
+
+        if (i == 0) {
+          leastDistToCrosshair = distToCrosshair;
+          continue;
+        }
+
+        if (distToCrosshair < leastDistToCrosshair) {
+          leastDistToCrosshair = distToCrosshair;
+        }
       }
     }
 
