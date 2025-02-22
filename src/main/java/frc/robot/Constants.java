@@ -96,6 +96,7 @@ public final class Constants {
     public static final int kElevator2CanId = 11;
 
     public static final int kCoralIntakeCanId = 12;
+    public static final int kCoralActuatorCanId = 15;
 
     public static final int kAlgaeArmCanId = 13;
     public static final int kAlgaeSpinnerCanId = 14;
@@ -114,6 +115,16 @@ public final class Constants {
 
     // Coral Intake constants
     public static final double kCoralIntakeSpeed = 0.4;
+    public static final boolean kCoralActuInverted = true;
+    public static final int kCoralActuCurrentLimit = 1; // Amps
+    // Actuator Rates
+    public static final double kCoralActuStrokeLength = 2.4; // Inches
+    public static final double kCoralActuStrokeTime = 7.8; // Seconds
+    public static final double kCoralActuSpeedRate =
+        kCoralActuStrokeLength / kCoralActuStrokeTime; // Inches Per Second
+    // Potential Actuator Stats
+    // public static final double kCoralActuSpeedRate = 0.6; // Inches per second
+    public static final double kCoralActuDistance = 2.2; // Inches
 
     public static final boolean kCoralActuInverted = true;
     public static final int kCoralActuCurrentLimit = 1; // Amps
@@ -258,9 +269,10 @@ public final class Constants {
   public static final class PIDConstants {
 
     // Elevator PID
-    public static final double kElevatorP = 0.005;
-    public static final double kElevatorI = 0.0036;
-    public static final double kElevatorD = 0.0022;
+
+    public static final double kElevatorP = 0.0065;
+    public static final double kElevatorI = 0.0035;
+    public static final double kElevatorD = 0.001;
 
     // Autonomous Elevator PID
     public static final double kAutoElevP = 0.0065;
