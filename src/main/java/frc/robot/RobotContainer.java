@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
-// import frc.robot.auto.plans.*;
+import frc.robot.auto.AutoAlgaeSpinForwardCmd;
 import frc.robot.commands.TeleopCmd;
 import frc.robot.commands.algaeArm.*;
 import frc.robot.commands.coralIntake.*;
@@ -195,10 +195,7 @@ public class RobotContainer {
         break;
     }
     // Create sequential command with the wait command first then run selected auto
-    auto =
-        new SequentialCommandGroup(
-            new BeginSleepCmd(drivetrain, SmartDashboard.getNumber("Auto Wait Time (Sec)", 0)),
-            auto);
+    auto = new SequentialCommandGroup(new AutoCoralSpinForwardCmd(coralIntake, 5));
     return auto;
   }
 }
