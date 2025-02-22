@@ -15,7 +15,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -47,18 +46,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
           RobotConstants.kRearRightDrivingCanId,
           RobotConstants.kRearRightTurningCanId,
           RobotConstants.kBackRightChassisAngularOffset);
-
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
   // The gyro sensor
   private AHRS m_gyro = new AHRS(NavXComType.kUSB1);
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
-  private double m_currentTranslationDir = 0.0;
-  private double m_currentTranslationMag = 0.0;
-
-  private double x;
-  private double y;
-  private double r;
 
   private boolean waiting = false;
   private double maxSpeedDrive;
@@ -84,12 +75,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DrivetrainSubsystem() {
     zeroHeading();
-    // m_gyro.calibrate();
-
-    m_chooser.setDefaultOption("Medium Speed", DriveConstants.medium);
-    m_chooser.addOption("Low Speed", DriveConstants.low);
-    m_chooser.addOption("High Speed", DriveConstants.high);
-    SmartDashboard.putData("Speed Drop Down", m_chooser);
   }
 
   /**
@@ -117,10 +102,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     double xSpeedDelivered = xSpeedCommanded * maxSpeedDrive;
     double ySpeedDelivered = ySpeedCommanded * maxSpeedDrive;
     double rotDelivered = m_currentRotation * maxSpeedTurn;
-
-    x = xSpeedDelivered;
-    y = ySpeedDelivered;
-    r = rotDelivered;
 
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
@@ -160,10 +141,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     double xSpeedDelivered = xSpeedCommanded * maxSpeedDrive;
     double ySpeedDelivered = ySpeedCommanded * maxSpeedDrive;
     double rotDelivered = m_currentRotation * maxSpeedTurn;
-
-    x = xSpeedDelivered;
-    y = ySpeedDelivered;
-    r = rotDelivered;
 
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
@@ -258,10 +235,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_frontRight.stop();
     m_rearLeft.stop();
     m_rearRight.stop();
-  }
-
-  public String getDropDown() {
-    return m_chooser.getSelected();
   }
 
   public void setWait() {

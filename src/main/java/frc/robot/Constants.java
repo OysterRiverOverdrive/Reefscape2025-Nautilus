@@ -49,12 +49,6 @@ public final class Constants {
     public static final int kDriveRotate = 4;
     public static final double deadzoneDriver = 0.12;
 
-    // Speed Mode Strings
-    // Moved from DrivetrainSubsystem
-    public static final String low = "speed1";
-    public static final String medium = "speed2";
-    public static final String high = "speed3";
-
     public enum joysticks {
       DRIVER,
       OPERATOR
@@ -65,17 +59,6 @@ public final class Constants {
 
     public static final double kMaxSpeedMetersPerSecond = 6.8;
     public static final double kMaxAngularSpeed = 1.25 * 2 * Math.PI; // radians per second
-
-    // Drive Mode Speeds
-    // High
-    public static final double kSpeedHighDrive = 6.0;
-    public static final double kSpeedHighTurn = kMaxAngularSpeed;
-
-    // Medium is Default Speeds
-
-    // Slow
-    public static final double kSpeedSlowDrive = 2.1;
-    public static final double kSpeedSlowTurn = 1.8;
 
     public static final double kDirectionSlewRate = 4; // radians per second
     public static final double kMagnitudeSlewRate = 2; // percent per second (1 = 100%)
@@ -109,7 +92,13 @@ public final class Constants {
     public static final int kRearLeftDrivingCanId = 9;
     public static final int kRearLeftTurningCanId = 8;
 
+    public static final int kElevator1CanId = 10;
+    public static final int kElevator2CanId = 11;
+
+    public static final int kCoralIntakeCanId = 12;
+
     public static final int kAlgaeArmCanId = 13;
+    public static final int kAlgaeSpinnerCanId = 14;
 
     // Used to declare Navx as upside down
     public static final boolean kGyroReversed = true;
@@ -120,41 +109,142 @@ public final class Constants {
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
-    // Algae Arm gear ratio, 15 to 1, so motor rotations to arm rotations is 1 to 15
-    public static final double kAlgaeArmGearRatio = 1.0 / 15.0;
+    // Algae Spinner constants
+    public static final double kAlgaeSpinnerSpeed = 0.2;
 
-    // Following angles are in degrees relative to bottom.
-    public static final double kAlgaeArmBottomAngle = 0;
-    public static final double kAlgaeArmFlatAngle = 40;
-    public static final double kAlgaeArmRemoveAlgaeAngle = 60;
-    public static final double kAlgaeArmTopAngle = 80;
+    // Coral Intake constants
+    public static final double kCoralIntakeSpeed = 0.4;
 
-    // Array of angles of algae arm stops relative to base angle in degrees
-    // Indicies are stops in order from bottom to top
-    public static final double[] kAlgaeArmStopAngles = {
-      RobotConstants.kAlgaeArmBottomAngle,
-      RobotConstants.kAlgaeArmFlatAngle,
-      RobotConstants.kAlgaeArmRemoveAlgaeAngle,
-      RobotConstants.kAlgaeArmTopAngle
-    };
+    public static final class AlgaeArmConstants {
+      // Algae Arm gear ratio, 15 to 1, so motor rotations to arm rotations is 1 to 15
+      public static final double kAlgaeArmGearRatio = 1.0 / 15.0;
 
-    // Same array in terms of rotations
-    public static final double[] kAlgaeArmStopRotations = {
-      RobotConstants.kAlgaeArmBottomAngle / 360,
-      RobotConstants.kAlgaeArmFlatAngle / 360,
-      RobotConstants.kAlgaeArmRemoveAlgaeAngle / 360,
-      RobotConstants.kAlgaeArmTopAngle / 360
-    };
+      // Bypassing Calculated Values with collected values, this can be faster during testing to
+      // just record values and then make the calculation work later
+      // Later Calculations ------------------------------------------------------
+      // Following angles are in degrees relative to bottom.
+      // public static final double kAlgaeArmBottomAngle = 0;
+      // public static final double kAlgaeArmFlatAngle = 40;
+      // public static final double kAlgaeArmRemoveAlgaeAngle = 60;
+      // public static final double kAlgaeArmTopAngle = 80;
+      // // guess??? maybe? not accurate check when algae arm attatched
+
+      // // Array of angles of algae arm stops relative to base angle in degrees
+      // // Indicies are stops in order from bottom to top
+      // public static final double[] kAlgaeArmStopAngles = {
+      //   AlgaeArmConstants.kAlgaeArmBottomAngle,
+      //   AlgaeArmConstants.kAlgaeArmFlatAngle,
+      //   AlgaeArmConstants.kAlgaeArmRemoveAlgaeAngle,
+      //   AlgaeArmConstants.kAlgaeArmTopAngle
+      // };
+
+      // // Same array in terms of rotations
+      // public static final double[] kAlgaeArmStopRotations = {
+      //   AlgaeArmConstants.kAlgaeArmBottomAngle / 360,
+      //   AlgaeArmConstants.kAlgaeArmFlatAngle / 360,
+      //   AlgaeArmConstants.kAlgaeArmRemoveAlgaeAngle / 360,
+      //   AlgaeArmConstants.kAlgaeArmTopAngle / 360
+      // };
+
+      // Bypassing Calculated Values with collected values, this can be faster during testing to
+      // just record values and then make the calculation work later
+      public static final double kDownAngle = 0.03;
+      public static final double kAlgaeAngle = 0.203;
+      public static final double kLoadingAngle = 0.433;
+    }
+
+    public static final class ElevatorConstants {
+
+      public static final double kElevatorHeightToRot = 10;
+      // guess??? maybe? not accurate check when elevator attatched
+
+      // Array of heights of elevator stops relative to base height in inches
+      // These hieghts are of the hinge for the coral bucket,
+      // recieved by taking Reef Level height,
+      // adding height difference between bottom and top of the coral bucket,
+      // and subtracting the lowest height reachable by the elevator,
+      // making all heights relative to the lowest point on the elevator
+      // After, it adds the in the offset so the coral center is lined up
+      // Indicies 1-4 are corresponding reef levels, index 0 is base
+      // Index 5 is height of elevator for coral intake
+
+      // Bypassing Calculated Values with collected values, this can be faster during testing to
+      // just record values and then make the calculation work later
+      // Later Calculations ------------------------------------------------------
+      // public static final double[] kElevatorStopsCalculated = {
+      //   0,
+      //   ElevatorConstants.kElevatorReefL1Height
+      //       + ElevatorConstants.kElevatorCoralBucketHeightDifference
+      //       - ElevatorConstants.kElevatorLowestHeight
+      //       + ElevatorConstants.kElevatorReefOffset,
+      //   ElevatorConstants.kElevatorReefL2Height
+      //       + ElevatorConstants.kElevatorCoralBucketHeightDifference
+      //       - ElevatorConstants.kElevatorLowestHeight
+      //       + ElevatorConstants.kElevatorReefOffset,
+      //   ElevatorConstants.kElevatorReefL3Height
+      //       + ElevatorConstants.kElevatorCoralBucketHeightDifference
+      //       - ElevatorConstants.kElevatorLowestHeight
+      //       + ElevatorConstants.kElevatorReefOffset,
+      //   ElevatorConstants.kElevatorReefL4Height
+      //       + ElevatorConstants.kElevatorCoralBucketHeightDifference
+      //       - ElevatorConstants.kElevatorLowestHeight
+      //       + ElevatorConstants.kElevatorReefOffset,
+      //   ElevatorConstants.kElevatorIntakeHeight - ElevatorConstants.kElevatorLowestHeight
+      // };
+
+      // // Heights for elevator as tested, last one is still guess
+      // public static final double[] kElevatorStopsTested = {
+      //   0 - ElevatorConstants.kElevatorLowestHeight,
+      //   26 - ElevatorConstants.kElevatorLowestHeight,
+      //   35.5 - ElevatorConstants.kElevatorLowestHeight,
+      //   51.5 - ElevatorConstants.kElevatorLowestHeight,
+      //   76.5 - ElevatorConstants.kElevatorLowestHeight,
+      //   25 - ElevatorConstants.kElevatorLowestHeight
+      // };
+
+      // All measurements are from ground to the top blue beam on the carriage
+      // Lowest Height is confirmed, rest are guesses
+
+      public static final double kElevLowHt = 18;
+      public static final double kElevL1Ht = 22;
+      public static final double kElevL2Ht = 32;
+      public static final double kElevL3Ht = 47.5;
+      public static final double kElevL4Ht = 73;
+      public static final double kElevIntakeHt = 28.5;
+      public static final double kElevatorAboveIntakeHeightDifference = 8;
+
+      public static final double kElevatorReefOffset = -2;
+      // Coral bucket downward angle from flat, degrees
+      public static final double kElevatorCoralBucketAngleDegrees = 28;
+      // Coral bucket downward angle from flat, degrees
+      public static final double kElevatorCoralBucketAngleRadians =
+          kElevatorCoralBucketAngleDegrees * Math.PI / 180.0;
+      // Height difference between pivot point and end of coral bucket for elevator
+      public static final double kElevatorCoralBucketHeightDifference =
+          8 * Math.sin(kElevatorCoralBucketAngleRadians);
+    }
   }
 
   // Constants for PIDs
   public static final class PIDConstants {
-    public static final double kAlgaeArmP =
-        0.1; // guess??? maybe? not accurate check when algae arm attatched
-    public static final double kAlgaeArmI =
-        0; // guess??? maybe? not accurate check when algae arm attatched
-    public static final double kAlgaeArmD =
-        0; // guess??? maybe? not accurate check when algae arm attatched
+
+    // Elevator PID
+    public static final double kElevatorP = 0.005;
+    public static final double kElevatorI = 0.0036;
+    public static final double kElevatorD = 0.0022;
+    // Autonomous Elevator PID
+    public static final double kAutoElevP = 0.0065;
+    public static final double kAutoElevI = 0.0025;
+    public static final double kAutoElevD = 0.0018;
+
+    // Algae Arm PID
+    public static final double kAlgaeArmP = 0.4;
+    public static final double kAlgaeArmI = 0.2;
+    public static final double kAlgaeArmD = 0.16;
+    // Autonomous Algae Arm PID
+    public static final double kAutoAlgaP = 0.8;
+    public static final double kAutoAlgaI = 0.5;
+    public static final double kAutoAlgaD = 0.1;
   }
 
   // Constants specifically for Swerve Module

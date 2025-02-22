@@ -98,7 +98,7 @@ public class ControllerUtils {
    * @param deadzone How much input should be ignored to prevent accidental press (ex. 0.2)
    * @param joystick Controller of which the button is located, use Enum in constants
    */
-  public boolean TrigSupplier(int axisnum, double deadzone, DriveConstants.joysticks joystick) {
+  public boolean getTriggerButton(int axisnum, double deadzone, DriveConstants.joysticks joystick) {
     Joystick controller;
     if (joystick == DriveConstants.joysticks.DRIVER) {
       controller = new Joystick(DriveConstants.kDrveControllerPort);
@@ -112,6 +112,18 @@ public class ControllerUtils {
       return true;
     } else {
       return false;
+    }
+  }
+
+  public Trigger triggerSupplier(int axisnum, double deadzone, DriveConstants.joysticks joystick) {
+    if (joystick == DriveConstants.joysticks.DRIVER) {
+      BooleanSupplier bsup = () -> getTriggerButton(axisnum, deadzone, joystick);
+      Trigger mybutton = new Trigger(bsup);
+      return mybutton;
+    } else {
+      BooleanSupplier bsup = () -> getTriggerButton(axisnum, deadzone, joystick);
+      Trigger mybutton = new Trigger(bsup);
+      return mybutton;
     }
   }
 
