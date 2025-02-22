@@ -16,7 +16,8 @@ public class AlgaeAPIDCmd extends Command {
   private double error;
 
   private final PIDController algaeArmPID =
-      new PIDController(PIDConstants.kAutoAlgaeP, PIDConstants.kAutoAlgaeI, PIDConstants.kAutoAlgaeD);
+      new PIDController(
+          PIDConstants.kAutoAlgaeP, PIDConstants.kAutoAlgaeI, PIDConstants.kAutoAlgaeD);
 
   /**
    * Autonomous Method of moving elevator

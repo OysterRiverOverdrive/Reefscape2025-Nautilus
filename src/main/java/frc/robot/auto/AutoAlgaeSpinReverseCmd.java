@@ -4,15 +4,16 @@
 
 package frc.robot.auto;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaeArmSubsystem;
-import edu.wpi.first.wpilibj.Timer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoAlgaeSpinReverseCmd extends Command {
   private AlgaeArmSubsystem algae;
   private Timer timer = new Timer();
   private double duration;
+
   /** Creates a new AutoAlgaeSpinForwardCmd. */
   public AutoAlgaeSpinReverseCmd(AlgaeArmSubsystem algae, double duration) {
     this.algae = algae;
