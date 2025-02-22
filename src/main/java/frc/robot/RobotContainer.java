@@ -136,16 +136,16 @@ public class RobotContainer {
     //             new CoralIntakeStopCommand(coralIntake),
     //             new ElevPreIntakeCmd(elevator),
     //             new AlgaeArmToDownCommand(algaeArm)));
-    cutil
-        .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
-        .onTrue(
-            new ParallelCommandGroup(
-                new ElevIntakeCmd(elevator),
-                new ExtendActuatorCmd(coralIntake),
-                new CoralIntakeReverseCommand(coralIntake)))
-        .onFalse(
-            new ParallelCommandGroup(
-                new RetractActuatorCmd(coralIntake), new CoralIntakeStopCommand(coralIntake)));
+    // cutil
+    //     .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(
+    //         new ParallelCommandGroup(
+    //             new ElevIntakeCmd(elevator),
+    //             new ExtendActuatorCmd(coralIntake),
+    //             new CoralIntakeReverseCommand(coralIntake)))
+    //     .onFalse(
+    //         new ParallelCommandGroup(
+    //             new RetractActuatorCmd(coralIntake), new CoralIntakeStopCommand(coralIntake)));
 
     // Coral Intake Bindings
     cutil
