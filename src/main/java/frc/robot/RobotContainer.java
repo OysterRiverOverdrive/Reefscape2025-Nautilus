@@ -54,7 +54,7 @@ public class RobotContainer {
           drivetrain,
           () -> cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.DRIVER));
   private final ElevTPIDCmd elevTPIDCmd = new ElevTPIDCmd(elevator);
-  private final AlgaTPIDCmd algaTPIDCmd = new AlgaTPIDCmd(algaeArm);
+  private final AlgaeTPIDCmd algaeTPIDCmd = new AlgaeTPIDCmd(algaeArm);
 
   public RobotContainer() {
 
@@ -63,7 +63,7 @@ public class RobotContainer {
     // Default Commands to be run all the time, only one per subsystem
     drivetrain.setDefaultCommand(teleopCmd);
     elevator.setDefaultCommand(elevTPIDCmd);
-    algaeArm.setDefaultCommand(algaTPIDCmd);
+    algaeArm.setDefaultCommand(algaeTPIDCmd);
 
     // Add Auto options to dropdown and push to dashboard
     m_chooser.setDefaultOption("Auto[Rename Me]", auto1);
