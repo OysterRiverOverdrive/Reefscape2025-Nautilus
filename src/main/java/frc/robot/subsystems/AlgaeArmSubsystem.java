@@ -78,7 +78,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     return algaeArmPIDSetPoint;
   }
 
-  public void setAlgaArmSpeed(double speed) {
+  public void setAlgaeArmSpeed(double speed) {
     m_AlgaeArmSparkMax.set(speed);
   }
 
