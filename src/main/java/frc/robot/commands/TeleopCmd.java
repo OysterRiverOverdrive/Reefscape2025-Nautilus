@@ -50,10 +50,10 @@ public class TeleopCmd extends Command {
     speedTurn = DriveConstants.kMaxAngularSpeed;
 
     double max;
-    if (ContX > ContY) {
-      max = ContX;
+    if (Math.abs(ContX) > Math.abs(ContY)) {
+      max = Math.abs(ContX);
     } else {
-      max = ContY;
+      max = Math.abs(ContY);
     }
     DrivetrainSubsystem.maxSpeedCmd = max;
 

@@ -124,19 +124,7 @@ public final class Constants {
         kCoralActuStrokeLength / kCoralActuStrokeTime; // Inches Per Second
     // Potential Actuator Stats
     // public static final double kCoralActuSpeedRate = 0.6; // Inches per second
-    public static final double kCoralActuDistance = 2.2; // Inches
-
-    public static final boolean kCoralActuInverted = true;
-    public static final int kCoralActuCurrentLimit = 1; // Amps
-    // Actuator Rates
-    public static final double kCoralActuStrokeLength = 2.4; // Inches
-    public static final double kCoralActuStrokeTime = 7.8; // Seconds
-    public static final double kCoralActuSpeedRate =
-        kCoralActuStrokeLength / kCoralActuStrokeTime; // Inches Per Second
-    // Potential Actuator Stats
-    // public static final double kCoralActuSpeedRate = 0.6; // Inches per second
     public static final double kCoralActuDistance = 2.28; // Inches
-
 
     public static final class AlgaeArmConstants {
       // Algae Arm gear ratio, 15 to 1, so motor rotations to arm rotations is 1 to 15
@@ -248,20 +236,21 @@ public final class Constants {
 
       public static final double[][] ELEV_SAFETY_POINTS = {
         {0.0, 78.0},
-        {0.1, 76.0},
-        {0.2, 74.0},
+        {0.05, 70.0},
+        {0.1, 65.0},
+        {0.2, 60.0},
         {0.3, 50.0},
         {0.4, 40.0},
-        {0.5, 30.0},
-        {0.6, 28.0},
-        {0.7, 25.0},
-        {0.8, 23.0},
-        {0.9, 20.0},
-        {1.0, 20.0}
+        {0.5, 35.0},
+        {0.6, 35.0},
+        {0.7, 35.0},
+        {0.8, 35.0},
+        {0.9, 27.0},
+        {1.0, 25.0}
       };
 
       // Polynomial degree (adjust as needed)
-      public static final int POLYNOMIAL_DEGREE = 5;
+      public static final int POLYNOMIAL_DEGREE = 2;
     }
   }
 
