@@ -124,7 +124,7 @@ public final class Constants {
         kCoralActuStrokeLength / kCoralActuStrokeTime; // Inches Per Second
     // Potential Actuator Stats
     // public static final double kCoralActuSpeedRate = 0.6; // Inches per second
-    public static final double kCoralActuDistance = 2.2; // Inches
+    public static final double kCoralActuDistance = 2.28; // Inches
 
     public static final class AlgaeArmConstants {
       // Algae Arm gear ratio, 15 to 1, so motor rotations to arm rotations is 1 to 15
@@ -233,6 +233,24 @@ public final class Constants {
       // Height difference between pivot point and end of coral bucket for elevator
       public static final double kElevatorCoralBucketHeightDifference =
           8 * Math.sin(kElevatorCoralBucketAngleRadians);
+
+      public static final double[][] ELEV_SAFETY_POINTS = {
+        {0.0, 78.0},
+        {0.05, 70.0},
+        {0.1, 65.0},
+        {0.2, 60.0},
+        {0.3, 50.0},
+        {0.4, 40.0},
+        {0.5, 35.0},
+        {0.6, 35.0},
+        {0.7, 35.0},
+        {0.8, 35.0},
+        {0.9, 27.0},
+        {1.0, 25.0}
+      };
+
+      // Polynomial degree (adjust as needed)
+      public static final int POLYNOMIAL_DEGREE = 2;
     }
   }
 
@@ -240,9 +258,11 @@ public final class Constants {
   public static final class PIDConstants {
 
     // Elevator PID
+
     public static final double kElevatorP = 0.0065;
     public static final double kElevatorI = 0.0035;
     public static final double kElevatorD = 0.001;
+
     // Autonomous Elevator PID
     public static final double kAutoElevP = 0.0065;
     public static final double kAutoElevI = 0.0025;

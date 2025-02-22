@@ -12,8 +12,12 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.*;
 import frc.robot.Constants.RobotConstants.ElevatorConstants;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+import org.apache.commons.math3.fitting.PolynomialCurveFitter;
+import org.apache.commons.math3.fitting.WeightedObservedPoints;
 
 public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
@@ -28,14 +32,32 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final SparkMaxConfig m_elevator1Config;
   private final SparkMaxConfig m_elevator2Config;
 
-  // Logic Variables
-  private double elevatorPIDSetPoint;
-  private double encoderRot;
-  private double prevRot;
-  private double rot;
-  private double rotcount = 0;
+  private DrivetrainSubsystem drivetrain;
 
-  public ElevatorSubsystem() {
+  // Logic Variables
+  private double elevatorPIDSetPoint; // Elevator commanded setpoint
+  private double prevRot; // prior enc value for comparison
+  private double rot; // enc
+  private double rotcount = 0; // # of rotations completed by abs enc
+  private final PolynomialFunction polynomial; // Max Height Function
+  public boolean safetyActive = false; // Bool for dashboard on height override
+
+  public ElevatorSubsystem(DrivetrainSubsystem drivetrain) {
+    WeightedObservedPoints elevSafetyPoints = new WeightedObservedPoints();
+    // Load points from Constants
+    for (double[] point : Constants.RobotConstants.ElevatorConstants.ELEV_SAFETY_POINTS) {
+      elevSafetyPoints.add(point[0], point[1]);
+    }
+    this.drivetrain = drivetrain;
+
+    // Fit polynomial of defined degree
+    PolynomialCurveFitter fitter =
+        PolynomialCurveFitter.create(Constants.RobotConstants.ElevatorConstants.POLYNOMIAL_DEGREE);
+    double[] coefficients = fitter.fit(elevSafetyPoints.toList());
+
+    // Store polynomial function
+    polynomial = new PolynomialFunction(coefficients);
+    System.out.println("Polynomial Equation: " + polynomial);
 
     // Leading motor config
     m_elevator1Config = new SparkMaxConfig();
@@ -66,6 +88,13 @@ public class ElevatorSubsystem extends SubsystemBase {
   public double getHeight() {
     // Function to convert Encoder to Carriage Height approximately in inches
     return (0.555 * getEncoder() + 17.7);
+  }
+
+  // Calculated equation based on demo speeds and heights
+  // Sheet used for calculation in software drive
+  public double safetyheight() {
+    double drivespeed = drivetrain.maxSpeedCmd;
+    return polynomial.value(drivespeed);
   }
 
   public void toBase() {
@@ -107,6 +136,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // This method will be called once per scheduler run
+
     // Logic to track looping encoder
     rot = m_elevator1Encoder.getPosition();
     if ((rot - prevRot) < -25) {
@@ -116,6 +147,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
     prevRot = rot;
 
+    SmartDashboard.putBoolean("Safety Active", safetyActive);
     SmartDashboard.putNumber("Elev Height", getHeight());
     SmartDashboard.putNumber("Elev Setpoint", elevatorPIDSetPoint);
   }
