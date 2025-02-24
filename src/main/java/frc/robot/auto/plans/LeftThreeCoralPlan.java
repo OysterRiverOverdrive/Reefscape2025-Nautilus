@@ -25,20 +25,18 @@ public class LeftThreeCoralPlan extends ParallelCommandGroup {
             List.of(new Translation2d(2, 0.5)),
             new Pose2d(3.82, 1.04, new Rotation2d(Math.PI * 2 / 3)));
     // Place coral and get algae
-    Command
-        showyDrive2 = // goes backwards to get coral, turns to face the coral getting place
-            autodrive.AutoDriveCmd(
-                drivetrain,
-                List.of(new Translation2d(-2, -1)),
-                new Pose2d(-2.7, -1.7, new Rotation2d(Math.PI)));
+    Command showyDrive2 = // goes backwards to get coral, turns to face the coral getting place
+        autodrive.AutoDriveCmd(
+            drivetrain,
+            List.of(new Translation2d(-2, -1)),
+            new Pose2d(-2.7, -1.7, new Rotation2d(Math.PI)));
     // Get coral
-    Command
-        showyDrive3 = // goes back and turns to face the reef again (it's the same thing
-            // because the robot turns backwards)
-            autodrive.AutoDriveCmd(
-                drivetrain,
-                List.of(new Translation2d(-2, -1)),
-                new Pose2d(-2.7, -1.7, new Rotation2d(Math.PI)));
+    Command showyDrive3 = // goes back and turns to face the reef again (it's the same thing
+        // because the robot turns backwards)
+        autodrive.AutoDriveCmd(
+            drivetrain,
+            List.of(new Translation2d(-2, -1)),
+            new Pose2d(-2.7, -1.7, new Rotation2d(Math.PI)));
     // after going back, place coral
 
     Command showyDrive2two = // andthen doesn't like multiple of the same command
