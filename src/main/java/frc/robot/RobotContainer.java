@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
@@ -64,6 +65,7 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(teleopCmd);
     elevator.setDefaultCommand(elevTPIDCmd);
     algaeArm.setDefaultCommand(algaTPIDCmd);
+    // coralIntake.setDefaultCommand(new CoralIntakeStopCommand(coralIntake));
 
     // Add Auto options to dropdown and push to dashboard
     m_chooser.setDefaultOption("Auto[Rename Me]", auto1);
@@ -119,14 +121,12 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> elevator.toIntake()));
 
     // Intake Sequence
-    // cutil
-    //     .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
-    //     .onTrue(
-    //         new SequentialCommandGroup(
-    //             new ParallelCommandGroup(
-    //                 new ExtendActuatorCmd(coralIntake), new ElevIntakeCmd(elevator)),
-    //             new CoralIntakeReverseCommand(coralIntake)))
-    //     .onFalse(new CoralIntakeStopCommand(coralIntake));
+    cutil
+        .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
+        .onTrue(
+            new ParallelCommandGroup(
+                    new ElevIntakeCmd(elevator), new ExtendActuatorCmd(coralIntake)
+                ));
 
     // Coral Intake Bindings
     cutil
