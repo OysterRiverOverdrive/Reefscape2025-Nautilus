@@ -125,8 +125,7 @@ public class RobotContainer {
         .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
         .onTrue(
             new ParallelCommandGroup(
-                    new ElevIntakeCmd(elevator), new ExtendActuatorCmd(coralIntake)
-                ));
+                new ElevIntakeCmd(elevator), new ExtendActuatorCmd(coralIntake)));
 
     // Coral Intake Bindings
     cutil
