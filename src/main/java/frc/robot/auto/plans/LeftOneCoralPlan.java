@@ -4,28 +4,44 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.auto.AutoCoralSpinForwardCmd;
 import frc.robot.auto.AutoCreationCmd;
+import frc.robot.commands.coralIntake.ResetActuatorCmd;
+import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.auto.AutoSleepCmd;
 import java.util.List;
 
 // STARTS ON THE RIGHT SIDE
 
 public class LeftOneCoralPlan extends ParallelCommandGroup {
 
-  public LeftOneCoralPlan(DrivetrainSubsystem drivetrain) {
+  public LeftOneCoralPlan(
+      DrivetrainSubsystem drivetrain,
+      ElevatorSubsystem elevatorsub,
+      CoralIntakeSubsystem intakesub) {
     AutoCreationCmd autodrive = new AutoCreationCmd();
+    ElevatorSubsystem elevator = elevatorsub;
+    CoralIntakeSubsystem intake = intakesub;
 
     // Auto Driving Commands
-
-    Command showyDrive1 = // goes from left side to reef, then turns to face the reef
+    Command toReef =
         autodrive.AutoDriveCmd(
             drivetrain,
-            List.of(new Translation2d(1, 0.5)),
-            new Pose2d(1.76, 1.01, new Rotation2d(Math.PI * 1 / 3)));
+            List.of(new Translation2d(2, 0.5)),
+            new Pose2d(3.75, -0.94, new Rotation2d(-Math.PI * 2 / 3)));
     // Place coral
 
     // Driving groups
-    addCommands(showyDrive1);
+    addCommands(
+      new ResetActuatorCmd(intake)
+      .andThen(toReef)
+      .andThen(new InstantCommand(() -> elevator.toL4()))
+      .andThen(new AutoSleepCmd(3))
+      .andThen(new AutoCoralSpinForwardCmd(intake,1))
+      );
   }
 }

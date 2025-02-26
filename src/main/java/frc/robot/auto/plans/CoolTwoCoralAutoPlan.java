@@ -4,26 +4,28 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.auto.AutoCreationCmd;
 import frc.robot.auto.AutoSleepCmd;
+import frc.robot.commands.elevator.ElevTPIDCmd;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import java.util.List;
 
 // STARTS ON THE RIGHT SIDE
 
 public class CoolTwoCoralAutoPlan extends ParallelCommandGroup {
 
-  public CoolTwoCoralAutoPlan(DrivetrainSubsystem drivetrain) {
+  public CoolTwoCoralAutoPlan(DrivetrainSubsystem drivetrain, ElevatorSubsystem elevator) {
     AutoCreationCmd autodrive = new AutoCreationCmd();
-
     // Auto Driving Commands
 
     Command showyDrive1 = // goes from right side to reef, then turns to face the reef
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(2, 0.5)),
-            new Pose2d(3.82, -1.01, new Rotation2d(-Math.PI * 2 / 3)));
+            new Pose2d(3.76, -0.95, new Rotation2d(-Math.PI * 2 / 3)));
     // Place coral and get algae
     Command showyDrive2 = // goes backwards to get coral, turns to face the coral getting place
         autodrive.AutoDriveCmd(
@@ -52,14 +54,18 @@ public class CoolTwoCoralAutoPlan extends ParallelCommandGroup {
 
     // Driving groups
     addCommands(
-        showyDrive1
-            .andThen(new AutoSleepCmd(0.25))
-            .andThen(showyDrive2)
-            .andThen(new AutoSleepCmd(0.25))
-            .andThen(showyDrive3)
-            .andThen(new AutoSleepCmd(0.25))
-            .andThen(showyDrive2two)
-            .andThen(new AutoSleepCmd(0.25))
-            .andThen(showyDrive3two));
+        new ParallelCommandGroup(
+            showyDrive1
+                .alongWith(new InstantCommand(() -> elevator.toL4()))
+                .andThen(new AutoSleepCmd(0.75))
+                .alongWith(new InstantCommand(() -> elevator.toIntake()))
+                .andThen(showyDrive2)
+                .andThen(new AutoSleepCmd(0.25))
+                .andThen(showyDrive3)
+                .andThen(new AutoSleepCmd(0.25))
+                .andThen(showyDrive2two)
+                .andThen(new AutoSleepCmd(0.25))
+                .andThen(showyDrive3two),
+            new ElevTPIDCmd(elevator)));
   }
 }

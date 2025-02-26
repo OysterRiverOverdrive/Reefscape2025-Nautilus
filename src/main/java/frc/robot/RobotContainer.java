@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
 import frc.robot.auto.plans.*;
@@ -57,8 +56,9 @@ public class RobotContainer {
   private final AlgaeTPIDCmd algaeTPIDCmd = new AlgaeTPIDCmd(algaeArm);
 
   // AUTOS
-  private final CoolTwoCoralAutoPlan coolTwoCOrealAuto = new CoolTwoCoralAutoPlan(drivetrain);
-  private final LeftOneCoralPlan leftOneCoralPlan = new LeftOneCoralPlan(drivetrain);
+  private final CoolTwoCoralAutoPlan coolTwoCOrealAuto =
+      new CoolTwoCoralAutoPlan(drivetrain, elevator);
+  private final LeftOneCoralPlan leftOneCoralPlan = new LeftOneCoralPlan(drivetrain, elevator, coralIntake);
   private final LeftThreeCoralPlan leftThreeCoralPlan = new LeftThreeCoralPlan(drivetrain);
   private final MiddleOneCoralPlan middleOneCoralPlan = new MiddleOneCoralPlan(drivetrain);
 
