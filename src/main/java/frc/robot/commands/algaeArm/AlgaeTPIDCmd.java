@@ -9,16 +9,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 
-public class AlgaTPIDCmd extends Command {
+public class AlgaeTPIDCmd extends Command {
 
-  private AlgaeArmSubsystem alga;
+  private AlgaeArmSubsystem algae;
 
   private final PIDController algaeArmPID =
       new PIDController(PIDConstants.kAlgaeArmP, PIDConstants.kAlgaeArmI, PIDConstants.kAlgaeArmD);
 
-  public AlgaTPIDCmd(AlgaeArmSubsystem alga) {
-    this.alga = alga;
-    addRequirements(alga);
+  public AlgaeTPIDCmd(AlgaeArmSubsystem algae) {
+    this.algae = algae;
+    addRequirements(algae);
   }
 
   // Called when the command is initially scheduled.
@@ -28,9 +28,9 @@ public class AlgaTPIDCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    algaeArmPID.setSetpoint(alga.getSetPoint());
-    double armSpeed = algaeArmPID.calculate(alga.getEncoder());
-    alga.setAlgaArmSpeed(armSpeed);
+    algaeArmPID.setSetpoint(algae.getSetPoint());
+    double armSpeed = algaeArmPID.calculate(algae.getEncoder());
+    algae.setAlgaeArmSpeed(armSpeed);
   }
 
   // Called once the command ends or is interrupted.

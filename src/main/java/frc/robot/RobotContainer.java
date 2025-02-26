@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
-// import frc.robot.auto.plans.*;
 import frc.robot.commands.TeleopCmd;
 import frc.robot.commands.algaeArm.*;
 import frc.robot.commands.coralIntake.*;
@@ -55,7 +54,7 @@ public class RobotContainer {
           drivetrain,
           () -> cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.DRIVER));
   private final ElevTPIDCmd elevTPIDCmd = new ElevTPIDCmd(elevator);
-  private final AlgaTPIDCmd algaTPIDCmd = new AlgaTPIDCmd(algaeArm);
+  private final AlgaeTPIDCmd algaeTPIDCmd = new AlgaeTPIDCmd(algaeArm);
 
   public RobotContainer() {
 
@@ -64,7 +63,7 @@ public class RobotContainer {
     // Default Commands to be run all the time, only one per subsystem
     drivetrain.setDefaultCommand(teleopCmd);
     elevator.setDefaultCommand(elevTPIDCmd);
-    algaeArm.setDefaultCommand(algaTPIDCmd);
+    algaeArm.setDefaultCommand(algaeTPIDCmd);
     // coralIntake.setDefaultCommand(new CoralIntakeStopCommand(coralIntake));
 
     // Add Auto options to dropdown and push to dashboard
@@ -176,10 +175,7 @@ public class RobotContainer {
         break;
     }
     // Create sequential command with the wait command first then run selected auto
-    auto =
-        new SequentialCommandGroup(
-            new BeginSleepCmd(drivetrain, SmartDashboard.getNumber("Auto Wait Time (Sec)", 0)),
-            auto);
+    auto = new SequentialCommandGroup(new AutoCoralSpinForwardCmd(coralIntake, 5));
     return auto;
   }
 }

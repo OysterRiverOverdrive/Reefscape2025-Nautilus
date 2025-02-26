@@ -249,9 +249,9 @@ public final class Constants {
     public static final double kAlgaeArmI = 0.2;
     public static final double kAlgaeArmD = 0.16;
     // Autonomous Algae Arm PID
-    public static final double kAutoAlgaP = 0.8;
-    public static final double kAutoAlgaI = 0.5;
-    public static final double kAutoAlgaD = 0.1;
+    public static final double kAutoAlgaeP = 0.8;
+    public static final double kAutoAlgaeI = 0.5;
+    public static final double kAutoAlgaeD = 0.1;
   }
 
   // Constants specifically for Swerve Module
