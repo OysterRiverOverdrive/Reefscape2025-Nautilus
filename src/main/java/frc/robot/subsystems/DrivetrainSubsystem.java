@@ -82,7 +82,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
           });
 
   // PoseEstimator class for tracking robot pose, replaces odometry.
-  SwerveDrivePoseEstimator m_poseestimator =
+  SwerveDrivePoseEstimator m_pose_estimator =
       new SwerveDrivePoseEstimator(
           DriveConstants.kDriveKinematics,
           Rotation2d.fromDegrees(getHeading()),
@@ -235,7 +235,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPoseEstimate() {
-    return m_poseestimator.getEstimatedPosition();
+    return m_pose_estimator.getEstimatedPosition();
   }
 
   /**
@@ -263,7 +263,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         },
         pose);
 
-    m_poseestimator.resetPosition(
+    m_pose_estimator.resetPosition(
         Rotation2d.fromDegrees(getHeading()),
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
@@ -316,7 +316,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void updatePoseEstimate() {
-    m_poseestimator.update(
+    m_pose_estimator.update(
         Rotation2d.fromDegrees(getHeading()),
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
@@ -329,7 +329,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     LimelightHelpers.SetRobotOrientation(
         "limelight",
-        m_poseestimator.getEstimatedPosition().getRotation().getDegrees(),
+        m_pose_estimator.getEstimatedPosition().getRotation().getDegrees(),
         0,
         0,
         0,
@@ -350,7 +350,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if (!doRejectUpdate) {
       // TODO: tune these constants or adjust based on distance?
       // m_odometry.setVisionMeasurementStdDevs(VecBuilder.fill(5, 5, 500));
-      m_poseestimator.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
+      m_pose_estimator.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
     }
   }
 
