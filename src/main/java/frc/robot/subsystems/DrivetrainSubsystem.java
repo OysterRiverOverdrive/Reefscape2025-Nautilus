@@ -315,7 +315,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         });
   }
 
-  public void updatePoseEstimate() {
+  public void updatePoseEstimate(boolean updateVision) {
     m_pose_estimator.update(
         Rotation2d.fromDegrees(getHeading()),
         new SwerveModulePosition[] {
@@ -325,6 +325,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
         });
 
+    if (!updateVision) return;
     boolean doRejectUpdate = false;
 
     LimelightHelpers.SetRobotOrientation(
@@ -361,9 +362,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     updateOdometry();
 
-    if (visionUpdateCounter == 0) {
-      updatePoseEstimate();
-    }
+    updatePoseEstimate(visionUpdateCounter == 0);
     visionUpdateCounter = (visionUpdateCounter + 1) % VISION_UPDATE_INTERVAL;
   }
 }
