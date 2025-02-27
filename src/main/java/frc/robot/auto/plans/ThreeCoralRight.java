@@ -4,36 +4,45 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.Constants.RobotConstants.ElevatorConstants;
 import frc.robot.auto.AutoCreationCmd;
 import frc.robot.auto.AutoSleepCmd;
+import frc.robot.commands.coralIntake.RetractActuatorCmd;
+import frc.robot.commands.elevator.ElevAPIDCmd;
 import frc.robot.commands.elevator.ElevTPIDCmd;
+import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import java.util.List;
 
 // STARTS ON THE RIGHT SIDE
 
-public class CoolTwoCoralAutoPlan extends ParallelCommandGroup {
+public class ThreeCoralRight extends ParallelCommandGroup {
 
-  public CoolTwoCoralAutoPlan(DrivetrainSubsystem drivetrain, ElevatorSubsystem elevator) {
+  public ThreeCoralRight(
+      DrivetrainSubsystem drivetrain,
+      ElevatorSubsystem elevatorsub,
+      CoralIntakeSubsystem intakesub) {
     AutoCreationCmd autodrive = new AutoCreationCmd();
+    ElevatorSubsystem elevator = elevatorsub;
+    CoralIntakeSubsystem intake = intakesub;
+
     // Auto Driving Commands
 
-    Command showyDrive1 = // goes from right side to reef, then turns to face the reef
+    Command toReef =
         autodrive.AutoDriveCmd(
             drivetrain,
-            List.of(new Translation2d(2, 0.5)),
-            new Pose2d(3.76, -0.95, new Rotation2d(-Math.PI * 2 / 3)));
+            List.of(new Translation2d(3, 0.3)),
+            new Pose2d(3.75, -0.01, new Rotation2d(-Math.PI * 2 / 3)));
     // Place coral and get algae
-    Command showyDrive2 = // goes backwards to get coral, turns to face the coral getting place
+    Command toFeeder1 = // goes backwards to get coral, turns to face the coral getting place
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(-2, 1)),
             new Pose2d(-2.7, 1.7, new Rotation2d(Math.PI)));
     // Get coral
-    Command showyDrive3 = // goes back to the reef and turns to face the reef again (it's the same
+    Command toReef1 = // goes back to the reef and turns to face the reef again (it's the same
         // thing)
         autodrive.AutoDriveCmd(
             drivetrain,
@@ -41,12 +50,12 @@ public class CoolTwoCoralAutoPlan extends ParallelCommandGroup {
             new Pose2d(-2.7, 1.7, new Rotation2d(Math.PI)));
     // after going back, place coral
 
-    Command showyDrive2two = // andthen doesn't like mutliple of the same command
+    Command toFeeder2 = // andthen doesn't like mutliple of the same command
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(-2, 1)),
             new Pose2d(-2.7, 1.7, new Rotation2d(Math.PI)));
-    Command showyDrive3two =
+    Command toReef2 =
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(-2, 1)),
@@ -55,17 +64,18 @@ public class CoolTwoCoralAutoPlan extends ParallelCommandGroup {
     // Driving groups
     addCommands(
         new ParallelCommandGroup(
-            showyDrive1
-                .alongWith(new InstantCommand(() -> elevator.toL4()))
+            toReef
+                .andThen(new RetractActuatorCmd(intake))
+                .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht, 3))
                 .andThen(new AutoSleepCmd(0.75))
-                .alongWith(new InstantCommand(() -> elevator.toIntake()))
-                .andThen(showyDrive2)
+                .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevIntakeHt, 3))
+                .andThen(toFeeder1)
                 .andThen(new AutoSleepCmd(0.25))
-                .andThen(showyDrive3)
+                .andThen(toReef1)
                 .andThen(new AutoSleepCmd(0.25))
-                .andThen(showyDrive2two)
+                .andThen(toFeeder2)
                 .andThen(new AutoSleepCmd(0.25))
-                .andThen(showyDrive3two),
+                .andThen(toReef2),
             new ElevTPIDCmd(elevator)));
   }
 }

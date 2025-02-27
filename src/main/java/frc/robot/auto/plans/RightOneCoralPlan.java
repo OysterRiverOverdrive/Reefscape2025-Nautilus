@@ -4,22 +4,23 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.Constants;
 import frc.robot.auto.AutoCoralSpinForwardCmd;
 import frc.robot.auto.AutoCreationCmd;
-import frc.robot.commands.coralIntake.ResetActuatorCmd;
+import frc.robot.auto.AutoSleepCmd;
+import frc.robot.commands.coralIntake.RetractActuatorCmd;
+import frc.robot.commands.elevator.ElevAPIDCmd;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.auto.AutoSleepCmd;
 import java.util.List;
 
 // STARTS ON THE RIGHT SIDE
 
-public class LeftOneCoralPlan extends ParallelCommandGroup {
+public class RightOneCoralPlan extends ParallelCommandGroup {
 
-  public LeftOneCoralPlan(
+  public RightOneCoralPlan(
       DrivetrainSubsystem drivetrain,
       ElevatorSubsystem elevatorsub,
       CoralIntakeSubsystem intakesub) {
@@ -31,17 +32,17 @@ public class LeftOneCoralPlan extends ParallelCommandGroup {
     Command toReef =
         autodrive.AutoDriveCmd(
             drivetrain,
-            List.of(new Translation2d(2, 0.5)),
-            new Pose2d(3.75, -0.94, new Rotation2d(-Math.PI * 2 / 3)));
+            List.of(new Translation2d(3, 0.3)),
+            new Pose2d(3.75, -0.01, new Rotation2d(-Math.PI * 2 / 3)));
     // Place coral
 
     // Driving groups
     addCommands(
-      new ResetActuatorCmd(intake)
-      .andThen(toReef)
-      .andThen(new InstantCommand(() -> elevator.toL4()))
-      .andThen(new AutoSleepCmd(3))
-      .andThen(new AutoCoralSpinForwardCmd(intake,1))
-      );
+        new RetractActuatorCmd(intake)
+            .andThen(toReef)
+            .andThen(
+                new ElevAPIDCmd(elevator, Constants.RobotConstants.ElevatorConstants.kElevL4Ht, 3))
+            .andThen(new AutoSleepCmd(3))
+            .andThen(new AutoCoralSpinForwardCmd(intake, 1)));
   }
 }

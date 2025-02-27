@@ -56,11 +56,14 @@ public class RobotContainer {
   private final AlgaeTPIDCmd algaeTPIDCmd = new AlgaeTPIDCmd(algaeArm);
 
   // AUTOS
-  private final CoolTwoCoralAutoPlan coolTwoCOrealAuto =
-      new CoolTwoCoralAutoPlan(drivetrain, elevator);
-  private final LeftOneCoralPlan leftOneCoralPlan = new LeftOneCoralPlan(drivetrain, elevator, coralIntake);
-  private final LeftThreeCoralPlan leftThreeCoralPlan = new LeftThreeCoralPlan(drivetrain);
-  private final MiddleOneCoralPlan middleOneCoralPlan = new MiddleOneCoralPlan(drivetrain);
+  private final ThreeCoralRight coolTwoCOrealAuto =
+      new ThreeCoralRight(drivetrain, elevator, coralIntake);
+  private final RightOneCoralPlan leftOneCoralPlan =
+      new RightOneCoralPlan(drivetrain, elevator, coralIntake);
+  private final ThreeCoralLeft leftThreeCoralPlan =
+      new ThreeCoralLeft(drivetrain, elevator, coralIntake);
+  private final MiddleOneCoralPlan middleOneCoralPlan =
+      new MiddleOneCoralPlan(drivetrain, elevator, coralIntake);
 
   public RobotContainer() {
 
