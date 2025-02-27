@@ -2,22 +2,24 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.coralIntake;
+package frc.robot.auto;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.RobotConstants;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.AlgaeArmSubsystem;
 
-public class RetractActuatorCmd extends Command {
-  private CoralIntakeSubsystem coral;
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class AutoAlgaeSpinForwardCmd extends Command {
+  private AlgaeArmSubsystem algae;
   private Timer timer = new Timer();
-  // t = d/v
-  private double runtime = RobotConstants.kCoralActuDistance / RobotConstants.kCoralActuSpeedRate;
+  private double duration;
 
-  public RetractActuatorCmd(CoralIntakeSubsystem coral) {
-    this.coral = coral;
-    addRequirements(coral);
+  /** Creates a new AutoAlgaeSpinForwardCmd. */
+  public AutoAlgaeSpinForwardCmd(AlgaeArmSubsystem algae, double duration) {
+    this.algae = algae;
+    this.duration = duration;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(algae);
   }
 
   // Called when the command is initially scheduled.
@@ -30,25 +32,18 @@ public class RetractActuatorCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coral.spinActuDown();
+    algae.algaeSpinnerForwardCmd();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    coral.spinActuStop();
+    algae.algaeSpinnerStopCmd();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean retVal = false;
-    double currTime = timer.get();
-    // Add a little to ensure completely down
-    if (currTime >= runtime + 1) {
-      retVal = true;
-    }
-
-    return retVal;
+    return timer.hasElapsed(duration) ? true : false;
   }
 }

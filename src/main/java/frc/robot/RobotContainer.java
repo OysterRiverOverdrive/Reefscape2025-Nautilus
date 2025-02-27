@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
-// import frc.robot.auto.plans.*;
 import frc.robot.commands.TeleopCmd;
 import frc.robot.commands.algaeArm.*;
 import frc.robot.commands.coralIntake.*;
@@ -54,7 +53,7 @@ public class RobotContainer {
           drivetrain,
           () -> cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.DRIVER));
   private final ElevTPIDCmd elevTPIDCmd = new ElevTPIDCmd(elevator);
-  private final AlgaTPIDCmd algaTPIDCmd = new AlgaTPIDCmd(algaeArm);
+  private final AlgaeTPIDCmd algaeTPIDCmd = new AlgaeTPIDCmd(algaeArm);
 
   public RobotContainer() {
 
@@ -63,7 +62,7 @@ public class RobotContainer {
     // Default Commands to be run all the time, only one per subsystem
     drivetrain.setDefaultCommand(teleopCmd);
     elevator.setDefaultCommand(elevTPIDCmd);
-    algaeArm.setDefaultCommand(algaTPIDCmd);
+    algaeArm.setDefaultCommand(algaeTPIDCmd);
 
     // Add Auto options to dropdown and push to dashboard
     m_chooser.setDefaultOption("Auto[Rename Me]", auto1);
@@ -115,36 +114,18 @@ public class RobotContainer {
         .supplier(Controllers.xbox_share, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> elevator.toBase()));
     cutil
-        .supplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> elevator.toAboveIntake()));
-    cutil
         .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> elevator.toIntake()));
 
-    // Intake sequential command binding
+    // Intake Sequence
     // cutil
     //     .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
     //     .onTrue(
     //         new SequentialCommandGroup(
-    //             new ElevPreIntakeCmd(elevator),
-    //             new AlgaeArmToLoadCommand(algaeArm),
-    //             new ElevIntakeCmd(elevator),
+    //             new ParallelCommandGroup(
+    //                 new ExtendActuatorCmd(coralIntake), new ElevIntakeCmd(elevator)),
     //             new CoralIntakeReverseCommand(coralIntake)))
-    //     .onFalse(
-    //         new SequentialCommandGroup(
-    //             new CoralIntakeStopCommand(coralIntake),
-    //             new ElevPreIntakeCmd(elevator),
-    //             new AlgaeArmToDownCommand(algaeArm)));
-    // cutil
-    //     .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
-    //     .onTrue(
-    //         new ParallelCommandGroup(
-    //             new ElevIntakeCmd(elevator),
-    //             new ExtendActuatorCmd(coralIntake),
-    //             new CoralIntakeReverseCommand(coralIntake)))
-    //     .onFalse(
-    //         new ParallelCommandGroup(
-    //             new RetractActuatorCmd(coralIntake), new CoralIntakeStopCommand(coralIntake)));
+    //     .onFalse(new CoralIntakeStopCommand(coralIntake));
 
     // Coral Intake Bindings
     cutil
@@ -165,9 +146,9 @@ public class RobotContainer {
         .supplier(Controllers.xbox_x, DriveConstants.joysticks.OPERATOR)
         .onTrue(new ExtendActuatorCmd(coralIntake));
     // .onTrue(new InstantCommand(() -> algaeArm.toLoad()));
-    cutil
-        .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new ResetActuatorCmd(coralIntake));
+    // cutil
+    //     .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new ResetActuatorCmd(coralIntake));
     // .onTrue(new InstantCommand(() -> algaeArm.toRemoveAlgae()));
   }
 
@@ -195,10 +176,7 @@ public class RobotContainer {
         break;
     }
     // Create sequential command with the wait command first then run selected auto
-    auto =
-        new SequentialCommandGroup(
-            new BeginSleepCmd(drivetrain, SmartDashboard.getNumber("Auto Wait Time (Sec)", 0)),
-            auto);
+    auto = new SequentialCommandGroup(new AutoCoralSpinForwardCmd(coralIntake, 5));
     return auto;
   }
 }

@@ -117,14 +117,10 @@ public final class Constants {
     public static final double kCoralIntakeSpeed = 0.4;
     public static final boolean kCoralActuInverted = true;
     public static final int kCoralActuCurrentLimit = 1; // Amps
+
     // Actuator Rates
-    public static final double kCoralActuStrokeLength = 2.4; // Inches
-    public static final double kCoralActuStrokeTime = 7.8; // Seconds
-    public static final double kCoralActuSpeedRate =
-        kCoralActuStrokeLength / kCoralActuStrokeTime; // Inches Per Second
-    // Potential Actuator Stats
-    // public static final double kCoralActuSpeedRate = 0.6; // Inches per second
-    public static final double kCoralActuDistance = 2.28; // Inches
+    public static final double kCoralActuSpeedRate = 0.6; // Inches per second
+    public static final double kCoralActuDistance = 2.04; // Inches
 
     public static final class AlgaeArmConstants {
       // Algae Arm gear ratio, 15 to 1, so motor rotations to arm rotations is 1 to 15
@@ -273,9 +269,9 @@ public final class Constants {
     public static final double kAlgaeArmI = 0.2;
     public static final double kAlgaeArmD = 0.16;
     // Autonomous Algae Arm PID
-    public static final double kAutoAlgaP = 0.8;
-    public static final double kAutoAlgaI = 0.5;
-    public static final double kAutoAlgaD = 0.1;
+    public static final double kAutoAlgaeP = 0.8;
+    public static final double kAutoAlgaeI = 0.5;
+    public static final double kAutoAlgaeD = 0.1;
   }
 
   // Constants specifically for Swerve Module

@@ -9,27 +9,28 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 
-public class AlgaAPIDCmd extends Command {
+public class AlgaeAPIDCmd extends Command {
 
-  private AlgaeArmSubsystem alga;
+  private AlgaeArmSubsystem algae;
   private double setpoint;
   private double error;
 
   private final PIDController algaeArmPID =
-      new PIDController(PIDConstants.kAutoAlgaP, PIDConstants.kAutoAlgaI, PIDConstants.kAutoAlgaD);
+      new PIDController(
+          PIDConstants.kAutoAlgaeP, PIDConstants.kAutoAlgaeI, PIDConstants.kAutoAlgaeD);
 
   /**
    * Autonomous Method of moving elevator
    *
-   * @param alga instance of elevator subsystem
+   * @param algae instance of elevator subsystem
    * @param setpoint (% of rot) set height (use elevator constants)
    * @param error (±) range around setpoint that command will end
    */
-  public AlgaAPIDCmd(AlgaeArmSubsystem alga, double setpoint, double error) {
-    this.alga = alga;
+  public AlgaeAPIDCmd(AlgaeArmSubsystem algae, double setpoint, double error) {
+    this.algae = algae;
     this.setpoint = setpoint;
     this.error = error;
-    addRequirements(alga);
+    addRequirements(algae);
   }
 
   // Called when the command is initially scheduled.
@@ -41,8 +42,8 @@ public class AlgaAPIDCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double armSpeed = algaeArmPID.calculate(alga.getEncoder());
-    alga.setAlgaArmSpeed(armSpeed);
+    double armSpeed = algaeArmPID.calculate(algae.getEncoder());
+    algae.setAlgaeArmSpeed(armSpeed);
   }
 
   // Called once the command ends or is interrupted.
@@ -52,7 +53,7 @@ public class AlgaAPIDCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (alga.getEncoder() >= (setpoint - error) && alga.getEncoder() <= (setpoint + error)) {
+    if (algae.getEncoder() >= (setpoint - error) && algae.getEncoder() <= (setpoint + error)) {
       return true;
     } else {
       return false;
