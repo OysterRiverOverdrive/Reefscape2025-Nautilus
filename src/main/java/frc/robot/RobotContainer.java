@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
-// import frc.robot.auto.plans.*;
 import frc.robot.commands.TeleopCmd;
 import frc.robot.commands.algaeArm.*;
 import frc.robot.commands.coralIntake.*;
@@ -52,14 +52,19 @@ public class RobotContainer {
   private final TeleopCmd teleopCmd =
       new TeleopCmd(
           drivetrain,
-          () -> cutil.Boolsupplier(Controllers.ps4_LB, DriveConstants.joysticks.DRIVER));
+          () -> cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.DRIVER));
+  private final ElevTPIDCmd elevTPIDCmd = new ElevTPIDCmd(elevator);
+  private final AlgaeTPIDCmd algaeTPIDCmd = new AlgaeTPIDCmd(algaeArm);
 
   public RobotContainer() {
 
     DataLogManager.start();
 
-    // Declare default command during Teleop Period as TeleopCmd(Driving Command)
+    // Default Commands to be run all the time, only one per subsystem
     drivetrain.setDefaultCommand(teleopCmd);
+    elevator.setDefaultCommand(elevTPIDCmd);
+    algaeArm.setDefaultCommand(algaeTPIDCmd);
+    // coralIntake.setDefaultCommand(new CoralIntakeStopCommand(coralIntake));
 
     // Add Auto options to dropdown and push to dashboard
     m_chooser.setDefaultOption("Auto[Rename Me]", auto1);
@@ -76,6 +81,11 @@ public class RobotContainer {
     configureBindings();
   }
 
+  // Continuation of method to prevent double instanciation
+  public void toBase() {
+    elevator.toBase();
+  }
+
   private void configureBindings() {
     // Configure buttons
     // Prior Reference:
@@ -85,20 +95,13 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> drivetrain.zeroHeading()));
 
     // Algae Spinner Bindings
-    cutil
-        .supplier(Controllers.xbox_rb, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new AlgaeSpinnerForwardCommand(algaeArm))
-        .onFalse(
-            cutil.getTriggerButton(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
-                ? new AlgaeSpinnerReverseCommand(algaeArm)
-                : new AlgaeSpinnerStopCommand(algaeArm));
-    cutil
-        .triggerSupplier(Controllers.xbox_rt, 0.2, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new AlgaeSpinnerReverseCommand(algaeArm))
-        .onFalse(
-            cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
-                ? new AlgaeSpinnerForwardCommand(algaeArm)
-                : new AlgaeSpinnerStopCommand(algaeArm));
+    // cutil
+    //     .supplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new AlgaeSpinnerForwardCommand(algaeArm))
+    //     .onFalse(new AlgaeSpinnerStopCommand(algaeArm));
+    // cutil
+    //     .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new AlgaeSpinnerStopCommand(algaeArm));
 
     // Elevator Bindings
     cutil.POVsupplier(0, DriveConstants.joysticks.OPERATOR)
@@ -110,50 +113,42 @@ public class RobotContainer {
     cutil.POVsupplier(270, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> elevator.toL4()));
     cutil
-        .supplier(Controllers.xbox_options, DriveConstants.joysticks.OPERATOR)
+        .supplier(Controllers.xbox_share, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> elevator.toBase()));
+    cutil
+        .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> elevator.toIntake()));
 
-    // Intake sequential command binding
+    // Intake Sequence
     cutil
         .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
         .onTrue(
-            new SequentialCommandGroup(
-                new ElevatorToAboveIntakeCommand(elevator),
-                new AlgaeArmToUpCommand(algaeArm),
-                new ElevatorToIntakeCommand(elevator),
-                new CoralIntakeForwardCommand(coralIntake)))
-        .onFalse(
-            new SequentialCommandGroup(
-                new CoralIntakeStopCommand(coralIntake),
-                new ElevatorToAboveIntakeCommand(elevator),
-                new AlgaeArmToDownCommand(algaeArm)));
+            new ParallelCommandGroup(
+                new ElevIntakeCmd(elevator), new ExtendActuatorCmd(coralIntake)));
 
     // Coral Intake Bindings
     cutil
-        .supplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
+        .supplier(Controllers.xbox_rb, DriveConstants.joysticks.OPERATOR)
         .onTrue(new CoralIntakeForwardCommand(coralIntake))
-        .onFalse(
-            cutil.getTriggerButton(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
-                ? new CoralIntakeReverseCommand(coralIntake)
-                : new CoralIntakeStopCommand(coralIntake));
+        .onFalse(new CoralIntakeStopCommand(coralIntake));
     cutil
-        .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
+        .triggerSupplier(Controllers.xbox_rt, 0.2, DriveConstants.joysticks.OPERATOR)
         .onTrue(new CoralIntakeReverseCommand(coralIntake))
-        .onFalse(
-            cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
-                ? new CoralIntakeForwardCommand(coralIntake)
-                : new CoralIntakeStopCommand(coralIntake));
+        .onFalse(new CoralIntakeStopCommand(coralIntake));
 
-    // Algae Arm Bindings
+    // Actuator Controls
     cutil
         .supplier(Controllers.xbox_b, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> algaeArm.toDown()));
+        .onTrue(new RetractActuatorCmd(coralIntake));
+    // .onTrue(new InstantCommand(() -> algaeArm.toDown()));
     cutil
         .supplier(Controllers.xbox_x, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> algaeArm.toFlat()));
-    cutil
-        .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> algaeArm.toRemoveAlgae()));
+        .onTrue(new ExtendActuatorCmd(coralIntake));
+    // .onTrue(new InstantCommand(() -> algaeArm.toLoad()));
+    // cutil
+    //     .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new ResetActuatorCmd(coralIntake));
+    // .onTrue(new InstantCommand(() -> algaeArm.toRemoveAlgae()));
   }
 
   public Command getAutonomousCommand() {
@@ -180,10 +175,7 @@ public class RobotContainer {
         break;
     }
     // Create sequential command with the wait command first then run selected auto
-    auto =
-        new SequentialCommandGroup(
-            new BeginSleepCmd(drivetrain, SmartDashboard.getNumber("Auto Wait Time (Sec)", 0)),
-            auto);
+    auto = new SequentialCommandGroup(new AutoCoralSpinForwardCmd(coralIntake, 5));
     return auto;
   }
 }
