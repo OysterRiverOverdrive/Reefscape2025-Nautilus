@@ -240,8 +240,8 @@ public final class Constants {
     public static final double kElevatorI = 0.0035;
     public static final double kElevatorD = 0.001;
     // Autonomous Elevator PID
-    public static final double kAutoElevP = 0.0065;
-    public static final double kAutoElevI = 0.0025;
+    public static final double kAutoElevP = 0.008;
+    public static final double kAutoElevI = 0.001;
     public static final double kAutoElevD = 0.0018;
 
     // Algae Arm PID
