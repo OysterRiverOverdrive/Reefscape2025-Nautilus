@@ -120,7 +120,7 @@ public final class Constants {
 
     // Actuator Rates
     public static final double kCoralActuSpeedRate = 0.6; // Inches per second
-    public static final double kCoralActuDistance = 2.04; // Inches
+    public static final double kCoralActuDistance = 2.15; // Inches
 
     public static final class AlgaeArmConstants {
       // Algae Arm gear ratio, 15 to 1, so motor rotations to arm rotations is 1 to 15
@@ -216,8 +216,8 @@ public final class Constants {
       public static final double kElevL1Ht = 22;
       public static final double kElevL2Ht = 32;
       public static final double kElevL3Ht = 47.5;
-      public static final double kElevL4Ht = 73;
-      public static final double kElevIntakeHt = 28.5;
+      public static final double kElevL4Ht = 74.5;
+      public static final double kElevIntakeHt = 27.2;
       public static final double kElevatorAboveIntakeHeightDifference = 8;
 
       public static final double kElevatorReefOffset = -2;
