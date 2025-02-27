@@ -63,19 +63,20 @@ public class ThreeCoralRight extends ParallelCommandGroup {
 
     // Driving groups
     addCommands(
-        new ParallelCommandGroup(
-            toReef
-                .andThen(new RetractActuatorCmd(intake))
-                .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht, 3))
-                .andThen(new AutoSleepCmd(0.75))
-                .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevIntakeHt, 3))
-                .andThen(toFeeder1)
-                .andThen(new AutoSleepCmd(0.25))
-                .andThen(toReef1)
-                .andThen(new AutoSleepCmd(0.25))
-                .andThen(toFeeder2)
-                .andThen(new AutoSleepCmd(0.25))
-                .andThen(toReef2),
-            new ElevTPIDCmd(elevator)));
+        // new ParallelCommandGroup(
+        //     toReef
+        //         .andThen(new RetractActuatorCmd(intake))
+        //         .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht, 3))
+        //         .andThen(new AutoSleepCmd(0.75))
+        //         .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevIntakeHt, 3))
+        //         .andThen(toFeeder1)
+        //         .andThen(new AutoSleepCmd(0.25))
+        //         .andThen(toReef1)
+        //         .andThen(new AutoSleepCmd(0.25))
+        //         .andThen(toFeeder2)
+        //         .andThen(new AutoSleepCmd(0.25))
+        //         .andThen(toReef2),
+        //     new ElevTPIDCmd(elevator))
+    );
   }
 }

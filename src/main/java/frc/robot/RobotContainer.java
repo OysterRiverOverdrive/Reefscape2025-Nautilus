@@ -78,7 +78,7 @@ public class RobotContainer {
     // coralIntake.setDefaultCommand(new CoralIntakeStopCommand(coralIntake));
 
     // Add Auto options to dropdown and push to dashboard
-    m_chooser.setDefaultOption("CoolTwoCoralAutoPlanYay!!", auto1);
+    m_chooser.setDefaultOption("RightThreeCoralPlan", auto1);
     m_chooser.addOption("LeftOneCoralPlan", auto2);
     m_chooser.addOption("LeftThreeCoralPlan", auto3);
     m_chooser.addOption("MiddleOneCoralPlan", auto4);

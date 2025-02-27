@@ -32,14 +32,14 @@ public class MiddleOneCoralPlan extends ParallelCommandGroup {
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(1, 0.01)),
-            new Pose2d(1.8, .02, new Rotation2d(0)));
+            new Pose2d(1.1, .02, new Rotation2d(0)));
     // Place coral
 
     // Driving groups
     addCommands(
         centerDrive
             .andThen(new RetractActuatorCmd(intake))
-            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht, 3))
-            .andThen(new AutoCoralSpinForwardCmd(intake, 1)));
+            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht, 0.1))
+            .andThen(new AutoCoralSpinForwardCmd(intake, 0.5)));
   }
 }
