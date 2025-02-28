@@ -51,6 +51,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
 
+  public static double maxSpeedCmd;
+
   private boolean waiting = false;
   private double maxSpeedDrive;
   private double maxSpeedTurn;
@@ -190,13 +192,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_gyro.reset();
   }
 
-  /** Zeroes the heading of the robot. */
   public double gyroangle() {
     return m_gyro.getAngle() * (RobotConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
   public double getHeading() {
-
     return Math.IEEEremainder(m_gyro.getAngle() * (RobotConstants.kGyroReversed ? -1.0 : 1.0), 360);
   }
 
@@ -258,6 +258,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Z axis angle", getHeading());
     SmartDashboard.putBoolean("Auto is Waiting", waiting);
+    SmartDashboard.putNumber("controller speed", maxSpeedCmd);
 
     // Update the odometry in the periodic block
     m_odometry.update(

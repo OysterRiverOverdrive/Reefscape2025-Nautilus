@@ -18,3 +18,6 @@ In VSCode, find the WPILib logo, in the menu type `build` and click on the menu 
 In the terminal, type `./gradlew build`
 ### Spotless
 Spotless is a service that runs inorder to maintain code quality. If spotless fails when building the code. Open the terminal (Ctrl + ~) and type `./gradlew spotlessApply`
+
+### Refreshing Dependencies
+In order to deal with new dependencies, run `./gradlew build --refresh-dependencies`. This command will take longer than a normal build and needs an internet connection
