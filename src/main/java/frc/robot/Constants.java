@@ -216,7 +216,7 @@ public final class Constants {
       public static final double kElevL1Ht = 22;
       public static final double kElevL2Ht = 32.5;
       public static final double kElevL3Ht = 49;
-      public static final double kElevL4Ht = 73;
+      public static final double kElevL4Ht = 74;
       public static final double kElevIntakeHt = 28.5;
       public static final double kElevatorAboveIntakeHeightDifference = 8;
 
@@ -232,9 +232,9 @@ public final class Constants {
 
       public static final double[][] ELEV_SAFETY_POINTS = {
         {0.0, 78.0},
-        {0.05, 65.0},
-        {0.1, 60.0},
-        {0.2, 50.0},
+        {0.05, 76.0},
+        {0.1, 74.0},
+        {0.2, 60.0},
         {0.3, 36.0},
         {0.4, 34.0},
         {0.5, 32.0},

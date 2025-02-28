@@ -258,6 +258,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Z axis angle", getHeading());
     SmartDashboard.putBoolean("Auto is Waiting", waiting);
+    SmartDashboard.putNumber("controller speed", maxSpeedCmd);
 
     // Update the odometry in the periodic block
     m_odometry.update(
