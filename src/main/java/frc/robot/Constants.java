@@ -254,10 +254,13 @@ public final class Constants {
   public static final class PIDConstants {
 
     // Elevator PID
+    public static final double kElevatorRP = 0.0078;
+    public static final double kElevatorRI = 0.0013;
+    public static final double kElevatorRD = 0.0021;
 
-    public static final double kElevatorP = 0.008;
-    public static final double kElevatorI = 0.0013;
-    public static final double kElevatorD = 0.0018;
+    public static final double kElevatorBP = 0.003;
+    public static final double kElevatorBI = 0.0013;
+    public static final double kElevatorBD = 0.0019;
 
     // Autonomous Elevator PID
     public static final double kAutoElevP = 0.008;
@@ -266,8 +269,8 @@ public final class Constants {
 
     // Algae Arm PID
     public static final double kAlgaeArmP = 0.4;
-    public static final double kAlgaeArmI = 0.2;
-    public static final double kAlgaeArmD = 0.16;
+    public static final double kAlgaeArmI = 0.05;
+    public static final double kAlgaeArmD = 0.1;
     // Autonomous Algae Arm PID
     public static final double kAutoAlgaeP = 0.8;
     public static final double kAutoAlgaeI = 0.5;

@@ -41,6 +41,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double rotcount = 0; // # of rotations completed by abs enc
   private final PolynomialFunction polynomial; // Max Height Function
   public boolean safetyActive = false; // Bool for dashboard on height override
+  public boolean setDirUp = true; // Boolean for PID direction
 
   public ElevatorSubsystem(DrivetrainSubsystem drivetrain) {
     WeightedObservedPoints elevSafetyPoints = new WeightedObservedPoints();
@@ -98,32 +99,46 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void toBase() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint = (ElevatorConstants.kElevLowHt);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public void toL1() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint = (ElevatorConstants.kElevL1Ht);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public void toL2() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint = (ElevatorConstants.kElevL2Ht);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public void toL3() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint = (ElevatorConstants.kElevL3Ht);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public void toL4() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint = (ElevatorConstants.kElevL4Ht);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public void toIntake() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint = (ElevatorConstants.kElevIntakeHt);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public void toAboveIntake() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint =
         (ElevatorConstants.kElevIntakeHt + ElevatorConstants.kElevatorAboveIntakeHeightDifference);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public double getSetPoint() {
@@ -132,6 +147,18 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void setElevatorSpeed(double speed) {
     m_elevator1SparkMax.set(speed);
+  }
+
+  public boolean getPIDDir() {
+    return setDirUp;
+  }
+
+  public void checkdir(double prior, double current) {
+    if (prior < current) {
+      setDirUp = true;
+    } else {
+      setDirUp = false;
+    }
   }
 
   @Override
@@ -150,5 +177,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Safety Active", safetyActive);
     SmartDashboard.putNumber("Elev Height", getHeight());
     SmartDashboard.putNumber("Elev Setpoint", elevatorPIDSetPoint);
+    SmartDashboard.putBoolean("bisbfgbjnsjlkblks", getPIDDir());
   }
 }

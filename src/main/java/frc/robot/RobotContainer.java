@@ -106,15 +106,6 @@ public class RobotContainer {
         .supplier(Controllers.ps4_RB, DriveConstants.joysticks.DRIVER)
         .onTrue(new InstantCommand(() -> drivetrain.zeroHeading()));
 
-    // Algae Spinner Bindings
-    // cutil
-    //     .supplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
-    //     .onTrue(new AlgaeSpinnerForwardCommand(algaeArm))
-    //     .onFalse(new AlgaeSpinnerStopCommand(algaeArm));
-    // cutil
-    //     .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
-    //     .onTrue(new AlgaeSpinnerStopCommand(algaeArm));
-
     // Elevator Bindings
     cutil.POVsupplier(0, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> elevator.toL1()));
@@ -131,13 +122,6 @@ public class RobotContainer {
         .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> elevator.toIntake()));
 
-    // Intake Sequence
-    cutil
-        .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
-        .onTrue(
-            new ParallelCommandGroup(
-                new ElevIntakeCmd(elevator), new ExtendActuatorCmd(coralIntake)));
-
     // Coral Intake Bindings
     cutil
         .supplier(Controllers.xbox_rb, DriveConstants.joysticks.OPERATOR)
@@ -152,15 +136,22 @@ public class RobotContainer {
     cutil
         .supplier(Controllers.xbox_b, DriveConstants.joysticks.OPERATOR)
         .onTrue(new RetractActuatorCmd(coralIntake));
-    // .onTrue(new InstantCommand(() -> algaeArm.toDown()));
     cutil
         .supplier(Controllers.xbox_x, DriveConstants.joysticks.OPERATOR)
         .onTrue(new ExtendActuatorCmd(coralIntake));
-    // .onTrue(new InstantCommand(() -> algaeArm.toLoad()));
-    // cutil
-    //     .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR)
-    //     .onTrue(new ResetActuatorCmd(coralIntake));
-    // .onTrue(new InstantCommand(() -> algaeArm.toRemoveAlgae()));
+
+    // Algae Arm Controls
+    cutil
+        .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new AlgaeArmToLoadCommand(algaeArm));
+    cutil
+        .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new AlgaeSpinnerForwardCommand(algaeArm))
+        .onFalse(new AlgaeSpinnerStopCommand(algaeArm));
+    cutil
+        .supplier(Controllers.xbox_options, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new AlgaeArmToReefCommand(algaeArm))
+        .onFalse(new AlgaeArmToDownCommand(algaeArm));
   }
 
   public Command getAutonomousCommand() {

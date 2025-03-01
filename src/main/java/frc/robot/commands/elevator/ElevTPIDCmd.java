@@ -12,9 +12,15 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class ElevTPIDCmd extends Command {
   private ElevatorSubsystem elevator;
   private double safetysetpoint; // Calculated Max Height
+  private double location;
 
-  private final PIDController elevatorPID =
-      new PIDController(PIDConstants.kElevatorP, PIDConstants.kElevatorI, PIDConstants.kElevatorD);
+  private final PIDController elevatorRisePID =
+      new PIDController(
+          PIDConstants.kElevatorRP, PIDConstants.kElevatorRI, PIDConstants.kElevatorRD);
+
+  private final PIDController elevatorBasePID =
+      new PIDController(
+          PIDConstants.kElevatorBP, PIDConstants.kElevatorBI, PIDConstants.kElevatorBD);
 
   public ElevTPIDCmd(ElevatorSubsystem elevator) {
     this.elevator = elevator;
@@ -29,7 +35,6 @@ public class ElevTPIDCmd extends Command {
   @Override
   public void execute() {
     safetysetpoint = elevator.safetyheight();
-    double location;
     if (safetysetpoint < elevator.getSetPoint()) {
       location = safetysetpoint;
       elevator.safetyActive = true;
@@ -37,9 +42,15 @@ public class ElevTPIDCmd extends Command {
       location = elevator.getSetPoint();
       elevator.safetyActive = false;
     }
-    elevatorPID.setSetpoint(location);
+    double elevatorSpeed;
+    if (elevator.getPIDDir()) {
+      elevatorRisePID.setSetpoint(location);
+      elevatorSpeed = elevatorRisePID.calculate(elevator.getHeight());
+    } else {
+      elevatorBasePID.setSetpoint(location);
+      elevatorSpeed = elevatorBasePID.calculate(elevator.getHeight());
+    }
 
-    double elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
     elevator.setElevatorSpeed(elevatorSpeed);
   }
 

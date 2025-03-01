@@ -31,6 +31,7 @@ public class AlgaeArmToDownCommand extends Command {
   @Override
   public void execute() {
     algaeArm_subsystem.toDown();
+    algaeArm_subsystem.algaeSpinnerStopCmd();
   }
 
   // Called once the command ends or is interrupted.
@@ -40,7 +41,6 @@ public class AlgaeArmToDownCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (algaeArm_subsystem.getSetPoint() - 0.5 <= algaeArm_subsystem.getRelativeRotation()
-        && algaeArm_subsystem.getRelativeRotation() <= algaeArm_subsystem.getSetPoint() + 0.5);
+    return false;
   }
 }

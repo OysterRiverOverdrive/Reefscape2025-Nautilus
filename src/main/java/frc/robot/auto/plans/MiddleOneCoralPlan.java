@@ -39,9 +39,9 @@ public class MiddleOneCoralPlan extends ParallelCommandGroup {
     // Driving groups
     addCommands(
         centerDrive
-            .andThen(new RetractActuatorCmd(intake))
+            .alongWith(new RetractActuatorCmd(intake))
             .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht, 0.5))
-            .andThen(new AutoSleepCmd(3))
+            .andThen(new AutoSleepCmd(3.5))
             .andThen(new AutoCoralSpinForwardCmd(intake, 0.5)));
   }
 }
