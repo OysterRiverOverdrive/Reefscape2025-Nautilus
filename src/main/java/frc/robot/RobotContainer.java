@@ -80,10 +80,10 @@ public class RobotContainer {
 
     // Add Auto options to dropdown and push to dashboard
     m_chooser.setDefaultOption("RightThreeCoralPlan", rightThree);
-    m_chooser.addOption("RightOneCoralPlan", leftThree);
-    m_chooser.addOption("LeftThreeCoralPlan", rightOne);
-    m_chooser.addOption("MiddleOneCoralPlan", leftOne);
-    m_chooser.addOption("LeftOneCoralPlan", middleOne);
+    m_chooser.addOption("RightOneCoralPlan", rightOne);
+    m_chooser.addOption("LeftThreeCoralPlan", leftThree);
+    m_chooser.addOption("MiddleOneCoralPlan", middleOne);
+    m_chooser.addOption("LeftOneCoralPlan", leftOne);
     m_chooser.addOption("Auto[Rename Me]", auto6);
     m_chooser.addOption("Auto[Rename Me]", auto7);
     SmartDashboard.putData("Auto Selector", m_chooser);

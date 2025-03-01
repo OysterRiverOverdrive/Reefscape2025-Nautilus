@@ -18,6 +18,10 @@ import frc.robot.Constants.RobotConstants.ElevatorConstants;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 import org.apache.commons.math3.fitting.PolynomialCurveFitter;
 import org.apache.commons.math3.fitting.WeightedObservedPoints;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 
 public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
@@ -42,6 +46,13 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final PolynomialFunction polynomial; // Max Height Function
   public boolean safetyActive = false; // Bool for dashboard on height override
   public boolean setDirUp = true; // Boolean for PID direction
+
+  // PID Network Table
+  private static final NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  private static final NetworkTable table = inst.getTable("ElevatorPID");
+  private static final NetworkTableEntry timestampEntry = table.getEntry("Timestamp");
+  private static final NetworkTableEntry setpointEntry = table.getEntry("Setpoint");
+  private static final NetworkTableEntry actualEntry = table.getEntry("ActualValue");
 
   public ElevatorSubsystem(DrivetrainSubsystem drivetrain) {
     WeightedObservedPoints elevSafetyPoints = new WeightedObservedPoints();
@@ -173,6 +184,12 @@ public class ElevatorSubsystem extends SubsystemBase {
       rotcount -= 1;
     }
     prevRot = rot;
+
+    // PID Network Table
+    double timestamp = Timer.getFPGATimestamp(); // Get current time in seconds
+    timestampEntry.setDouble(timestamp);
+    setpointEntry.setDouble(elevatorPIDSetPoint);
+    actualEntry.setDouble(getHeight());
 
     SmartDashboard.putBoolean("Safety Active", safetyActive);
     SmartDashboard.putNumber("Elev Height", getHeight());
