@@ -120,7 +120,7 @@ public final class Constants {
 
     // Actuator Rates
     public static final double kCoralActuSpeedRate = 0.6; // Inches per second
-    public static final double kCoralActuDistance = 2.15; // Inches
+    public static final double kCoralActuDistance = 2.12; // Inches
 
     public static final class AlgaeArmConstants {
       // Algae Arm gear ratio, 15 to 1, so motor rotations to arm rotations is 1 to 15
@@ -214,10 +214,10 @@ public final class Constants {
 
       public static final double kElevLowHt = 18;
       public static final double kElevL1Ht = 22;
-      public static final double kElevL2Ht = 32;
-      public static final double kElevL3Ht = 47.5;
-      public static final double kElevL4Ht = 74.5;
-      public static final double kElevIntakeHt = 27.2;
+      public static final double kElevL2Ht = 32.5;
+      public static final double kElevL3Ht = 49;
+      public static final double kElevL4Ht = 74;
+      public static final double kElevIntakeHt = 28.5;
       public static final double kElevatorAboveIntakeHeightDifference = 8;
 
       public static final double kElevatorReefOffset = -2;
@@ -229,6 +229,24 @@ public final class Constants {
       // Height difference between pivot point and end of coral bucket for elevator
       public static final double kElevatorCoralBucketHeightDifference =
           8 * Math.sin(kElevatorCoralBucketAngleRadians);
+
+      public static final double[][] ELEV_SAFETY_POINTS = {
+        {0.0, 78.0},
+        {0.05, 76.0},
+        {0.1, 74.0},
+        {0.2, 60.0},
+        {0.3, 36.0},
+        {0.4, 34.0},
+        {0.5, 32.0},
+        {0.6, 30.0},
+        {0.7, 28.0},
+        {0.8, 26.0},
+        {0.9, 23.0},
+        {1.0, 20.0}
+      };
+
+      // Polynomial degree (adjust as needed)
+      public static final int POLYNOMIAL_DEGREE = 2;
     }
   }
 
@@ -236,12 +254,14 @@ public final class Constants {
   public static final class PIDConstants {
 
     // Elevator PID
-    public static final double kElevatorP = 0.0065;
-    public static final double kElevatorI = 0.0035;
-    public static final double kElevatorD = 0.001;
+
+    public static final double kElevatorP = 0.008;
+    public static final double kElevatorI = 0.0013;
+    public static final double kElevatorD = 0.0018;
+
     // Autonomous Elevator PID
     public static final double kAutoElevP = 0.008;
-    public static final double kAutoElevI = 0.001;
+    public static final double kAutoElevI = 0.0013;
     public static final double kAutoElevD = 0.0018;
 
     // Algae Arm PID
