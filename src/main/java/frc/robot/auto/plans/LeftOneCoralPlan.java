@@ -33,7 +33,7 @@ public class LeftOneCoralPlan extends ParallelCommandGroup {
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(3, -0.3)),
-            new Pose2d(3.75, 0.01, new Rotation2d(-Math.PI * 2 / 3)));
+            new Pose2d(3.75, 0.01, new Rotation2d(Math.PI * 2 / 3)));
     // Place coral
 
     // Driving groups
