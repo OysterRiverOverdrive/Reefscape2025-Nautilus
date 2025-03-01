@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
 import frc.robot.auto.plans.*;
@@ -32,11 +31,11 @@ public class RobotContainer {
 
   // Auto Dropdown - Make dropdown variable and variables to be selected
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private final String auto1 = "1";
-  private final String auto2 = "2";
-  private final String auto3 = "3";
-  private final String auto4 = "4";
-  private final String auto5 = "5";
+  private final String rightThree = "1";
+  private final String leftThree = "2";
+  private final String rightOne = "3";
+  private final String leftOne = "4";
+  private final String middleOne = "5";
   private final String auto6 = "6";
   private final String auto7 = "7";
   Command auto;
@@ -58,14 +57,16 @@ public class RobotContainer {
   private final AlgaeTPIDCmd algaeTPIDCmd = new AlgaeTPIDCmd(algaeArm);
 
   // AUTOS
-  private final ThreeCoralRight coolTwoCOrealAuto =
+  private final ThreeCoralRight rightThreeCoralPlan =
       new ThreeCoralRight(drivetrain, elevator, coralIntake);
-  private final RightOneCoralPlan leftOneCoralPlan =
+  private final RightOneCoralPlan rightOneCoralPlan =
       new RightOneCoralPlan(drivetrain, elevator, coralIntake);
   private final ThreeCoralLeft leftThreeCoralPlan =
       new ThreeCoralLeft(drivetrain, elevator, coralIntake);
   private final MiddleOneCoralPlan middleOneCoralPlan =
       new MiddleOneCoralPlan(drivetrain, elevator, coralIntake);
+  private final LeftOneCoralPlan leftOneCoralPlan =
+      new LeftOneCoralPlan(drivetrain, elevator, coralIntake);
 
   public RobotContainer() {
 
@@ -78,11 +79,11 @@ public class RobotContainer {
     // coralIntake.setDefaultCommand(new CoralIntakeStopCommand(coralIntake));
 
     // Add Auto options to dropdown and push to dashboard
-    m_chooser.setDefaultOption("RightThreeCoralPlan", auto1);
-    m_chooser.addOption("LeftOneCoralPlan", auto2);
-    m_chooser.addOption("LeftThreeCoralPlan", auto3);
-    m_chooser.addOption("MiddleOneCoralPlan", auto4);
-    m_chooser.addOption("Auto[Rename Me]", auto5);
+    m_chooser.setDefaultOption("RightThreeCoralPlan", rightThree);
+    m_chooser.addOption("RightOneCoralPlan", leftThree);
+    m_chooser.addOption("LeftThreeCoralPlan", rightOne);
+    m_chooser.addOption("MiddleOneCoralPlan", leftOne);
+    m_chooser.addOption("LeftOneCoralPlan", middleOne);
     m_chooser.addOption("Auto[Rename Me]", auto6);
     m_chooser.addOption("Auto[Rename Me]", auto7);
     SmartDashboard.putData("Auto Selector", m_chooser);
@@ -170,19 +171,20 @@ public class RobotContainer {
 
     switch (m_chooser.getSelected()) {
       default:
-      case auto1:
-        auto = coolTwoCOrealAuto;
+      case rightThree:
+        auto = rightThreeCoralPlan;
         break;
-      case auto2:
-        auto = leftOneCoralPlan;
-        break;
-      case auto3:
+      case leftThree:
         auto = leftThreeCoralPlan;
         break;
-      case auto4:
-        auto = middleOneCoralPlan;
+      case rightOne:
+        auto = rightOneCoralPlan;
         break;
-      case auto5:
+      case leftOne:
+        auto = leftOneCoralPlan;
+        break;
+      case middleOne:
+        auto = middleOneCoralPlan;
         break;
       case auto6:
         break;
