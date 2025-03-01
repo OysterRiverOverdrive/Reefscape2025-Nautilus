@@ -5,12 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.Constants.RobotConstants.ElevatorConstants;
 import frc.robot.auto.AutoCreationCmd;
-import frc.robot.auto.AutoSleepCmd;
-import frc.robot.commands.coralIntake.RetractActuatorCmd;
-import frc.robot.commands.elevator.ElevAPIDCmd;
-import frc.robot.commands.elevator.ElevTPIDCmd;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -77,6 +72,6 @@ public class ThreeCoralRight extends ParallelCommandGroup {
         //         .andThen(new AutoSleepCmd(0.25))
         //         .andThen(toReef2),
         //     new ElevTPIDCmd(elevator))
-    );
+        );
   }
 }
