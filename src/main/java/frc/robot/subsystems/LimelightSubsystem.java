@@ -40,6 +40,10 @@ public class LimelightSubsystem extends SubsystemBase {
     } else {
       LimelightHelpers.setLEDMode_PipelineControl("");
     }
+
+    SmartDashboard.putNumber("Apriltag X", getAprilTagX());
+    SmartDashboard.putNumber("Apriltag Y", getAprilTagY());
+    SmartDashboard.putNumber("Apriltag area", getAprilTagArea());
   }
 
   public void setLEDsOn() {
