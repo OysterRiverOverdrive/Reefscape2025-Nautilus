@@ -297,6 +297,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return m_gyro.getRate() * (RobotConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
+  // making only arcade drive method for vision processing system to be able to input speed and turn
+  // for going to april tag
+  public void arcadeDrive(double speed, double turn) {
+    m_robotDrive.arcadeDrive(speed, turn);
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Z axis angle", getHeading());

@@ -19,7 +19,7 @@ public class MoveToAprilTagCmd extends CommandBase {
   final double speedKp = -0.01;
   final double turnRateKp = 0.015;
 
-  /** Creates a new ToAprilTagCmd. */
+  /** Creates a new MoveToAprilTagCmd. */
   public MoveToAprilTagCmd(DrivetrainSubsystem drivetrain, LimelightSubsystem limelight) {
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -74,9 +74,9 @@ public class MoveToAprilTagCmd extends CommandBase {
   public void driveToTarget( // method to drive to target
       double speed) {
 
-    double myx = camera.getTargetx();
+    double myX = camera.getTargetx();
 
-    double turnRate = myx * turnRateKp;
+    double turnRate = myX * turnRateKp;
 
     drv.arcadeDrive(speed, turnRate);
   }
