@@ -9,15 +9,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
+import frc.robot.auto.plans.*;
 import frc.robot.commands.TeleopCmd;
 import frc.robot.commands.algaeArm.*;
 import frc.robot.commands.coralIntake.*;
 import frc.robot.commands.elevator.*;
 import frc.robot.subsystems.AlgaeArmSubsystem;
+import frc.robot.subsystems.AlgaeSpinnerSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -31,11 +31,11 @@ public class RobotContainer {
 
   // Auto Dropdown - Make dropdown variable and variables to be selected
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private final String auto1 = "1";
-  private final String auto2 = "2";
-  private final String auto3 = "3";
-  private final String auto4 = "4";
-  private final String auto5 = "5";
+  private final String rightThree = "1";
+  private final String leftThree = "2";
+  private final String rightOne = "3";
+  private final String leftOne = "4";
+  private final String middleOne = "5";
   private final String auto6 = "6";
   private final String auto7 = "7";
   Command auto;
@@ -46,6 +46,7 @@ public class RobotContainer {
   private final ElevatorSubsystem elevator = new ElevatorSubsystem(drivetrain);
   private final CoralIntakeSubsystem coralIntake = new CoralIntakeSubsystem();
   private final AlgaeArmSubsystem algaeArm = new AlgaeArmSubsystem();
+  private final AlgaeSpinnerSubsystem algaeSpinner = new AlgaeSpinnerSubsystem();
   private final PowerSubsystem battery = new PowerSubsystem();
 
   // Commands
@@ -55,6 +56,18 @@ public class RobotContainer {
           () -> cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.DRIVER));
   private final ElevTPIDCmd elevTPIDCmd = new ElevTPIDCmd(elevator);
   private final AlgaeTPIDCmd algaeTPIDCmd = new AlgaeTPIDCmd(algaeArm);
+
+  // AUTOS
+  private final ThreeCoralRight rightThreeCoralPlan =
+      new ThreeCoralRight(drivetrain, elevator, coralIntake);
+  private final RightOneCoralPlan rightOneCoralPlan =
+      new RightOneCoralPlan(drivetrain, elevator, coralIntake);
+  private final ThreeCoralLeft leftThreeCoralPlan =
+      new ThreeCoralLeft(drivetrain, elevator, coralIntake);
+  private final MiddleOneCoralPlan middleOneCoralPlan =
+      new MiddleOneCoralPlan(drivetrain, elevator, coralIntake);
+  private final LeftOneCoralPlan leftOneCoralPlan =
+      new LeftOneCoralPlan(drivetrain, elevator, coralIntake);
 
   public RobotContainer() {
 
@@ -67,11 +80,11 @@ public class RobotContainer {
     // coralIntake.setDefaultCommand(new CoralIntakeStopCommand(coralIntake));
 
     // Add Auto options to dropdown and push to dashboard
-    m_chooser.setDefaultOption("Auto[Rename Me]", auto1);
-    m_chooser.addOption("Auto[Rename Me]", auto2);
-    m_chooser.addOption("Auto[Rename Me]", auto3);
-    m_chooser.addOption("Auto[Rename Me]", auto4);
-    m_chooser.addOption("Auto[Rename Me]", auto5);
+    m_chooser.setDefaultOption("RightThreeCoralPlan", rightThree);
+    m_chooser.addOption("RightOneCoralPlan", rightOne);
+    m_chooser.addOption("LeftThreeCoralPlan", leftThree);
+    m_chooser.addOption("MiddleOneCoralPlan", middleOne);
+    m_chooser.addOption("LeftOneCoralPlan", leftOne);
     m_chooser.addOption("Auto[Rename Me]", auto6);
     m_chooser.addOption("Auto[Rename Me]", auto7);
     SmartDashboard.putData("Auto Selector", m_chooser);
@@ -94,15 +107,6 @@ public class RobotContainer {
         .supplier(Controllers.ps4_RB, DriveConstants.joysticks.DRIVER)
         .onTrue(new InstantCommand(() -> drivetrain.zeroHeading()));
 
-    // Algae Spinner Bindings
-    // cutil
-    //     .supplier(Controllers.xbox_lb, DriveConstants.joysticks.OPERATOR)
-    //     .onTrue(new AlgaeSpinnerForwardCommand(algaeArm))
-    //     .onFalse(new AlgaeSpinnerStopCommand(algaeArm));
-    // cutil
-    //     .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
-    //     .onTrue(new AlgaeSpinnerStopCommand(algaeArm));
-
     // Elevator Bindings
     cutil.POVsupplier(0, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> elevator.toL1()));
@@ -119,13 +123,6 @@ public class RobotContainer {
         .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
         .onTrue(new InstantCommand(() -> elevator.toIntake()));
 
-    // Intake Sequence
-    cutil
-        .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
-        .onTrue(
-            new ParallelCommandGroup(
-                new ElevIntakeCmd(elevator), new ExtendActuatorCmd(coralIntake)));
-
     // Coral Intake Bindings
     cutil
         .supplier(Controllers.xbox_rb, DriveConstants.joysticks.OPERATOR)
@@ -140,15 +137,34 @@ public class RobotContainer {
     cutil
         .supplier(Controllers.xbox_b, DriveConstants.joysticks.OPERATOR)
         .onTrue(new RetractActuatorCmd(coralIntake));
-    // .onTrue(new InstantCommand(() -> algaeArm.toDown()));
     cutil
         .supplier(Controllers.xbox_x, DriveConstants.joysticks.OPERATOR)
         .onTrue(new ExtendActuatorCmd(coralIntake));
-    // .onTrue(new InstantCommand(() -> algaeArm.toLoad()));
-    // cutil
-    //     .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR)
-    //     .onTrue(new ResetActuatorCmd(coralIntake));
-    // .onTrue(new InstantCommand(() -> algaeArm.toRemoveAlgae()));
+
+    // Algae Arm Controls
+    cutil
+        .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> algaeArm.toLoad()));
+    // .onTrue(new AlgaeArmToLoadCommand(algaeArm, algaeSpinner));
+    cutil
+        .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> algaeArm.toDown()));
+    // .onTrue(new AlgaeSpinnerForwardCommand(algaeSpinner))
+    // .onFalse(new AlgaeSpinnerStopCommand(algaeArm, algaeSpinner));
+    cutil
+        .supplier(Controllers.xbox_options, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> algaeArm.toRemoveAlgae()));
+    // .onTrue(new AlgaeArmToReefCommand(algaeArm, algaeSpinner))
+    // .onFalse(new AlgaeArmToDownCommand(algaeArm, algaeSpinner));
+
+    cutil
+        .supplier(Controllers.xbox_lbutton, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> algaeSpinner.algaeSpinnerForwardCmd()))
+        .onFalse(new InstantCommand(() -> algaeSpinner.algaeSpinnerStopCmd()));
+    cutil
+        .supplier(Controllers.xbox_rbutton, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> algaeSpinner.algaeSpinnerReverseCmd()))
+        .onFalse(new InstantCommand(() -> algaeSpinner.algaeSpinnerStopCmd()));
   }
 
   public Command getAutonomousCommand() {
@@ -159,23 +175,26 @@ public class RobotContainer {
 
     switch (m_chooser.getSelected()) {
       default:
-      case auto1:
+      case rightThree:
+        auto = rightThreeCoralPlan;
         break;
-      case auto2:
+      case leftThree:
+        auto = leftThreeCoralPlan;
         break;
-      case auto3:
+      case rightOne:
+        auto = rightOneCoralPlan;
         break;
-      case auto4:
+      case leftOne:
+        auto = leftOneCoralPlan;
         break;
-      case auto5:
+      case middleOne:
+        auto = middleOneCoralPlan;
         break;
       case auto6:
         break;
       case auto7:
         break;
     }
-    // Create sequential command with the wait command first then run selected auto
-    auto = new SequentialCommandGroup(new AutoCoralSpinForwardCmd(coralIntake, 5));
     return auto;
   }
 }

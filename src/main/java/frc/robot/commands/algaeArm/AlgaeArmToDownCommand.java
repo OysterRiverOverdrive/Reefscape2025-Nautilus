@@ -6,19 +6,21 @@ package frc.robot.commands.algaeArm;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaeArmSubsystem;
+import frc.robot.subsystems.AlgaeSpinnerSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class AlgaeArmToDownCommand extends Command {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final AlgaeArmSubsystem algaeArm_subsystem;
+  private final AlgaeSpinnerSubsystem algaeSpinner_subsystem;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AlgaeArmToDownCommand(AlgaeArmSubsystem subsystem) {
+  public AlgaeArmToDownCommand(AlgaeArmSubsystem subsystem, AlgaeSpinnerSubsystem spinner) {
     algaeArm_subsystem = subsystem;
+    algaeSpinner_subsystem = spinner;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -31,6 +33,7 @@ public class AlgaeArmToDownCommand extends Command {
   @Override
   public void execute() {
     algaeArm_subsystem.toDown();
+    algaeSpinner_subsystem.algaeSpinnerStopCmd();
   }
 
   // Called once the command ends or is interrupted.
@@ -40,7 +43,6 @@ public class AlgaeArmToDownCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (algaeArm_subsystem.getSetPoint() - 0.5 <= algaeArm_subsystem.getRelativeRotation()
-        && algaeArm_subsystem.getRelativeRotation() <= algaeArm_subsystem.getSetPoint() + 0.5);
+    return false;
   }
 }

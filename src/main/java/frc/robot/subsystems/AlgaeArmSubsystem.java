@@ -10,7 +10,6 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
@@ -20,16 +19,10 @@ public class AlgaeArmSubsystem extends SubsystemBase {
 
   private final SparkMax m_AlgaeArmSparkMax =
       new SparkMax(RobotConstants.kAlgaeArmCanId, MotorType.kBrushless);
-  private final SparkMax m_AlgaeSpinnerSparkMax =
-      new SparkMax(RobotConstants.kAlgaeSpinnerCanId, MotorType.kBrushless);
 
   private final RelativeEncoder m_AlgaeArmEncoder;
 
-  private final PIDController algaeArmPID =
-      new PIDController(PIDConstants.kAlgaeArmP, PIDConstants.kAlgaeArmI, PIDConstants.kAlgaeArmD);
-
   private SparkMaxConfig m_ArmConfig;
-  private SparkMaxConfig m_SpinnerConfig;
 
   private double algaeArmPIDSetPoint;
 
@@ -44,18 +37,6 @@ public class AlgaeArmSubsystem extends SubsystemBase {
 
   public double getEncoder() {
     return m_AlgaeArmEncoder.getPosition() * AlgaeArmConstants.kAlgaeArmGearRatio;
-  }
-
-  public void algaeSpinnerForwardCmd() {
-    m_AlgaeSpinnerSparkMax.set(RobotConstants.kAlgaeSpinnerSpeed);
-  }
-
-  public void algaeSpinnerReverseCmd() {
-    m_AlgaeSpinnerSparkMax.set(-1 * RobotConstants.kAlgaeSpinnerSpeed);
-  }
-
-  public void algaeSpinnerStopCmd() {
-    m_AlgaeSpinnerSparkMax.stopMotor();
   }
 
   public void toDown() {

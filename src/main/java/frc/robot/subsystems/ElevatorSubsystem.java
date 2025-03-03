@@ -10,6 +10,10 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -41,6 +45,14 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double rotcount = 0; // # of rotations completed by abs enc
   private final PolynomialFunction polynomial; // Max Height Function
   public boolean safetyActive = false; // Bool for dashboard on height override
+  public boolean setDirUp = true; // Boolean for PID direction
+
+  // PID Network Table
+  private static final NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  private static final NetworkTable table = inst.getTable("ElevatorPID");
+  private static final NetworkTableEntry timestampEntry = table.getEntry("Timestamp");
+  private static final NetworkTableEntry setpointEntry = table.getEntry("Setpoint");
+  private static final NetworkTableEntry actualEntry = table.getEntry("ActualValue");
 
   public ElevatorSubsystem(DrivetrainSubsystem drivetrain) {
     WeightedObservedPoints elevSafetyPoints = new WeightedObservedPoints();
@@ -98,32 +110,46 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void toBase() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint = (ElevatorConstants.kElevLowHt);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public void toL1() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint = (ElevatorConstants.kElevL1Ht);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public void toL2() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint = (ElevatorConstants.kElevL2Ht);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public void toL3() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint = (ElevatorConstants.kElevL3Ht);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public void toL4() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint = (ElevatorConstants.kElevL4Ht);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public void toIntake() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint = (ElevatorConstants.kElevIntakeHt);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public void toAboveIntake() {
+    double prev = elevatorPIDSetPoint;
     elevatorPIDSetPoint =
         (ElevatorConstants.kElevIntakeHt + ElevatorConstants.kElevatorAboveIntakeHeightDifference);
+    checkdir(prev, elevatorPIDSetPoint);
   }
 
   public double getSetPoint() {
@@ -132,6 +158,18 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void setElevatorSpeed(double speed) {
     m_elevator1SparkMax.set(speed);
+  }
+
+  public boolean getPIDDir() {
+    return setDirUp;
+  }
+
+  public void checkdir(double prior, double current) {
+    if (prior < current) {
+      setDirUp = true;
+    } else {
+      setDirUp = false;
+    }
   }
 
   @Override
@@ -146,6 +184,12 @@ public class ElevatorSubsystem extends SubsystemBase {
       rotcount -= 1;
     }
     prevRot = rot;
+
+    // PID Network Table
+    double timestamp = Timer.getFPGATimestamp(); // Get current time in seconds
+    timestampEntry.setDouble(timestamp);
+    setpointEntry.setDouble(elevatorPIDSetPoint);
+    actualEntry.setDouble(getHeight());
 
     SmartDashboard.putBoolean("Safety Active", safetyActive);
     SmartDashboard.putNumber("Elev Height", getHeight());
