@@ -11,11 +11,9 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.estimator.PoseEstimator;
 import frc.robot.Constants.LimeLightConstants;
 import frc.utils.LimelightHelpers;
 import frc.utils.LimelightHelpers.PoseEstimate;
-import frc.utils.LimelightHelpers.RawFiducial;
 import java.util.Optional;
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -46,7 +44,7 @@ public class LimelightSubsystem extends SubsystemBase {
         LimeLightConstants.CameraRollOffset,
         LimeLightConstants.CameraPitchOffset,
         LimeLightConstants.CameraYawOffset);
-    
+
     // PoseEstimator PEstimator = new PoseEstimator<>(null, null, null, null); Pose Estimator, idk.
   }
 
@@ -137,43 +135,6 @@ public class LimelightSubsystem extends SubsystemBase {
       LimelightHelpers.setLEDMode_ForceOn("");
     } else {
       LimelightHelpers.setLEDMode_PipelineControl("");
-    }
-
-    PoseEstimate CurPose = getPose2dMegaTag2();
-
-    if (LimelightHelpers.validPoseEstimate(CurPose)) {
-      
-      LimelightHelpers.SetRobotOrientation("", CurPose.pose.getRotation().getDegrees(), 0, 0, 0, 0, 0);
-
-      LimelightHelpers.printPoseEstimate(CurPose);
-
-      SmartDashboard.putNumber("tag area", CurPose.avgTagArea);
-      SmartDashboard.putNumber("average tag distance", CurPose.avgTagDist);
-
-      for (int i = 0; i < CurPose.rawFiducials.length; i++) {
-        RawFiducial fiducial = CurPose.rawFiducials[i];
-        SmartDashboard.putNumber("distance to camera", fiducial.distToCamera);
-        SmartDashboard.putNumber("apriltag x", fiducial.txnc);
-        SmartDashboard.putNumber("apriltag y", fiducial.tync);
-      }
-    }
-
-    /*when an april tag is seen, the robot should compare its current pose2d with the pose2d retrieved from the limelight
-     *this comparison is put into smartdashboard
-     * [0] = x
-     * [1] = y
-     * [2] = z (set to 0)
-     * [3] = roll (set to 0)
-     * [4] = pitch (set to 0)
-     * [5] = yaw
-     */
-    if (isAprilTag("")) {
-      double[] aprilTagPose2d = LimelightHelpers.pose2dToArray(getPose2dMegaTag2().pose);
-      double[] robotPose2d = LimelightHelpers.pose2dToArray(drivetrain.getPose());
-      double ErrorOfDistance =
-          Math.hypot(robotPose2d[1] - aprilTagPose2d[1], robotPose2d[0] - aprilTagPose2d[0]);
-
-      SmartDashboard.putNumber("Pose2d error", ErrorOfDistance);
     }
   }
 }

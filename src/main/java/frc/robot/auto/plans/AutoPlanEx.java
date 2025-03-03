@@ -46,6 +46,5 @@ public class AutoPlanEx extends ParallelCommandGroup {
     **this example code just drives straight to the reef from the middle starting point and unloads a coral onto the reef.
 
     */
-
   }
 }
