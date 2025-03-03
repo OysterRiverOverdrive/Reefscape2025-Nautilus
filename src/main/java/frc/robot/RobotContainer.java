@@ -18,6 +18,7 @@ import frc.robot.commands.algaeArm.*;
 import frc.robot.commands.coralIntake.*;
 import frc.robot.commands.elevator.*;
 import frc.robot.subsystems.AlgaeArmSubsystem;
+import frc.robot.subsystems.AlgaeSpinnerSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -46,6 +47,7 @@ public class RobotContainer {
   private final ElevatorSubsystem elevator = new ElevatorSubsystem(drivetrain);
   private final CoralIntakeSubsystem coralIntake = new CoralIntakeSubsystem();
   private final AlgaeArmSubsystem algaeArm = new AlgaeArmSubsystem();
+  private final AlgaeSpinnerSubsystem algaeSpinner = new AlgaeSpinnerSubsystem();
   private final PowerSubsystem battery = new PowerSubsystem();
 
   // Commands
@@ -142,16 +144,19 @@ public class RobotContainer {
 
     // Algae Arm Controls
     cutil
-        .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new AlgaeArmToLoadCommand(algaeArm));
+        .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR).onTrue(new InstantCommand(() -> algaeArm.toLoad()));
+        // .onTrue(new AlgaeArmToLoadCommand(algaeArm, algaeSpinner));
     cutil
-        .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new AlgaeSpinnerForwardCommand(algaeArm))
-        .onFalse(new AlgaeSpinnerStopCommand(algaeArm));
+        .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR).onTrue(new InstantCommand(() -> algaeArm.toDown()));
+        // .onTrue(new AlgaeSpinnerForwardCommand(algaeSpinner))
+        // .onFalse(new AlgaeSpinnerStopCommand(algaeArm, algaeSpinner));
     cutil
-        .supplier(Controllers.xbox_options, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new AlgaeArmToReefCommand(algaeArm))
-        .onFalse(new AlgaeArmToDownCommand(algaeArm));
+        .supplier(Controllers.xbox_options, DriveConstants.joysticks.OPERATOR).onTrue(new InstantCommand(() -> algaeArm.toRemoveAlgae()));
+        // .onTrue(new AlgaeArmToReefCommand(algaeArm, algaeSpinner))
+        // .onFalse(new AlgaeArmToDownCommand(algaeArm, algaeSpinner));
+
+    cutil.supplier(Controllers.xbox_lbutton, DriveConstants.joysticks.OPERATOR).onTrue(new InstantCommand(() -> algaeSpinner.algaeSpinnerForwardCmd())).onFalse(new InstantCommand(() -> algaeSpinner.algaeSpinnerStopCmd()));
+    cutil.supplier(Controllers.xbox_rbutton, DriveConstants.joysticks.OPERATOR).onTrue(new InstantCommand(() -> algaeSpinner.algaeSpinnerReverseCmd())).onFalse(new InstantCommand(() -> algaeSpinner.algaeSpinnerStopCmd()));
   }
 
   public Command getAutonomousCommand() {

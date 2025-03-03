@@ -194,6 +194,5 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Safety Active", safetyActive);
     SmartDashboard.putNumber("Elev Height", getHeight());
     SmartDashboard.putNumber("Elev Setpoint", elevatorPIDSetPoint);
-    SmartDashboard.putBoolean("bisbfgbjnsjlkblks", getPIDDir());
   }
 }

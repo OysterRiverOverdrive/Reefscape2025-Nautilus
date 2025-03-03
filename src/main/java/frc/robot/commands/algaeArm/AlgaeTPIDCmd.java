@@ -5,6 +5,7 @@
 package frc.robot.commands.algaeArm;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.AlgaeArmSubsystem;
@@ -30,6 +31,7 @@ public class AlgaeTPIDCmd extends Command {
   public void execute() {
     algaeArmPID.setSetpoint(algae.getSetPoint());
     double armSpeed = algaeArmPID.calculate(algae.getEncoder());
+    SmartDashboard.putNumber("speed", armSpeed);
     algae.setAlgaeArmSpeed(armSpeed);
   }
 

@@ -6,13 +6,16 @@ package frc.robot.commands.algaeArm;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaeArmSubsystem;
+import frc.robot.subsystems.AlgaeSpinnerSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class AlgaeArmToReefCommand extends Command {
   private final AlgaeArmSubsystem algaeArm_subsystem;
+  private final AlgaeSpinnerSubsystem algaeSpinner_subsystem;
 
-  public AlgaeArmToReefCommand(AlgaeArmSubsystem subsystem) {
+  public AlgaeArmToReefCommand(AlgaeArmSubsystem subsystem, AlgaeSpinnerSubsystem spinner) {
     algaeArm_subsystem = subsystem;
+    algaeSpinner_subsystem = spinner;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -25,7 +28,7 @@ public class AlgaeArmToReefCommand extends Command {
   @Override
   public void execute() {
     algaeArm_subsystem.toRemoveAlgae();
-    algaeArm_subsystem.algaeSpinnerForwardCmd();
+    algaeSpinner_subsystem.algaeSpinnerForwardCmd();
   }
 
   // Called once the command ends or is interrupted.

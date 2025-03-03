@@ -6,19 +6,22 @@ package frc.robot.commands.algaeArm;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaeArmSubsystem;
+import frc.robot.subsystems.AlgaeSpinnerSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class AlgaeSpinnerStopCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final AlgaeArmSubsystem algaeArm_subsystem;
+  private final AlgaeSpinnerSubsystem algaeSpinner_subsystem;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AlgaeSpinnerStopCommand(AlgaeArmSubsystem subsystem) {
+  public AlgaeSpinnerStopCommand(AlgaeArmSubsystem subsystem, AlgaeSpinnerSubsystem spinner) {
     algaeArm_subsystem = subsystem;
+    algaeSpinner_subsystem = spinner;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -31,7 +34,7 @@ public class AlgaeSpinnerStopCommand extends Command {
   @Override
   public void execute() {
     algaeArm_subsystem.toDown();
-    algaeArm_subsystem.algaeSpinnerStopCmd();
+    algaeSpinner_subsystem.algaeSpinnerStopCmd();
   }
 
   // Called once the command ends or is interrupted.
