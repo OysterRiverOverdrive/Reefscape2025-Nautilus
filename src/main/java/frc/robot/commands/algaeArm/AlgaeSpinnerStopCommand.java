@@ -12,6 +12,7 @@ import frc.robot.subsystems.AlgaeSpinnerSubsystem;
 public class AlgaeSpinnerStopCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final AlgaeArmSubsystem algaeArm_subsystem;
+
   private final AlgaeSpinnerSubsystem algaeSpinner_subsystem;
 
   /**

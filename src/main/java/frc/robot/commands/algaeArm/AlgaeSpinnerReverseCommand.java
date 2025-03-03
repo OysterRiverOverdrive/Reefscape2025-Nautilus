@@ -5,7 +5,6 @@
 package frc.robot.commands.algaeArm;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.AlgaeSpinnerSubsystem;
 
 /** An example command that uses an example subsystem. */

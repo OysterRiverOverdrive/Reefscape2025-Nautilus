@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
 import frc.robot.auto.plans.*;
@@ -144,19 +143,28 @@ public class RobotContainer {
 
     // Algae Arm Controls
     cutil
-        .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR).onTrue(new InstantCommand(() -> algaeArm.toLoad()));
-        // .onTrue(new AlgaeArmToLoadCommand(algaeArm, algaeSpinner));
+        .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> algaeArm.toLoad()));
+    // .onTrue(new AlgaeArmToLoadCommand(algaeArm, algaeSpinner));
     cutil
-        .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR).onTrue(new InstantCommand(() -> algaeArm.toDown()));
-        // .onTrue(new AlgaeSpinnerForwardCommand(algaeSpinner))
-        // .onFalse(new AlgaeSpinnerStopCommand(algaeArm, algaeSpinner));
+        .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> algaeArm.toDown()));
+    // .onTrue(new AlgaeSpinnerForwardCommand(algaeSpinner))
+    // .onFalse(new AlgaeSpinnerStopCommand(algaeArm, algaeSpinner));
     cutil
-        .supplier(Controllers.xbox_options, DriveConstants.joysticks.OPERATOR).onTrue(new InstantCommand(() -> algaeArm.toRemoveAlgae()));
-        // .onTrue(new AlgaeArmToReefCommand(algaeArm, algaeSpinner))
-        // .onFalse(new AlgaeArmToDownCommand(algaeArm, algaeSpinner));
+        .supplier(Controllers.xbox_options, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> algaeArm.toRemoveAlgae()));
+    // .onTrue(new AlgaeArmToReefCommand(algaeArm, algaeSpinner))
+    // .onFalse(new AlgaeArmToDownCommand(algaeArm, algaeSpinner));
 
-    cutil.supplier(Controllers.xbox_lbutton, DriveConstants.joysticks.OPERATOR).onTrue(new InstantCommand(() -> algaeSpinner.algaeSpinnerForwardCmd())).onFalse(new InstantCommand(() -> algaeSpinner.algaeSpinnerStopCmd()));
-    cutil.supplier(Controllers.xbox_rbutton, DriveConstants.joysticks.OPERATOR).onTrue(new InstantCommand(() -> algaeSpinner.algaeSpinnerReverseCmd())).onFalse(new InstantCommand(() -> algaeSpinner.algaeSpinnerStopCmd()));
+    cutil
+        .supplier(Controllers.xbox_lbutton, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> algaeSpinner.algaeSpinnerForwardCmd()))
+        .onFalse(new InstantCommand(() -> algaeSpinner.algaeSpinnerStopCmd()));
+    cutil
+        .supplier(Controllers.xbox_rbutton, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> algaeSpinner.algaeSpinnerReverseCmd()))
+        .onFalse(new InstantCommand(() -> algaeSpinner.algaeSpinnerStopCmd()));
   }
 
   public Command getAutonomousCommand() {

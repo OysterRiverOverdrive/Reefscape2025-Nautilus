@@ -33,7 +33,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     m_ArmConfig.inverted(true);
     m_AlgaeArmSparkMax.configure(
         m_ArmConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-      }
+  }
 
   public double getEncoder() {
     return m_AlgaeArmEncoder.getPosition() * AlgaeArmConstants.kAlgaeArmGearRatio;

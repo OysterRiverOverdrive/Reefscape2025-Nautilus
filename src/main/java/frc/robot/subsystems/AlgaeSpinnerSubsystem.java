@@ -7,13 +7,11 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants;
 
 public class AlgaeSpinnerSubsystem extends SubsystemBase {
   /** Creates a new AlgaeSpinnerSubsystem. */
-
   private final SparkMax m_AlgaeSpinnerSparkMax =
       new SparkMax(RobotConstants.kAlgaeSpinnerCanId, MotorType.kBrushless);
 
