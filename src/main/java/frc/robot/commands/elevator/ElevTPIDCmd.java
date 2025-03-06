@@ -9,16 +9,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevTPIDCmd extends Command {
-  ElevatorSubsystem elevator;
+  private ElevatorSubsystem elevator;
+  private double safetysetpoint; // Calculated Max Height
+  private double location;
 
-  private final PIDController elevatorPID =
-      new PIDController(PIDConstants.kElevatorP, PIDConstants.kElevatorI, PIDConstants.kElevatorD);
+  private final PIDController elevatorRisePID =
+      new PIDController(
+          PIDConstants.kElevatorRP, PIDConstants.kElevatorRI, PIDConstants.kElevatorRD);
 
-  /** Creates a new TelePIDCmd. */
+  private final PIDController elevatorBasePID =
+      new PIDController(
+          PIDConstants.kElevatorBP, PIDConstants.kElevatorBI, PIDConstants.kElevatorBD);
+
   public ElevTPIDCmd(ElevatorSubsystem elevator) {
-    // Use addRequirements() here to declare subsystem dependencies
     this.elevator = elevator;
     addRequirements(elevator);
   }
@@ -30,8 +34,23 @@ public class ElevTPIDCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevatorPID.setSetpoint(elevator.getSetPoint());
-    double elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
+    safetysetpoint = elevator.safetyheight();
+    if (safetysetpoint < elevator.getSetPoint()) {
+      location = safetysetpoint;
+      elevator.safetyActive = true;
+    } else {
+      location = elevator.getSetPoint();
+      elevator.safetyActive = false;
+    }
+    double elevatorSpeed;
+    if (elevator.getPIDDir()) {
+      elevatorRisePID.setSetpoint(location);
+      elevatorSpeed = elevatorRisePID.calculate(elevator.getHeight());
+    } else {
+      elevatorBasePID.setSetpoint(location);
+      elevatorSpeed = elevatorBasePID.calculate(elevator.getHeight());
+    }
+
     elevator.setElevatorSpeed(elevatorSpeed);
   }
 

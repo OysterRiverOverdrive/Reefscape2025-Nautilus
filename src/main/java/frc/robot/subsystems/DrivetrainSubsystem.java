@@ -63,6 +63,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private double y;
   private double r;
 
+  public static double maxSpeedCmd;
+
   private boolean waiting = false;
   private double maxSpeedDrive;
   private double maxSpeedTurn;
@@ -235,7 +237,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getHeading() {
-
     return Math.IEEEremainder(m_gyro.getAngle() * (RobotConstants.kGyroReversed ? -1.0 : 1.0), 360);
   }
 
@@ -307,6 +308,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Z axis angle", getHeading());
     SmartDashboard.putBoolean("Auto is Waiting", waiting);
+    SmartDashboard.putNumber("controller speed", maxSpeedCmd);
 
     // Update the odometry in the periodic block
     m_odometry.update(

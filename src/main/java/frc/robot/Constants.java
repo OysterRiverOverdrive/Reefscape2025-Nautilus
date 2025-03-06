@@ -111,7 +111,7 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // Algae Spinner constants
-    public static final double kAlgaeSpinnerSpeed = 0.2;
+    public static final double kAlgaeSpinnerSpeed = 0.45;
 
     // Coral Intake constants
     public static final double kCoralIntakeSpeed = 0.4;
@@ -120,7 +120,7 @@ public final class Constants {
 
     // Actuator Rates
     public static final double kCoralActuSpeedRate = 0.6; // Inches per second
-    public static final double kCoralActuDistance = 2.15; // Inches
+    public static final double kCoralActuDistance = 2.3; // Inches
 
     public static final class AlgaeArmConstants {
       // Algae Arm gear ratio, 15 to 1, so motor rotations to arm rotations is 1 to 15
@@ -156,8 +156,8 @@ public final class Constants {
       // Bypassing Calculated Values with collected values, this can be faster during testing to
       // just record values and then make the calculation work later
       public static final double kDownAngle = 0.03;
-      public static final double kAlgaeAngle = 0.203;
-      public static final double kLoadingAngle = 0.433;
+      public static final double kAlgaeAngle = 0.295;
+      public static final double kLoadingAngle = 0.169;
     }
 
     public static final class ElevatorConstants {
@@ -214,10 +214,10 @@ public final class Constants {
 
       public static final double kElevLowHt = 18;
       public static final double kElevL1Ht = 22;
-      public static final double kElevL2Ht = 32;
-      public static final double kElevL3Ht = 47.5;
-      public static final double kElevL4Ht = 74.5;
-      public static final double kElevIntakeHt = 27.2;
+      public static final double kElevL2Ht = 32.5;
+      public static final double kElevL3Ht = 49;
+      public static final double kElevL4Ht = 74;
+      public static final double kElevIntakeHt = 27.5;
       public static final double kElevatorAboveIntakeHeightDifference = 8;
 
       public static final double kElevatorReefOffset = -2;
@@ -229,6 +229,24 @@ public final class Constants {
       // Height difference between pivot point and end of coral bucket for elevator
       public static final double kElevatorCoralBucketHeightDifference =
           8 * Math.sin(kElevatorCoralBucketAngleRadians);
+
+      public static final double[][] ELEV_SAFETY_POINTS = {
+        {0.0, 78.0},
+        {0.05, 76.0},
+        {0.1, 74.0},
+        {0.2, 60.0},
+        {0.3, 36.0},
+        {0.4, 34.0},
+        {0.5, 32.0},
+        {0.6, 30.0},
+        {0.7, 28.0},
+        {0.8, 26.0},
+        {0.9, 23.0},
+        {1.0, 20.0}
+      };
+
+      // Polynomial degree (adjust as needed)
+      public static final int POLYNOMIAL_DEGREE = 2;
     }
   }
 
@@ -236,18 +254,23 @@ public final class Constants {
   public static final class PIDConstants {
 
     // Elevator PID
-    public static final double kElevatorP = 0.0065;
-    public static final double kElevatorI = 0.0035;
-    public static final double kElevatorD = 0.001;
+    public static final double kElevatorRP = 0.0068;
+    public static final double kElevatorRI = 0.0011;
+    public static final double kElevatorRD = 0.0025;
+
+    public static final double kElevatorBP = 0.0078;
+    public static final double kElevatorBI = 0.0013;
+    public static final double kElevatorBD = 0.0021;
+
     // Autonomous Elevator PID
-    public static final double kAutoElevP = 0.0065;
-    public static final double kAutoElevI = 0.0025;
+    public static final double kAutoElevP = 0.008;
+    public static final double kAutoElevI = 0.0013;
     public static final double kAutoElevD = 0.0018;
 
     // Algae Arm PID
-    public static final double kAlgaeArmP = 0.4;
-    public static final double kAlgaeArmI = 0.2;
-    public static final double kAlgaeArmD = 0.16;
+    public static final double kAlgaeArmP = 0.5;
+    public static final double kAlgaeArmI = 0.8;
+    public static final double kAlgaeArmD = 0;
     // Autonomous Algae Arm PID
     public static final double kAutoAlgaeP = 0.8;
     public static final double kAutoAlgaeI = 0.5;
