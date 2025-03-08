@@ -12,7 +12,7 @@ public class MoveToAprilTagCmd extends CommandBase {
   DrivetrainSubsystem drv;
   LimelightSubsystem camera;
 
-  double standOffDistInches = 31.00; //  distance we want to stop from target
+  double standOffDistInches = 0.00; //  distance we want to stop from target
 
   boolean cmdFinished = false;
   double speed = 0.0;
@@ -36,7 +36,8 @@ public class MoveToAprilTagCmd extends CommandBase {
     cmdFinished = false;
 
     speed = -0.6;
-
+    
+    //idk what this is - what is this
     if (camera.pLine == 5) {
       standOffDistInches = 60.0;
     } else {
@@ -48,19 +49,19 @@ public class MoveToAprilTagCmd extends CommandBase {
   @Override
   public void execute() {
     if (cmdFinished == false) {
-      double distToMyTgt = CurPose.getDistance();
+      double distToMyTgt = CurPose.getDistance(); //find command to get y distance
 
       if (distToMyTgt != -10000 && distToMyTgt < 50) // dist is inches
       {
         // speed proportions if distance less than 50 in
-        speed = distToMyTgt * speedKp; // calculating speed to help make the sto smoother
+        speed = distToMyTgt * speedKp; // calculating speed to help make the stop smoother
       }
 
       if (distToMyTgt != -10000.00 && distToMyTgt <= standOffDistInches) // the bot is at its goal
       {
 
         speed = 0.0;
-        drv.arcadeDrive(0, 0); // stop the bot once reached the distance
+        drv.fieldDrive(0, 0, 0, 0, 0); // stop the bot once reached the distance
 
         cmdFinished = true;
       }
@@ -74,11 +75,11 @@ public class MoveToAprilTagCmd extends CommandBase {
   public void driveToTarget( // method to drive to target
       double speed) {
 
-    double myX = camera.getTargetx();
+    double myY = //TO-DO*******find command that gets sideways distance
 
-    double turnRate = myX * turnRateKp;
+    double turnRate = myY * turnRateKp;
 
-    drv.arcadeDrive(speed, turnRate);
+    drv.fieldDrive(0,speed,turnRate,turnRate,speed); //xSpeed currently at 0
   }
 
   // Called once the command ends or is interrupted.
@@ -91,4 +92,7 @@ public class MoveToAprilTagCmd extends CommandBase {
 
     return cmdFinished;
   }
+
+  
+
 }
