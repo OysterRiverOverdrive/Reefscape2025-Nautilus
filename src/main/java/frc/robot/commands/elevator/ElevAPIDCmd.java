@@ -13,9 +13,16 @@ public class ElevAPIDCmd extends Command {
   private ElevatorSubsystem elevator;
   private double setpoint;
   private double error;
+  private double priorSet;
+  private boolean rising;
 
-  private final PIDController elevatorPID =
-      new PIDController(PIDConstants.kAutoElevP, PIDConstants.kAutoElevI, PIDConstants.kAutoElevD);
+  private final PIDController elevatorRisePID =
+      new PIDController(
+          PIDConstants.kElevatorRP, PIDConstants.kElevatorRI, PIDConstants.kElevatorRD);
+
+  private final PIDController elevatorBasePID =
+      new PIDController(
+          PIDConstants.kElevatorBP, PIDConstants.kElevatorBI, PIDConstants.kElevatorBD);
 
   /**
    * Autonomous Method of moving elevator
@@ -34,13 +41,25 @@ public class ElevAPIDCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevatorPID.setSetpoint(setpoint);
+    priorSet = elevator.getHeight();
+    if (setpoint > priorSet) {
+      rising = true;
+      elevatorRisePID.setSetpoint(setpoint);
+    } else {
+      rising = false;
+      elevatorBasePID.setSetpoint(setpoint);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
+    double elevatorSpeed;
+    if (rising) {
+      elevatorSpeed = elevatorRisePID.calculate(elevator.getHeight());
+    } else {
+      elevatorSpeed = elevatorBasePID.calculate(elevator.getHeight());
+    }
     elevator.setElevatorSpeed(elevatorSpeed);
   }
 
