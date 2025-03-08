@@ -49,7 +49,8 @@ public class MoveToAprilTagCmd extends CommandBase {
   @Override
   public void execute() {
     if (cmdFinished == false) {
-      double distToMyTgt = CurPose.getDistance(); //find command to get y distance
+      double distToMyTgt = //CurPose.getDistance(); //find command to get y distance
+      //use TXNC or TYNC, this is distance
 
       if (distToMyTgt != -10000 && distToMyTgt < 50) // dist is inches
       {
@@ -76,6 +77,7 @@ public class MoveToAprilTagCmd extends CommandBase {
       double speed) {
 
     double myY = //TO-DO*******find command that gets sideways distance
+    //LimelightHelpers.getBotPose2d(camera);
 
     double turnRate = myY * turnRateKp;
 
