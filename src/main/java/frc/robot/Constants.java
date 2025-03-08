@@ -254,12 +254,12 @@ public final class Constants {
   public static final class PIDConstants {
 
     // Elevator PID
-    public static final double kElevatorRP = 0.0068;
-    public static final double kElevatorRI = 0.0011;
-    public static final double kElevatorRD = 0.0025;
+    public static final double kElevatorRP = 0.022;
+    public static final double kElevatorRI = 0.0015;
+    public static final double kElevatorRD = 0.003;
 
     public static final double kElevatorBP = 0.0078;
-    public static final double kElevatorBI = 0.0013;
+    public static final double kElevatorBI = 0.00;
     public static final double kElevatorBD = 0.0021;
 
     // Autonomous Elevator PID
