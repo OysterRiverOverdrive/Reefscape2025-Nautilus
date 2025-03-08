@@ -155,16 +155,6 @@ public class LimelightSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("apriltag x", fiducial.txnc);
         SmartDashboard.putNumber("apriltag y", fiducial.tync);
 
-        double distToCrosshair = Math.hypot(fiducial.txnc, fiducial.tync);
-
-        if (i == 0) {
-          leastDistToCrosshair = distToCrosshair;
-          continue;
-        }
-
-        if (distToCrosshair < leastDistToCrosshair) {
-          leastDistToCrosshair = distToCrosshair;
-        }
       }
     }
 
