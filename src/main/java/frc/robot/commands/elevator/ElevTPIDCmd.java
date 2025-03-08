@@ -4,7 +4,8 @@
 
 package frc.robot.commands.elevator;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -14,13 +15,19 @@ public class ElevTPIDCmd extends Command {
   private double safetysetpoint; // Calculated Max Height
   private double location;
 
-  private final PIDController elevatorRisePID =
-      new PIDController(
-          PIDConstants.kElevatorRP, PIDConstants.kElevatorRI, PIDConstants.kElevatorRD);
+  private final ProfiledPIDController elevatorRisePID = 
+        new ProfiledPIDController(
+            PIDConstants.kElevatorRP,
+            PIDConstants.kElevatorRI,
+            PIDConstants.kElevatorRD,
+            new TrapezoidProfile.Constraints(PIDConstants.kElevatorRMaxV, PIDConstants.kElevatorRMaxA));
 
-  private final PIDController elevatorBasePID =
-      new PIDController(
-          PIDConstants.kElevatorBP, PIDConstants.kElevatorBI, PIDConstants.kElevatorBD);
+  private final ProfiledPIDController elevatorBasePID = 
+        new ProfiledPIDController(
+            PIDConstants.kElevatorBP,
+            PIDConstants.kElevatorBI,
+            PIDConstants.kElevatorBD,
+            new TrapezoidProfile.Constraints(PIDConstants.kElevatorBMaxV, PIDConstants.kElevatorBMaxA));
 
   public ElevTPIDCmd(ElevatorSubsystem elevator) {
     this.elevator = elevator;
@@ -44,10 +51,10 @@ public class ElevTPIDCmd extends Command {
     }
     double elevatorSpeed;
     if (elevator.getPIDDir()) {
-      elevatorRisePID.setSetpoint(location);
+      elevatorRisePID.setGoal(location);
       elevatorSpeed = elevatorRisePID.calculate(elevator.getHeight());
     } else {
-      elevatorBasePID.setSetpoint(location);
+      elevatorBasePID.setGoal(location);
       elevatorSpeed = elevatorBasePID.calculate(elevator.getHeight());
     }
 

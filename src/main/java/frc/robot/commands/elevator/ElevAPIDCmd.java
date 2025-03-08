@@ -5,6 +5,8 @@
 package frc.robot.commands.elevator;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -16,13 +18,19 @@ public class ElevAPIDCmd extends Command {
   private double priorSet;
   private boolean rising;
 
-  private final PIDController elevatorRisePID =
-      new PIDController(
-          PIDConstants.kElevatorRP, PIDConstants.kElevatorRI, PIDConstants.kElevatorRD);
+  private final ProfiledPIDController elevatorRisePID = 
+        new ProfiledPIDController(
+            PIDConstants.kElevatorRP,
+            PIDConstants.kElevatorRI,
+            PIDConstants.kElevatorRD,
+            new TrapezoidProfile.Constraints(PIDConstants.kElevatorRMaxV, PIDConstants.kElevatorRMaxA));
 
-  private final PIDController elevatorBasePID =
-      new PIDController(
-          PIDConstants.kElevatorBP, PIDConstants.kElevatorBI, PIDConstants.kElevatorBD);
+  private final ProfiledPIDController elevatorBasePID = 
+        new ProfiledPIDController(
+            PIDConstants.kElevatorBP,
+            PIDConstants.kElevatorBI,
+            PIDConstants.kElevatorBD,
+            new TrapezoidProfile.Constraints(PIDConstants.kElevatorBMaxV, PIDConstants.kElevatorBMaxA));
 
   /**
    * Autonomous Method of moving elevator
@@ -44,10 +52,10 @@ public class ElevAPIDCmd extends Command {
     priorSet = elevator.getHeight();
     if (setpoint > priorSet) {
       rising = true;
-      elevatorRisePID.setSetpoint(setpoint);
+      elevatorRisePID.setGoal(setpoint);
     } else {
       rising = false;
-      elevatorBasePID.setSetpoint(setpoint);
+      elevatorBasePID.setGoal(setpoint);
     }
   }
 

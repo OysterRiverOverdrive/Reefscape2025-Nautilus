@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -154,19 +155,31 @@ public final class Constants {
   // Constants for PIDs
   public static final class PIDConstants {
 
+    public final ProfiledPIDController elevatorRisePID =
+        new ProfiledPIDController(
+            kElevatorRP,
+            kElevatorRI,
+            kElevatorRD,
+            new TrapezoidProfile.Constraints(kElevatorRMaxV, kElevatorRMaxA));
     // Elevator PID
     public static final double kElevatorRP = 0.022;
     public static final double kElevatorRI = 0.0015;
     public static final double kElevatorRD = 0.003;
+    public static final double kElevatorRMaxV = 5; // m/s
+    public static final double kElevatorRMaxA = 10; // m/s^2
+
+    public final ProfiledPIDController elevatorBasePID =
+        new ProfiledPIDController(
+            kElevatorBP,
+            kElevatorBI,
+            kElevatorBD,
+            new TrapezoidProfile.Constraints(kElevatorBMaxV, kElevatorBMaxA));
 
     public static final double kElevatorBP = 0.0078;
     public static final double kElevatorBI = 0.00;
     public static final double kElevatorBD = 0.0021;
-
-    // Autonomous Elevator PID
-    public static final double kAutoElevP = 0.008;
-    public static final double kAutoElevI = 0.0013;
-    public static final double kAutoElevD = 0.0018;
+    public static final double kElevatorBMaxV = 5; // m/s
+    public static final double kElevatorBMaxA = 10; // m/s^2
   }
 
   // Constants specifically for Swerve Module
