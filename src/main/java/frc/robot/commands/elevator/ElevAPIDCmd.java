@@ -4,7 +4,6 @@
 
 package frc.robot.commands.elevator;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,19 +17,21 @@ public class ElevAPIDCmd extends Command {
   private double priorSet;
   private boolean rising;
 
-  private final ProfiledPIDController elevatorRisePID = 
-        new ProfiledPIDController(
-            PIDConstants.kElevatorRP,
-            PIDConstants.kElevatorRI,
-            PIDConstants.kElevatorRD,
-            new TrapezoidProfile.Constraints(PIDConstants.kElevatorRMaxV, PIDConstants.kElevatorRMaxA));
+  private final ProfiledPIDController elevatorRisePID =
+      new ProfiledPIDController(
+          PIDConstants.kElevatorRP,
+          PIDConstants.kElevatorRI,
+          PIDConstants.kElevatorRD,
+          new TrapezoidProfile.Constraints(
+              PIDConstants.kElevatorRMaxV, PIDConstants.kElevatorRMaxA));
 
-  private final ProfiledPIDController elevatorBasePID = 
-        new ProfiledPIDController(
-            PIDConstants.kElevatorBP,
-            PIDConstants.kElevatorBI,
-            PIDConstants.kElevatorBD,
-            new TrapezoidProfile.Constraints(PIDConstants.kElevatorBMaxV, PIDConstants.kElevatorBMaxA));
+  private final ProfiledPIDController elevatorBasePID =
+      new ProfiledPIDController(
+          PIDConstants.kElevatorBP,
+          PIDConstants.kElevatorBI,
+          PIDConstants.kElevatorBD,
+          new TrapezoidProfile.Constraints(
+              PIDConstants.kElevatorBMaxV, PIDConstants.kElevatorBMaxA));
 
   /**
    * Autonomous Method of moving elevator

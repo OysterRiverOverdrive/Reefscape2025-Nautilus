@@ -15,19 +15,21 @@ public class ElevTPIDCmd extends Command {
   private double safetysetpoint; // Calculated Max Height
   private double location;
 
-  private final ProfiledPIDController elevatorRisePID = 
-        new ProfiledPIDController(
-            PIDConstants.kElevatorRP,
-            PIDConstants.kElevatorRI,
-            PIDConstants.kElevatorRD,
-            new TrapezoidProfile.Constraints(PIDConstants.kElevatorRMaxV, PIDConstants.kElevatorRMaxA));
+  private final ProfiledPIDController elevatorRisePID =
+      new ProfiledPIDController(
+          PIDConstants.kElevatorRP,
+          PIDConstants.kElevatorRI,
+          PIDConstants.kElevatorRD,
+          new TrapezoidProfile.Constraints(
+              PIDConstants.kElevatorRMaxV, PIDConstants.kElevatorRMaxA));
 
-  private final ProfiledPIDController elevatorBasePID = 
-        new ProfiledPIDController(
-            PIDConstants.kElevatorBP,
-            PIDConstants.kElevatorBI,
-            PIDConstants.kElevatorBD,
-            new TrapezoidProfile.Constraints(PIDConstants.kElevatorBMaxV, PIDConstants.kElevatorBMaxA));
+  private final ProfiledPIDController elevatorBasePID =
+      new ProfiledPIDController(
+          PIDConstants.kElevatorBP,
+          PIDConstants.kElevatorBI,
+          PIDConstants.kElevatorBD,
+          new TrapezoidProfile.Constraints(
+              PIDConstants.kElevatorBMaxV, PIDConstants.kElevatorBMaxA));
 
   public ElevTPIDCmd(ElevatorSubsystem elevator) {
     this.elevator = elevator;
