@@ -125,19 +125,9 @@ public class RobotContainer {
         .triggerSupplier(Controllers.xbox_rt, 0.2, DriveConstants.joysticks.OPERATOR)
         .onTrue(new CoralIntakeReverseCommand(coralIntake))
         .onFalse(new CoralIntakeStopCommand(coralIntake));
-
-    // Actuator Controls
-    cutil
-        .supplier(Controllers.xbox_b, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new RetractActuatorCmd(coralIntake));
-    cutil
-        .supplier(Controllers.xbox_x, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new ExtendActuatorCmd(coralIntake));
   }
 
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    // Return NOTHING, replace with command to be run in autonomous period
     // Prior Reference:
     // https://github.com/OysterRiverOverdrive/Charged-Up-2023-Atlas_Chainsaw/blob/main/src/main/java/frc/robot/RobotContainer.java
 
