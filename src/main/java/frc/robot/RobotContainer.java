@@ -13,11 +13,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
 import frc.robot.auto.plans.*;
 import frc.robot.commands.TeleopCmd;
-import frc.robot.commands.algaeArm.*;
 import frc.robot.commands.coralIntake.*;
 import frc.robot.commands.elevator.*;
-import frc.robot.subsystems.AlgaeArmSubsystem;
-import frc.robot.subsystems.AlgaeSpinnerSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -45,8 +42,6 @@ public class RobotContainer {
   private final LimelightSubsystem limelight = new LimelightSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem(drivetrain);
   private final CoralIntakeSubsystem coralIntake = new CoralIntakeSubsystem();
-  private final AlgaeArmSubsystem algaeArm = new AlgaeArmSubsystem();
-  private final AlgaeSpinnerSubsystem algaeSpinner = new AlgaeSpinnerSubsystem();
   private final PowerSubsystem battery = new PowerSubsystem();
 
   // Commands
@@ -55,7 +50,6 @@ public class RobotContainer {
           drivetrain,
           () -> cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.DRIVER));
   private final ElevTPIDCmd elevTPIDCmd = new ElevTPIDCmd(elevator);
-  private final AlgaeTPIDCmd algaeTPIDCmd = new AlgaeTPIDCmd(algaeArm);
 
   // AUTOS
   private final ThreeCoralRight rightThreeCoralPlan =
@@ -76,7 +70,6 @@ public class RobotContainer {
     // Default Commands to be run all the time, only one per subsystem
     drivetrain.setDefaultCommand(teleopCmd);
     elevator.setDefaultCommand(elevTPIDCmd);
-    algaeArm.setDefaultCommand(algaeTPIDCmd);
     // coralIntake.setDefaultCommand(new CoralIntakeStopCommand(coralIntake));
 
     // Add Auto options to dropdown and push to dashboard
@@ -132,44 +125,9 @@ public class RobotContainer {
         .triggerSupplier(Controllers.xbox_rt, 0.2, DriveConstants.joysticks.OPERATOR)
         .onTrue(new CoralIntakeReverseCommand(coralIntake))
         .onFalse(new CoralIntakeStopCommand(coralIntake));
-
-    // Actuator Controls
-    cutil
-        .supplier(Controllers.xbox_b, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new RetractActuatorCmd(coralIntake));
-    cutil
-        .supplier(Controllers.xbox_x, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new ExtendActuatorCmd(coralIntake));
-
-    // Algae Arm Controls
-    cutil
-        .supplier(Controllers.xbox_y, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> algaeArm.toLoad()));
-    // .onTrue(new AlgaeArmToLoadCommand(algaeArm, algaeSpinner));
-    cutil
-        .supplier(Controllers.xbox_a, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> algaeArm.toDown()));
-    // .onTrue(new AlgaeSpinnerForwardCommand(algaeSpinner))
-    // .onFalse(new AlgaeSpinnerStopCommand(algaeArm, algaeSpinner));
-    cutil
-        .supplier(Controllers.xbox_options, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> algaeArm.toRemoveAlgae()));
-    // .onTrue(new AlgaeArmToReefCommand(algaeArm, algaeSpinner))
-    // .onFalse(new AlgaeArmToDownCommand(algaeArm, algaeSpinner));
-
-    cutil
-        .supplier(Controllers.xbox_lbutton, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> algaeSpinner.algaeSpinnerForwardCmd()))
-        .onFalse(new InstantCommand(() -> algaeSpinner.algaeSpinnerStopCmd()));
-    cutil
-        .supplier(Controllers.xbox_rbutton, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> algaeSpinner.algaeSpinnerReverseCmd()))
-        .onFalse(new InstantCommand(() -> algaeSpinner.algaeSpinnerStopCmd()));
   }
 
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    // Return NOTHING, replace with command to be run in autonomous period
     // Prior Reference:
     // https://github.com/OysterRiverOverdrive/Charged-Up-2023-Atlas_Chainsaw/blob/main/src/main/java/frc/robot/RobotContainer.java
 
