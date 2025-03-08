@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.LimeLightConstants;
 import frc.utils.LimelightHelpers;
+import frc.utils.LimelightHelpers.PoseEstimate;
 import java.util.Optional;
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -20,16 +22,30 @@ public class LimelightSubsystem extends SubsystemBase {
   private final String leds_off = "leds_off";
   private final String leds_flash = "leds_flash";
 
+  DrivetrainSubsystem drivetrain;
+
   /** Creates a new LimelightSubSys. */
-  public LimelightSubsystem() {
+  public LimelightSubsystem(DrivetrainSubsystem drivetrain) {
+
+    this.drivetrain = drivetrain;
 
     // Default to LEDs off.
     led_chooser.setDefaultOption("Off", leds_off);
     led_chooser.addOption("On", leds_on);
     led_chooser.addOption("Flash", leds_flash);
     SmartDashboard.putData("Limelight LEDs", led_chooser);
-  }
 
+    // makes camera poses returned relative to the robots pose
+    LimelightHelpers.setCameraPose_RobotSpace(
+        "",
+        LimeLightConstants.CameraForwardOffset,
+        LimeLightConstants.CameraSideOffset,
+        LimeLightConstants.CameraUpOffest,
+        LimeLightConstants.CameraRollOffset,
+        LimeLightConstants.CameraPitchOffset,
+        LimeLightConstants.CameraYawOffset);
+
+    // PoseEstimator PEstimator = new PoseEstimator<>(null, null, null, null); Pose Estimator, idk.
   @Override
   public void periodic() {
     // Turn camera LEDs off or on
@@ -59,11 +75,19 @@ public class LimelightSubsystem extends SubsystemBase {
    *
    * @return Pose2d
    */
-  public Pose2d getPose2d() {
+  public Pose2d getPose2dMegaTag1() {
     if (DriverStation.getAlliance().equals(Optional.of(Alliance.Blue))) {
       return LimelightHelpers.getBotPose2d_wpiBlue("");
     } else {
       return LimelightHelpers.getBotPose2d_wpiRed("");
+    }
+  }
+
+  public PoseEstimate getPose2dMegaTag2() {
+    if (DriverStation.getAlliance().equals(Optional.of(Alliance.Blue))) {
+      return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
+    } else {
+      return LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2("");
     }
   }
 
@@ -106,5 +130,25 @@ public class LimelightSubsystem extends SubsystemBase {
    */
   public double getAprilTagArea() {
     return LimelightHelpers.getTA("");
+  }
+
+  /**
+   * @param limelight name of the limelight (default name is "")
+   * @return if there a april tag visible to the limelight
+   */
+  public boolean isAprilTag(String limelight) {
+    return LimelightHelpers.getTV(limelight);
+  }
+
+  @Override
+  public void periodic() {
+    // Turn camera LEDs off or on
+    if (led_chooser.getSelected().equals(leds_off)) {
+      LimelightHelpers.setLEDMode_ForceOff("");
+    } else if (led_chooser.getSelected().equals(leds_on)) {
+      LimelightHelpers.setLEDMode_ForceOn("");
+    } else {
+      LimelightHelpers.setLEDMode_PipelineControl("");
+    }
   }
 }
