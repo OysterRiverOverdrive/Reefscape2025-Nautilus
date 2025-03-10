@@ -5,7 +5,6 @@
 package frc.robot;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -119,7 +118,7 @@ public final class Constants {
       public static final double kElevL2Ht = 40.5;
       public static final double kElevL3Ht = 55;
       public static final double kElevL4Ht = 77;
-      public static final double kElevIntakeHt = 27.5;
+      public static final double kElevIntakeHt = 21.5;
       public static final double kElevatorAboveIntakeHeightDifference = 8;
 
       public static final double kElevatorReefOffset = -2;
@@ -156,6 +155,7 @@ public final class Constants {
   public static final class PIDConstants {
 
     // Elevator PID
+    // Don't change these values unless you know what you're doing - Robot may Self-Destruct
     public static final double kElevatorRP = 0.1;
     public static final double kElevatorRI = 0.00;
     public static final double kElevatorRD = 0.00;
