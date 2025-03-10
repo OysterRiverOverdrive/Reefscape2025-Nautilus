@@ -44,23 +44,9 @@ public class LimelightSubsystem extends SubsystemBase {
         LimeLightConstants.CameraRollOffset,
         LimeLightConstants.CameraPitchOffset,
         LimeLightConstants.CameraYawOffset);
+  }
 
     // PoseEstimator PEstimator = new PoseEstimator<>(null, null, null, null); Pose Estimator, idk.
-  @Override
-  public void periodic() {
-    // Turn camera LEDs off or on
-    if (led_chooser.getSelected().equals(leds_off)) {
-      LimelightHelpers.setLEDMode_ForceOff("");
-    } else if (led_chooser.getSelected().equals(leds_on)) {
-      LimelightHelpers.setLEDMode_ForceOn("");
-    } else {
-      LimelightHelpers.setLEDMode_PipelineControl("");
-    }
-
-    SmartDashboard.putNumber("Apriltag X", getAprilTagX());
-    SmartDashboard.putNumber("Apriltag Y", getAprilTagY());
-    SmartDashboard.putNumber("Apriltag area", getAprilTagArea());
-  }
 
   public void setLEDsOn() {
     LimelightHelpers.setLEDMode_ForceOn("");
@@ -150,5 +136,8 @@ public class LimelightSubsystem extends SubsystemBase {
     } else {
       LimelightHelpers.setLEDMode_PipelineControl("");
     }
+
+
+
   }
 }

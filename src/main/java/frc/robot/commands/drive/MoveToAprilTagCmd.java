@@ -4,11 +4,11 @@
 
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
-public class MoveToAprilTagCmd extends CommandBase {
+public class MoveToAprilTagCmd extends Command {
   DrivetrainSubsystem drv;
   LimelightSubsystem camera;
 
