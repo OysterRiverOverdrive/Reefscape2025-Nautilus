@@ -17,21 +17,13 @@ public class ElevAPIDCmd extends Command {
   private double priorSet;
   private boolean rising;
 
-  private final ProfiledPIDController elevatorRisePID =
+  private final ProfiledPIDController elevatorPID =
       new ProfiledPIDController(
           PIDConstants.kElevatorRP,
           PIDConstants.kElevatorRI,
           PIDConstants.kElevatorRD,
           new TrapezoidProfile.Constraints(
               PIDConstants.kElevatorRMaxV, PIDConstants.kElevatorRMaxA));
-
-  private final ProfiledPIDController elevatorBasePID =
-      new ProfiledPIDController(
-          PIDConstants.kElevatorBP,
-          PIDConstants.kElevatorBI,
-          PIDConstants.kElevatorBD,
-          new TrapezoidProfile.Constraints(
-              PIDConstants.kElevatorBMaxV, PIDConstants.kElevatorBMaxA));
 
   /**
    * Autonomous Method of moving elevator
@@ -50,25 +42,14 @@ public class ElevAPIDCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    priorSet = elevator.getHeight();
-    if (setpoint > priorSet) {
-      rising = true;
-      elevatorRisePID.setGoal(setpoint);
-    } else {
-      rising = false;
-      elevatorBasePID.setGoal(setpoint);
-    }
+    elevatorPID.setGoal(setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double elevatorSpeed;
-    if (rising) {
-      elevatorSpeed = elevatorRisePID.calculate(elevator.getHeight());
-    } else {
-      elevatorSpeed = elevatorBasePID.calculate(elevator.getHeight());
-    }
+    elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
     elevator.setElevatorSpeed(elevatorSpeed);
   }
 

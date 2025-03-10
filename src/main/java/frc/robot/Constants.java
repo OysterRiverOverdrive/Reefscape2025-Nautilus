@@ -5,7 +5,6 @@
 package frc.robot;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -115,11 +114,11 @@ public final class Constants {
       public static final double kElevatorHeightToRot = 10;
 
       public static final double kElevLowHt = 18;
-      public static final double kElevL1Ht = 22;
-      public static final double kElevL2Ht = 32.5;
-      public static final double kElevL3Ht = 49;
-      public static final double kElevL4Ht = 74;
-      public static final double kElevIntakeHt = 27.5;
+      public static final double kElevL1Ht = 28;
+      public static final double kElevL2Ht = 40.5;
+      public static final double kElevL3Ht = 55;
+      public static final double kElevL4Ht = 77;
+      public static final double kElevIntakeHt = 21.5;
       public static final double kElevatorAboveIntakeHeightDifference = 8;
 
       public static final double kElevatorReefOffset = -2;
@@ -155,31 +154,13 @@ public final class Constants {
   // Constants for PIDs
   public static final class PIDConstants {
 
-    public final ProfiledPIDController elevatorRisePID =
-        new ProfiledPIDController(
-            kElevatorRP,
-            kElevatorRI,
-            kElevatorRD,
-            new TrapezoidProfile.Constraints(kElevatorRMaxV, kElevatorRMaxA));
     // Elevator PID
-    public static final double kElevatorRP = 0.022;
-    public static final double kElevatorRI = 0.0015;
-    public static final double kElevatorRD = 0.003;
-    public static final double kElevatorRMaxV = 5; // m/s
-    public static final double kElevatorRMaxA = 10; // m/s^2
-
-    public final ProfiledPIDController elevatorBasePID =
-        new ProfiledPIDController(
-            kElevatorBP,
-            kElevatorBI,
-            kElevatorBD,
-            new TrapezoidProfile.Constraints(kElevatorBMaxV, kElevatorBMaxA));
-
-    public static final double kElevatorBP = 0.0078;
-    public static final double kElevatorBI = 0.00;
-    public static final double kElevatorBD = 0.0021;
-    public static final double kElevatorBMaxV = 5; // m/s
-    public static final double kElevatorBMaxA = 10; // m/s^2
+    // Don't change these values unless you know what you're doing - Robot may Self-Destruct
+    public static final double kElevatorRP = 0.1;
+    public static final double kElevatorRI = 0.00;
+    public static final double kElevatorRD = 0.00;
+    public static final double kElevatorRMaxV = 10000; // m/s
+    public static final double kElevatorRMaxA = 27.5; // m/s^2
   }
 
   // Constants specifically for Swerve Module
