@@ -9,7 +9,6 @@ import frc.robot.Constants;
 import frc.robot.auto.AutoCoralSpinForwardCmd;
 import frc.robot.auto.AutoCreationCmd;
 import frc.robot.auto.AutoSleepCmd;
-import frc.robot.commands.coralIntake.RetractActuatorCmd;
 import frc.robot.commands.elevator.ElevAPIDCmd;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -38,8 +37,7 @@ public class RightOneCoralPlan extends ParallelCommandGroup {
 
     // Driving groups
     addCommands(
-        new RetractActuatorCmd(intake)
-            .andThen(toReef)
+        toReef
             .andThen(
                 new ElevAPIDCmd(elevator, Constants.RobotConstants.ElevatorConstants.kElevL4Ht, 3))
             .andThen(new AutoSleepCmd(3))

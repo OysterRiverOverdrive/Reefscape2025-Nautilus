@@ -4,7 +4,8 @@
 
 package frc.robot.commands.elevator;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -13,9 +14,16 @@ public class ElevAPIDCmd extends Command {
   private ElevatorSubsystem elevator;
   private double setpoint;
   private double error;
+  private double priorSet;
+  private boolean rising;
 
-  private final PIDController elevatorPID =
-      new PIDController(PIDConstants.kAutoElevP, PIDConstants.kAutoElevI, PIDConstants.kAutoElevD);
+  private final ProfiledPIDController elevatorPID =
+      new ProfiledPIDController(
+          PIDConstants.kElevatorRP,
+          PIDConstants.kElevatorRI,
+          PIDConstants.kElevatorRD,
+          new TrapezoidProfile.Constraints(
+              PIDConstants.kElevatorRMaxV, PIDConstants.kElevatorRMaxA));
 
   /**
    * Autonomous Method of moving elevator
@@ -34,13 +42,14 @@ public class ElevAPIDCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevatorPID.setSetpoint(setpoint);
+    elevatorPID.setGoal(setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
+    double elevatorSpeed;
+    elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
     elevator.setElevatorSpeed(elevatorSpeed);
   }
 
