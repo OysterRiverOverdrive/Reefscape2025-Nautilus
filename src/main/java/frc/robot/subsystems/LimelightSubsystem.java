@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
 import frc.utils.LimelightHelpers;
-import frc.utils.LimelightHelpers.PoseEstimate;
 import java.util.Optional;
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -77,7 +76,7 @@ public class LimelightSubsystem extends SubsystemBase {
     }
   }
 
-  public PoseEstimate getPose2dMegaTag2() {
+  public LimelightHelpers.PoseEstimate getPose2dMegaTag2() {
     if (DriverStation.getAlliance().equals(Optional.of(Alliance.Blue))) {
       return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
     } else {
