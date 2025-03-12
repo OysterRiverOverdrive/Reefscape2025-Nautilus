@@ -6,13 +6,17 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.LimelightConstants;
 import frc.utils.LimelightHelpers;
+import frc.utils.LimelightHelpers.PoseEstimate;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import java.util.Optional;
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -21,31 +25,35 @@ public class LimelightSubsystem extends SubsystemBase {
   private final String leds_off = "leds_off";
   private final String leds_flash = "leds_flash";
 
+  DrivetrainSubsystem drivetrain;
+
+  AprilTagFieldLayout fieldmap;
+
   /** Creates a new LimelightSubSys. */
-  public LimelightSubsystem() {
+  public LimelightSubsystem(DrivetrainSubsystem drivetrain) {
+
+    this.drivetrain = drivetrain;
 
     // Default to LEDs off.
     led_chooser.setDefaultOption("Off", leds_off);
     led_chooser.addOption("On", leds_on);
     led_chooser.addOption("Flash", leds_flash);
     SmartDashboard.putData("Limelight LEDs", led_chooser);
+
+    // makes camera poses returned relative to the robots pose
+    LimelightHelpers.setCameraPose_RobotSpace(
+        "",
+        LimelightConstants.CameraForwardOffset,
+        LimelightConstants.CameraSideOffset,
+        LimelightConstants.CameraUpOffest,
+        LimelightConstants.CameraRollOffset,
+        LimelightConstants.CameraPitchOffset,
+        LimelightConstants.CameraYawOffset);
+
+        fieldmap = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);// creates the field of april tags
   }
 
-  @Override
-  public void periodic() {
-    // Turn camera LEDs off or on
-    if (led_chooser.getSelected().equals(leds_off)) {
-      LimelightHelpers.setLEDMode_ForceOff("");
-    } else if (led_chooser.getSelected().equals(leds_on)) {
-      LimelightHelpers.setLEDMode_ForceOn("");
-    } else {
-      LimelightHelpers.setLEDMode_PipelineControl("");
-    }
-
-    SmartDashboard.putNumber("Apriltag X", getAprilTagX());
-    SmartDashboard.putNumber("Apriltag Y", getAprilTagY());
-    SmartDashboard.putNumber("Apriltag area", getAprilTagArea());
-  }
+    // PoseEstimator PEstimator = new PoseEstimator<>(null, null, null, null); Pose Estimator, idk.
 
   public void setLEDsOn() {
     LimelightHelpers.setLEDMode_ForceOn("");
@@ -60,11 +68,19 @@ public class LimelightSubsystem extends SubsystemBase {
    *
    * @return Pose2d
    */
-  public Pose2d getPose2d() {
+  public Pose2d getPose2dMegaTag1() {
     if (DriverStation.getAlliance().equals(Optional.of(Alliance.Blue))) {
       return LimelightHelpers.getBotPose2d_wpiBlue("");
     } else {
       return LimelightHelpers.getBotPose2d_wpiRed("");
+    }
+  }
+
+  public PoseEstimate getPose2dMegaTag2() {
+    if (DriverStation.getAlliance().equals(Optional.of(Alliance.Blue))) {
+      return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
+    } else {
+      return LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2("");
     }
   }
 
@@ -107,5 +123,34 @@ public class LimelightSubsystem extends SubsystemBase {
    */
   public double getAprilTagArea() {
     return LimelightHelpers.getTA("");
+  }
+
+  /**
+   * @param limelight name of the limelight (default name is "")
+   * @return if there a april tag visible to the limelight
+   */
+  public boolean isAprilTag(String limelight) {
+    return LimelightHelpers.getTV(limelight);
+  }
+
+  public double FieldApriltagX(int ID){
+    return fieldmap.getTagPose(ID).get().getX();
+  }
+
+  public double FieldApriltagY(int ID){
+
+    return fieldmap.getTagPose(ID).get().getY();
+  }
+
+  @Override
+  public void periodic() {
+    // Turn camera LEDs off or on
+    if (led_chooser.getSelected().equals(leds_off)) {
+      LimelightHelpers.setLEDMode_ForceOff("");
+    } else if (led_chooser.getSelected().equals(leds_on)) {
+      LimelightHelpers.setLEDMode_ForceOn("");
+    } else {
+      LimelightHelpers.setLEDMode_PipelineControl("");
+    }
   }
 }
