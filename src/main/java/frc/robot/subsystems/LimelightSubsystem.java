@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -23,6 +25,8 @@ public class LimelightSubsystem extends SubsystemBase {
   private final String leds_flash = "leds_flash";
 
   DrivetrainSubsystem drivetrain;
+
+  AprilTagFieldLayout fieldmap;
 
   /** Creates a new LimelightSubSys. */
   public LimelightSubsystem(DrivetrainSubsystem drivetrain) {
@@ -69,7 +73,7 @@ public class LimelightSubsystem extends SubsystemBase {
     }
   }
 
-  public PoseEstimate getPose2dMegaTag2() {
+  public LimelightHelpers.PoseEstimate getPose2dMegaTag2() {
     if (DriverStation.getAlliance().equals(Optional.of(Alliance.Blue))) {
       return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
     } else {
@@ -126,6 +130,15 @@ public class LimelightSubsystem extends SubsystemBase {
     return LimelightHelpers.getTV(limelight);
   }
 
+  public double FieldApriltagX(int ID) {
+    return fieldmap.getTagPose(ID).get().getX();
+  }
+
+  public double FieldApriltagY(int ID) {
+
+    return fieldmap.getTagPose(ID).get().getY();
+  }
+
   @Override
   public void periodic() {
     // Turn camera LEDs off or on
@@ -136,8 +149,5 @@ public class LimelightSubsystem extends SubsystemBase {
     } else {
       LimelightHelpers.setLEDMode_PipelineControl("");
     }
-
-
-
   }
 }
