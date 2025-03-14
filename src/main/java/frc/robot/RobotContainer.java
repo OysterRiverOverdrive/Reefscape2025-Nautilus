@@ -14,6 +14,7 @@ import frc.robot.auto.*;
 import frc.robot.auto.plans.*;
 import frc.robot.commands.TeleopCmd;
 import frc.robot.commands.coralIntake.*;
+import frc.robot.commands.drive.AutoMoveToAprilTagCmd;
 import frc.robot.commands.elevator.*;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -99,6 +100,9 @@ public class RobotContainer {
     cutil
         .supplier(Controllers.ps4_RB, DriveConstants.joysticks.DRIVER)
         .onTrue(new InstantCommand(() -> drivetrain.zeroHeading()));
+    cutil
+        .supplier(Controllers.xbox_a, DriveConstants.joysticks.DRIVER)
+        .onTrue(new AutoMoveToAprilTagCmd(limelight, drivetrain));
 
     // Elevator Bindings
     cutil.POVsupplier(0, DriveConstants.joysticks.OPERATOR)

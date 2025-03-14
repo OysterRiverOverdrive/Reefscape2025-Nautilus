@@ -102,12 +102,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DrivetrainSubsystem() {
     zeroHeading();
-    // m_gyro.calibrate();
-
-    m_chooser.setDefaultOption("Medium Speed", DriveConstants.medium);
-    m_chooser.addOption("Low Speed", DriveConstants.low);
-    m_chooser.addOption("High Speed", DriveConstants.high);
-    SmartDashboard.putData("Speed Drop Down", m_chooser);
   }
 
   /**

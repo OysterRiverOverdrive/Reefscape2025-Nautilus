@@ -6,12 +6,12 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.auto.AutoCreationCmd;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.utils.LimelightHelpers;
 import java.util.List;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -26,20 +26,38 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
   final double speedKp = -0.01;
   final double turnRateKp = 0.015;
 
-  public AutoMoveToAprilTagCmd(
-    LimelightSubsystem limelightsub, 
-    DrivetrainSubsystem drivetrain) 
-    {
+  public AutoMoveToAprilTagCmd(LimelightSubsystem limelightsub, DrivetrainSubsystem drivetrain) {
     AutoCreationCmd autodrive = new AutoCreationCmd();
     LimelightSubsystem limelight = limelightsub;
+    if (limelight.isAprilTag("")) {
+      Pose2d curP = limelight.getPose2dMegaTag2().pose;
+      double xDist = curP.getX();
+      double yDist = curP.getY();
+      Rotation2d origAngle = curP.getRotation();
 
-  //Auto Driving Commands
-  Command toReef =
-      autodrive.AutoDriveCmd(
-        drivetrain,
-        List.of(new Translation2d(0,0)),
-        new Pose2d(0,0,new Rotation2d(0)));
-  //
-    addCommands();
+      double curTag = LimelightHelpers.getFiducialID("");
+
+      // placeholder 6 apriltag ~position
+      double tagX = 113;
+      double tagY = 162;
+
+      double moveX = tagX - xDist;
+      double moveY = tagY - yDist;
+      double mag = Math.sqrt(tagX * tagX + tagY * tagY);
+
+      Rotation2d rot = new Rotation2d(Math.atan2(moveY, moveX));
+
+      double finalXD = mag * Math.cos(rot.minus(origAngle).getRadians());
+      double finalYD = mag * Math.sin(rot.minus(origAngle).getRadians());
+      Pose2d finalPose = new Pose2d(finalXD, finalYD, new Rotation2d(60 - origAngle.getRadians()));
+
+      // Auto Driving Commands
+      Command toAprilTag =
+          autodrive.AutoDriveCmd(drivetrain, List.of(finalPose.div(2).getTranslation()), finalPose);
+      //
+      addCommands(toAprilTag);
+    } else {
+      addCommands(null);
+    }
   }
 }
