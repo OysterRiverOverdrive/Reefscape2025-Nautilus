@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LimeLightConstants;
+import frc.robot.Constants.LimelightConstants;
 import frc.utils.LimelightHelpers;
 import frc.utils.LimelightHelpers.PoseEstimate;
 import java.util.Optional;
@@ -42,12 +42,12 @@ public class LimelightSubsystem extends SubsystemBase {
     // makes camera poses returned relative to the robots pose
     LimelightHelpers.setCameraPose_RobotSpace(
         "",
-        LimeLightConstants.CameraForwardOffset,
-        LimeLightConstants.CameraSideOffset,
-        LimeLightConstants.CameraUpOffest,
-        LimeLightConstants.CameraRollOffset,
-        LimeLightConstants.CameraPitchOffset,
-        LimeLightConstants.CameraYawOffset);
+        LimelightConstants.CameraForwardOffset,
+        LimelightConstants.CameraSideOffset,
+        LimelightConstants.CameraUpOffest,
+        LimelightConstants.CameraRollOffset,
+        LimelightConstants.CameraPitchOffset,
+        LimelightConstants.CameraYawOffset);
   }
 
   // PoseEstimator PEstimator = new PoseEstimator<>(null, null, null, null); Pose Estimator, idk.
@@ -130,12 +130,16 @@ public class LimelightSubsystem extends SubsystemBase {
     return LimelightHelpers.getTV(limelight);
   }
 
+  public Pose2d FieldApriltagPose(int ID) {
+    return fieldmap.getTagPose(ID).get().toPose2d();
+  }
+
   public double FieldApriltagX(int ID) {
-    return fieldmap.getTagPose(ID).get().getX();
+    return FieldApriltagPose(ID).getX();
   }
 
   public double FieldApriltagY(int ID) {
-    return fieldmap.getTagPose(ID).get().getY();
+    return FieldApriltagPose(ID).getY();
   }
 
   @Override
