@@ -135,7 +135,6 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public double FieldApriltagY(int ID) {
-
     return fieldmap.getTagPose(ID).get().getY();
   }
 
