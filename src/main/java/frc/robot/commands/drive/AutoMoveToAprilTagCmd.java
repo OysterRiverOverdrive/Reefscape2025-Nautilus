@@ -14,6 +14,8 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.utils.LimelightHelpers;
 import java.util.List;
 
+import org.opencv.core.Mat;
+
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
@@ -38,12 +40,10 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
       double curTag = LimelightHelpers.getFiducialID("");
 
       // placeholder 6 apriltag ~position
-      double tagX = 113;
-      double tagY = 162;
 
-      double moveX = tagX - xDist;
-      double moveY = tagY - yDist;
-      double mag = Math.sqrt(tagX * tagX + tagY * tagY);
+      double moveX = limelight.FieldApriltagX((int)curTag) - xDist;
+      double moveY = limelight.FieldApriltagY((int)curTag) - yDist;
+      double mag = Math.sqrt(Math.pow(limelight.FieldApriltagX((int)curTag), 2) + Math.pow(limelight.FieldApriltagY((int)curTag),2));
 
       Rotation2d rot = new Rotation2d(Math.atan2(moveY, moveX));
 
