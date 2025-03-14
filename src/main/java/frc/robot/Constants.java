@@ -163,6 +163,18 @@ public final class Constants {
     public static final double kElevatorRMaxA = 27.5; // m/s^2
   }
 
+  public static final class LimelightConstants {
+    // Offset of coral posts from AprilTag center on reef (inches*in. to meters conversion)
+    public static final double kCoralPostOffset = 5.5 * 0.0254;
+
+    public static final double CameraForwardOffset = 10 * 0.0254; // NEEDS TO BE MEASURED
+    public static final double CameraSideOffset = -3.25 * 0.0254;
+    public static final double CameraUpOffest = 1 * 0.0254;
+    public static final double CameraRollOffset = 0;
+    public static final double CameraPitchOffset = 0;
+    public static final double CameraYawOffset = 0;
+  }
+
   // Constants specifically for Swerve Module
   public static final class ModuleConstants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
