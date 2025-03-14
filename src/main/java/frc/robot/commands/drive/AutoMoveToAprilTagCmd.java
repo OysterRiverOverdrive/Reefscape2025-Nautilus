@@ -40,6 +40,8 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
       double curTag = LimelightHelpers.getFiducialID("");
 
       // placeholder 6 apriltag ~position
+      // double tagX = 113;
+      // double tagY = 162;
 
       double moveX = limelight.FieldApriltagX((int)curTag) - xDist;
       double moveY = limelight.FieldApriltagY((int)curTag) - yDist;
