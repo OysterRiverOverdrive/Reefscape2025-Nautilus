@@ -48,6 +48,7 @@ public class LimelightSubsystem extends SubsystemBase {
         LimelightConstants.CameraRollOffset,
         LimelightConstants.CameraPitchOffset,
         LimelightConstants.CameraYawOffset);
+    fieldmap.loadField(AprilTagFields.k2025Reefscape);
   }
 
   // PoseEstimator PEstimator = new PoseEstimator<>(null, null, null, null); Pose Estimator, idk.
