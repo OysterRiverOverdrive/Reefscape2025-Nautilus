@@ -37,15 +37,15 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
       double yDist = curP.getY();
       Rotation2d origAngle = curP.getRotation();
 
-      double curTag = LimelightHelpers.getFiducialID("");
+      int curTag = (int)LimelightHelpers.getFiducialID("");
 
       // placeholder 6 apriltag ~position
       // double tagX = 113;
       // double tagY = 162;
 
-      double moveX = limelight.FieldApriltagX((int)curTag) - xDist;
-      double moveY = limelight.FieldApriltagY((int)curTag) - yDist;
-      double mag = Math.sqrt(Math.pow(limelight.FieldApriltagX((int)curTag), 2) + Math.pow(limelight.FieldApriltagY((int)curTag),2));
+      double moveX = limelight.FieldApriltagX(curTag) - xDist;
+      double moveY = limelight.FieldApriltagY(curTag) - yDist;
+      double mag = Math.sqrt(Math.pow(limelight.FieldApriltagX(curTag), 2) + Math.pow(limelight.FieldApriltagY(curTag),2));
 
       Rotation2d rot = new Rotation2d(Math.atan2(moveY, moveX));
 
