@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.LimelightConstants;
 import frc.utils.LimelightHelpers;
 import frc.robot.Constants.LimelightConstants;
 import java.util.Optional;
@@ -48,7 +49,6 @@ public class LimelightSubsystem extends SubsystemBase {
         LimelightConstants.CameraRollOffset,
         LimelightConstants.CameraPitchOffset,
         LimelightConstants.CameraYawOffset);
-
     fieldmap.loadField(AprilTagFields.k2025Reefscape);
   }
 
@@ -132,12 +132,16 @@ public class LimelightSubsystem extends SubsystemBase {
     return LimelightHelpers.getTV(limelight);
   }
 
+  public Pose2d FieldApriltagPose(int ID) {
+    return fieldmap.getTagPose(ID).get().toPose2d();
+  }
+
   public double FieldApriltagX(int ID) {
-    return fieldmap.getTagPose(ID).get().getX();
+    return FieldApriltagPose(ID).getX();
   }
 
   public double FieldApriltagY(int ID) {
-    return fieldmap.getTagPose(ID).get().getY();
+    return FieldApriltagPose(ID).getY();
   }
 
   @Override

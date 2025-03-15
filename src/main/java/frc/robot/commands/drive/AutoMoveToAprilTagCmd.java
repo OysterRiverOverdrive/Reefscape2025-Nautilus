@@ -7,6 +7,7 @@ package frc.robot.commands.drive;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.auto.AutoCreationCmd;
@@ -15,14 +16,10 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.utils.LimelightHelpers;
 import java.util.List;
 
-import org.opencv.core.Mat;
-
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
-  DrivetrainSubsystem drv;
-  LimelightSubsystem camera;
 
   boolean cmdFinished = false;
   double speed = 0.0;
@@ -32,6 +29,7 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
   public AutoMoveToAprilTagCmd(LimelightSubsystem limelightsub, DrivetrainSubsystem drivetrain) {
     AutoCreationCmd autodrive = new AutoCreationCmd();
     LimelightSubsystem limelight = limelightsub;
+    DrivetrainSubsystem drive = drivetrain;
     if (limelight.isAprilTag("")) {
       Pose2d curP = limelight.getPose2dMegaTag2().pose;
       double xDist = curP.getX();
@@ -44,11 +42,14 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
       // double tagX = 113;
       // double tagY = 162;
 
-      double moveX = limelight.FieldApriltagX(curTag) - xDist;
-      double moveY = limelight.FieldApriltagY(curTag) - yDist;
-      double mag = Math.hypot(limelight.FieldApriltagX(curTag), limelight.FieldApriltagY(curTag));
+      Pose2d tagPose = limelight.FieldApriltagPose(curTag);
+      Transform2d motion = tagPose.minus(curP);
 
-      Rotation2d rot = new Rotation2d(Math.atan2(moveY, moveX));
+      double moveX = motion.getX();
+      double moveY = motion.getY();
+      double mag = Math.hypot(tagPose.getX(), tagPose.getY());
+
+      Rotation2d rot = new Rotation2d(moveX, moveY);
 
       double finalXD = mag * Math.cos(rot.minus(origAngle).getRadians());
       double finalYD = mag * Math.sin(rot.minus(origAngle).getRadians());
@@ -56,7 +57,7 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
 
       // Auto Driving Commands
       Command toAprilTag =
-          autodrive.AutoDriveCmd(drivetrain, List.of(finalPose.div(2).getTranslation()), finalPose);
+          autodrive.AutoDriveCmd(drive, List.of(finalPose.div(2).getTranslation()), finalPose);
       //
       SmartDashboard.putNumber("finalPoseX", finalXD);
       SmartDashboard.putNumber("finalPoseY", finalYD);
