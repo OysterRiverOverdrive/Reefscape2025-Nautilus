@@ -8,6 +8,8 @@ import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -45,24 +47,31 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
 
       Pose2d tagPose = limelight.FieldApriltagPose(curTag);
 
-      double moveX = tagPose.getMeasureX().minus(curP.getMeasureX()).in(Meters);
-      double moveY = tagPose.getMeasureY().minus(curP.getMeasureY()).in(Meters);
-      double mag = Math.hypot(moveX, moveY);
+      Transform2d motion = tagPose.minus(curP);
 
-      Rotation2d rot = new Rotation2d(moveX, moveY);
+      Pose2d motionPose = new Pose2d(motion.getTranslation(), motion.getRotation());
 
-      double finalXD = mag * Math.cos(rot.minus(origAngle).getRadians());
-      double finalYD = mag * Math.sin(rot.minus(origAngle).getRadians());
-      Pose2d finalPose =
-          new Pose2d(finalXD, finalYD, new Rotation2d(rot.minus(origAngle).getRadians()));
+      //double moveX = tagPose.getMeasureX().minus(curP.getMeasureX()).in(Meters);
+      //double moveY = tagPose.getMeasureY().minus(curP.getMeasureY()).in(Meters);
+      //double mag = Math.hypot(moveX, moveY);
+
+      //Rotation2d rot = new Rotation2d(moveX, moveY);
+
+      // double finalXD = mag * Math.cos(rot.minus(origAngle).getRadians());
+      // double finalYD = mag * Math.sin(rot.minus(origAngle).getRadians());
+      // Pose2d finalPose =
+      //     new Pose2d(finalXD, finalYD, new Rotation2d(rot.minus(origAngle).getRadians()));
 
       // Auto Driving Commands
+      // Command toAprilTag =
+      //     autodrive.AutoDriveCmd(drive, List.of(finalPose.div(2).getTranslation()), finalPose);
+
       Command toAprilTag =
-          autodrive.AutoDriveCmd(drive, List.of(finalPose.div(2).getTranslation()), finalPose);
+          autodrive.AutoDriveCmd(drivetrain, List.of(motionPose.div(2).getTranslation()), motionPose);
       //
-      SmartDashboard.putNumber("finalPoseX", finalXD);
-      SmartDashboard.putNumber("finalPoseY", finalYD);
-      SmartDashboard.putNumber("newPoseRotation", rot.minus(origAngle).getRadians());
+      SmartDashboard.putNumber("finalPoseX", motion.getX());
+      SmartDashboard.putNumber("finalPoseY", motion.getY());
+      SmartDashboard.putNumber("newPoseRotation", motion.getRotation().getRadians());
     } else {
       System.out.println("Nothing executed.");
     }
