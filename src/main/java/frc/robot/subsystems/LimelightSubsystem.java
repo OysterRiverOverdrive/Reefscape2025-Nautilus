@@ -8,6 +8,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -15,7 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
 import frc.utils.LimelightHelpers;
-import frc.utils.LimelightHelpers.PoseEstimate;
 import java.util.Optional;
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -152,6 +152,40 @@ public class LimelightSubsystem extends SubsystemBase {
       LimelightHelpers.setLEDMode_ForceOn("");
     } else {
       LimelightHelpers.setLEDMode_PipelineControl("");
+    }
+    SmartDashboard.putNumber("Current Apriltag ID", LimelightHelpers.getFiducialID(""));
+    SmartDashboard.putNumber("X Distance", getPose2dMegaTag2().pose.getX());
+    SmartDashboard.putNumber("Y Distance", getPose2dMegaTag2().pose.getY());
+    SmartDashboard.putNumber(
+        "Rotation in Rads", getPose2dMegaTag2().pose.getRotation().getRadians());
+
+    if (isAprilTag("")) {
+      Pose2d curP = getPose2dMegaTag2().pose;
+      double xDist = curP.getX();
+      double yDist = curP.getY();
+      Rotation2d origAngle = curP.getRotation();
+
+      double curTag = LimelightHelpers.getFiducialID("");
+
+      // placeholder 6 apriltag ~position
+      double tagX = 113;
+      double tagY = 162;
+
+      double moveX = tagX - xDist;
+      double moveY = tagY - yDist;
+      double mag = Math.hypot(tagX, tagY);
+
+      Rotation2d rot = new Rotation2d(Math.atan2(moveY, moveX));
+
+      double finalXD = mag * Math.cos(rot.minus(origAngle).getRadians());
+      double finalYD = mag * Math.sin(rot.minus(origAngle).getRadians());
+      Pose2d finalPose = new Pose2d(finalXD, finalYD, new Rotation2d(origAngle.getRadians()));
+
+      // Auto Driving Commands
+
+      SmartDashboard.putNumber("finalPoseX", finalXD);
+      SmartDashboard.putNumber("finalPoseY", finalYD);
+      SmartDashboard.putNumber("newPoseRotation", rot.minus(origAngle).getRadians());
     }
   }
 }
