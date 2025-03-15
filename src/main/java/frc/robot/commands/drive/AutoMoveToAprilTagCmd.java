@@ -48,9 +48,7 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
       double moveY = motion.getY();
       double mag = Math.hypot(tagPose.getX(), tagPose.getY());
 
-      Rotation2d rot = motion.getRotation();
-
-      //Rotation2d rot = new Rotation2d(Math.atan2(moveY, moveX));
+      Rotation2d rot = new Rotation2d(moveX, moveY);
 
       double finalXD = mag * Math.cos(rot.minus(origAngle).getRadians());
       double finalYD = mag * Math.sin(rot.minus(origAngle).getRadians());
