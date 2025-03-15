@@ -4,9 +4,10 @@
 
 package frc.robot.commands.drive;
 
+import static edu.wpi.first.units.Units.Meters;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.auto.AutoCreationCmd;
@@ -42,11 +43,10 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
       // double tagY = 162;
 
       Pose2d tagPose = limelight.FieldApriltagPose(curTag);
-      Transform2d motion = tagPose.minus(curP);
 
-      double moveX = motion.getX();
-      double moveY = motion.getY();
-      double mag = Math.hypot(tagPose.getX(), tagPose.getY());
+      double moveX = tagPose.getMeasureX().minus(curP.getMeasureX()).in(Meters);
+      double moveY = tagPose.getMeasureY().minus(curP.getMeasureY()).in(Meters);
+      double mag = Math.hypot(moveX, moveY);
 
       Rotation2d rot = new Rotation2d(moveX, moveY);
 
