@@ -6,6 +6,7 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.auto.AutoCreationCmd;
@@ -45,21 +46,24 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
 
       double moveX = limelight.FieldApriltagX(curTag) - xDist;
       double moveY = limelight.FieldApriltagY(curTag) - yDist;
-      double mag = Math.sqrt(Math.pow(limelight.FieldApriltagX(curTag), 2) + Math.pow(limelight.FieldApriltagY(curTag),2));
+      double mag = Math.hypot(limelight.FieldApriltagX(curTag), limelight.FieldApriltagY(curTag));
 
       Rotation2d rot = new Rotation2d(Math.atan2(moveY, moveX));
 
       double finalXD = mag * Math.cos(rot.minus(origAngle).getRadians());
       double finalYD = mag * Math.sin(rot.minus(origAngle).getRadians());
-      Pose2d finalPose = new Pose2d(finalXD, finalYD, new Rotation2d(60 - origAngle.getRadians()));
+      Pose2d finalPose = new Pose2d(finalXD, finalYD, new Rotation2d(origAngle.getRadians()));
 
       // Auto Driving Commands
       Command toAprilTag =
           autodrive.AutoDriveCmd(drivetrain, List.of(finalPose.div(2).getTranslation()), finalPose);
       //
-      addCommands(toAprilTag);
+      SmartDashboard.putNumber("finalPoseX", finalXD);
+      SmartDashboard.putNumber("finalPoseY", finalYD);
+      SmartDashboard.putNumber("newPoseRotation", rot.minus(origAngle).getRadians());
     } else {
-      addCommands(null);
+      System.out.println("Nothing executed.");
     }
+    addCommands();
   }
 }

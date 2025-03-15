@@ -240,16 +240,6 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
-  public static final class LimeLightConstants {
-    // the offset constants are changed from Cm to Meters
-    public static final double CameraForwardOffset = 0.18;
-    public static final double CameraSideOffset = 0.345;
-    public static final double CameraUpOffest = 0.80;
-    public static final double CameraRollOffset = 0.0;
-    public static final double CameraPitchOffset = 0.0;
-    public static final double CameraYawOffset = 0.0;
-  }
-
   public static final class TimerConstants {
     // from timer from when autonomous starts to autonmous ends
     public static final int AutoTimerLength = 15; // seconds
