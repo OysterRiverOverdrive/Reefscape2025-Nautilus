@@ -15,6 +15,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.utils.LimelightHelpers;
-import frc.utils.LimelightHelpers.PoseEstimate;
 import frc.utils.SwerveModule;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -74,9 +75,31 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
+  /* Updating vision-based pose estimates might be expensive, so we can optionally
+   ** update every VISION_UPDATE_INTERVAL periodic cycles instead. */
+  private static int visionUpdateCounter = 0;
+  private static final int VISION_UPDATE_INTERVAL = 10;
+
   // PoseEstimator class for tracking robot pose
+  
   SwerveDrivePoseEstimator m_poseEstimator =
-      new SwerveDrivePoseEstimator(
+  new SwerveDrivePoseEstimator(
+      DriveConstants.kDriveKinematics,
+      Rotation2d.fromDegrees(getHeading()),
+      new SwerveModulePosition[] {
+        m_frontLeft.getPosition(),
+        m_frontRight.getPosition(),
+        m_rearLeft.getPosition(),
+        m_rearRight.getPosition()
+      },
+      new Pose2d(),
+      // Not tuned, maybe should be in constants, need to be tuned
+      VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+      VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+
+  // Odometry class for tracking robot pose
+  SwerveDriveOdometry m_odometry =
+      new SwerveDriveOdometry(
           DriveConstants.kDriveKinematics,
           Rotation2d.fromDegrees(getHeading()),
           new SwerveModulePosition[] {
@@ -84,11 +107,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
             m_frontRight.getPosition(),
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
-          },
-          new Pose2d());
+          });
 
-  // Odometry class for tracking robot pose
-  SwerveDriveOdometry m_odometry =
+  SwerveDriveOdometry m_autoOdometry =
       new SwerveDriveOdometry(
           DriveConstants.kDriveKinematics,
           Rotation2d.fromDegrees(getHeading()),
@@ -292,13 +313,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return m_gyro.getRate() * (RobotConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
-  @Override
-  public void periodic() {
-    SmartDashboard.putNumber("Z axis angle", getHeading());
-    SmartDashboard.putBoolean("Auto is Waiting", waiting);
-    SmartDashboard.putNumber("controller speed", maxSpeedCmd);
-
-    // Update the odometry in the periodic block
+  /**
+   * Updates the field relative position of the robot. From
+   * https://github.com/LimelightVision/limelight-examples/blob/main/java-wpilib/swerve-megatag-odometry/src/main/java/frc/robot/Drivetrain.java
+   *
+   * <p>Megatag 1 code removed and odometry object renamed.
+   */
+  public void updateOdometry() {
     m_odometry.update(
         Rotation2d.fromDegrees(getHeading()),
         new SwerveModulePosition[] {
@@ -307,18 +328,59 @@ public class DrivetrainSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
         });
+  }
 
-    PoseEstimate CurPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
+  public void updatePoseEstimate(boolean updateVision) {
+    m_poseEstimator.update(
+        Rotation2d.fromDegrees(getHeading()),
+        new SwerveModulePosition[] {
+          m_frontLeft.getPosition(),
+          m_frontRight.getPosition(),
+          m_rearLeft.getPosition(),
+          m_rearRight.getPosition()
+        });
 
-    if (LimelightHelpers.validPoseEstimate(CurPose)) {
-      m_odometry.update(
-          Rotation2d.fromDegrees(CurPose.pose.getRotation().getDegrees()),
-          new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-          });
+    if (!updateVision) return;
+    boolean doRejectUpdate = false;
+
+    LimelightHelpers.SetRobotOrientation(
+        "limelight",
+        m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
+        0,
+        0,
+        0,
+        0,
+        0);
+    LimelightHelpers.PoseEstimate mt2 =
+        LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+    if (Math.abs(m_gyro.getRate())
+        > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision
+    // updates
+    {
+      doRejectUpdate = true;
     }
+    // If there's no Limelight attached, mt2 will be null.
+    if (mt2 == null || mt2.tagCount == 0) {
+      doRejectUpdate = true;
+    }
+    if (!doRejectUpdate) {
+      // TODO: tune these constants or adjust based on distance?
+      // m_odometry.setVisionMeasurementStdDevs(VecBuilder.fill(5, 5, 500));
+      m_poseEstimator.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
+    }
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("Z axis angle", getHeading());
+    SmartDashboard.putBoolean("Auto is Waiting", waiting);
+    SmartDashboard.putNumber("controller speed", maxSpeedCmd);
+    
+    SmartDashboard.putNumber("Gyro Angle", getHeading());
+
+    updateOdometry();
+
+    updatePoseEstimate(visionUpdateCounter == 0);
+    visionUpdateCounter = (visionUpdateCounter + 1) % VISION_UPDATE_INTERVAL;
   }
 }
