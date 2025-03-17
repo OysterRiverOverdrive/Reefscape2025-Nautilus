@@ -115,10 +115,10 @@ public final class Constants {
 
       public static final double kElevLowHt = 18;
       public static final double kElevL1Ht = 28;
-      public static final double kElevL2Ht = 40.5;
-      public static final double kElevL3Ht = 55;
-      public static final double kElevL4Ht = 77;
-      public static final double kElevIntakeHt = 21.5;
+      public static final double kElevL2Ht = 38;
+      public static final double kElevL3Ht = 54;
+      public static final double kElevL4Ht = 78.5;
+      public static final double kElevIntakeHt = 25.5;
       public static final double kElevatorAboveIntakeHeightDifference = 8;
 
       public static final double kElevatorReefOffset = -2;
@@ -132,22 +132,22 @@ public final class Constants {
           8 * Math.sin(kElevatorCoralBucketAngleRadians);
 
       public static final double[][] ELEV_SAFETY_POINTS = {
-        {0.0, 78.0},
-        {0.05, 76.0},
+        // {0.0, 78.0},
+        // {0.05, 76.0},
         {0.1, 74.0},
-        {0.2, 60.0},
-        {0.3, 36.0},
-        {0.4, 34.0},
-        {0.5, 32.0},
-        {0.6, 30.0},
-        {0.7, 28.0},
-        {0.8, 26.0},
-        {0.9, 23.0},
+        // {0.2, 60.0},
+        // {0.3, 36.0},
+        // {0.4, 34.0},
+        // {0.5, 32.0},
+        // {0.6, 30.0},
+        // {0.7, 28.0},
+        // {0.8, 26.0},
+        // {0.9, 23.0},
         {1.0, 20.0}
       };
 
       // Polynomial degree (adjust as needed)
-      public static final int POLYNOMIAL_DEGREE = 2;
+      public static final int POLYNOMIAL_DEGREE = 1;
     }
   }
 
