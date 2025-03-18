@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -42,12 +45,12 @@ public class LimelightSubsystem extends SubsystemBase {
     // makes camera poses returned relative to the robots pose
     LimelightHelpers.setCameraPose_RobotSpace(
         "",
-        LimelightConstants.CameraForwardOffset,
-        LimelightConstants.CameraSideOffset,
-        LimelightConstants.CameraUpOffest,
-        LimelightConstants.CameraRollOffset,
-        LimelightConstants.CameraPitchOffset,
-        LimelightConstants.CameraYawOffset);
+        LimelightConstants.kCameraForwardOffset.in(Inches),
+        LimelightConstants.kCameraSideOffset.in(Inches),
+        LimelightConstants.kCameraUpOffest.in(Inches),
+        LimelightConstants.kCameraRollOffset.in(Inches),
+        LimelightConstants.kCameraPitchOffset.in(Inches),
+        LimelightConstants.kCameraYawOffset.in(Inches));
     fieldmap.loadField(AprilTagFields.k2025Reefscape);
   }
 
@@ -131,8 +134,20 @@ public class LimelightSubsystem extends SubsystemBase {
     return LimelightHelpers.getTV(limelight);
   }
 
+  /**
+   * Returns an April Tag Pose, rotated so the Rotation2D faces toward the april tag.
+   * The native Rotation2D faces outward from the April Tag, so the native pose is
+   * deconstructed, and a rotated pose is constructed with the same Translation (x and y),
+   * and the Rotation is the native rotation plus PI to fully flip the direction.
+   * 
+   * @param ID april tage ID
+   * @return tag pose relative to origin
+   */
   public Pose2d FieldApriltagPose(int ID) {
-    return fieldmap.getTagPose(ID).get().toPose2d();
+    Pose2d tagPose = fieldmap.getTagPose(ID).get().toPose2d();
+    Pose2d tagPoseRotated = new Pose2d(
+          tagPose.getTranslation(), tagPose.getRotation().plus(new Rotation2d(Math.PI)));
+    return tagPoseRotated;
   }
 
   public double FieldApriltagX(int ID) {

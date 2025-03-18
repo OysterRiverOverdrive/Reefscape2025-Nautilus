@@ -4,15 +4,17 @@
 
 package frc.robot.commands.drive;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
+import edu.wpi.first.units.measure.Distance;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.auto.AutoCreationCmd;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -47,9 +49,45 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
 
       Pose2d tagPose = limelight.FieldApriltagPose(curTag);
 
-      Transform2d motion = tagPose.minus(curP);
+      // tagPose, offset so as to put the center of the robot outside of the bounds of the reef
+      // This distance is 16.75 inches
+      Transform2d outset = new Transform2d(
+        Distance.ofRelativeUnits(-16.75, Inches),
+        Distance.ofRelativeUnits(0, Inches),
+        new Rotation2d(0));
+      Pose2d tagPoseOutset = tagPose.transformBy(outset);
+
+      // Since scoring may happen on either the left or the right, there must be two
+      // different locations, leftPose and rightPose
+      Transform2d leftOffset = new Transform2d(
+        Distance.ofRelativeUnits(0, Inches),
+        LimelightConstants.kScoreCoralLeftOffset,
+        new Rotation2d(0));
+      
+      Pose2d leftPose = tagPoseOutset.transformBy(leftOffset);
+
+      Transform2d rightOffset = new Transform2d(
+        Distance.ofRelativeUnits(0, Inches),
+        LimelightConstants.kScoreCoralRightOffset,
+        new Rotation2d(0));
+
+      Pose2d rightPose = tagPoseOutset.transformBy(rightOffset);
+
+      // Need different motions for different end positions
+      Transform2d leftMotion = leftPose.minus(curP);
+      Transform2d rightMotion = rightPose.minus(curP);
+
+      Pose2d leftMotionPose = new Pose2d(leftMotion.getTranslation(), leftMotion.getRotation());
+      Pose2d rightMotionPose = new Pose2d(rightMotion.getTranslation(), rightMotion.getRotation());
+
+      // For testing:
+      Transform2d motion = tagPoseOutset.minus(curP);
 
       Pose2d motionPose = new Pose2d(motion.getTranslation(), motion.getRotation());
+
+      Command toAprilTag =
+          autodrive.AutoDriveCmd(drivetrain,
+              List.of(motionPose.div(2).getTranslation()), motionPose);
 
       //double moveX = tagPose.getMeasureX().minus(curP.getMeasureX()).in(Meters);
       //double moveY = tagPose.getMeasureY().minus(curP.getMeasureY()).in(Meters);
@@ -66,9 +104,14 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
       // Command toAprilTag =
       //     autodrive.AutoDriveCmd(drive, List.of(finalPose.div(2).getTranslation()), finalPose);
 
-      Command toAprilTag =
-          autodrive.AutoDriveCmd(drivetrain, List.of(motionPose.div(2).getTranslation()), motionPose);
-      //
+      Command toAprilTagLeft =
+          autodrive.AutoDriveCmd(drivetrain,
+              List.of(leftMotionPose.div(2).getTranslation()), leftMotionPose);
+
+      Command toAprilTagRight =
+          autodrive.AutoDriveCmd(drivetrain,
+              List.of(rightMotionPose.div(2).getTranslation()), rightMotionPose);
+      
       SmartDashboard.putNumber("finalPoseX", motion.getX());
       SmartDashboard.putNumber("finalPoseY", motion.getY());
       SmartDashboard.putNumber("newPoseRotation", motion.getRotation().getRadians());

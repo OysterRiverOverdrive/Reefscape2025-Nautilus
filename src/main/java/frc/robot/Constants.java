@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Inches;
+import edu.wpi.first.units.measure.Distance;
+
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -164,15 +167,32 @@ public final class Constants {
   }
 
   public static final class LimelightConstants {
-    // Offset of coral posts from AprilTag center on reef (inches*in. to meters conversion)
-    public static final double kCoralPostOffset = 5.5 * 0.0254;
+    // Uses Distance objects, which can handle unit conversion automatically.
+    // <DistanceName>.in(<unit>) returns a double if the unit is imported.
+      
+    // Offset of coral posts from AprilTag center on reef 
+    public static final Distance kCoralPostOffset =
+        Distance.ofRelativeUnits(5.5, Inches);
 
-    public static final double CameraForwardOffset = 10 * 0.0254; // NEEDS TO BE MEASURED
-    public static final double CameraSideOffset = -3.25 * 0.0254;
-    public static final double CameraUpOffest = 1 * 0.0254;
-    public static final double CameraRollOffset = 0;
-    public static final double CameraPitchOffset = 0;
-    public static final double CameraYawOffset = 0;
+    // Offsets for robot to score at both reef posts. This is the distance from the center
+    // of the AprilTag to the center of the robot, widthwise on the reef, so not depth.
+    public static final Distance kScoreCoralLeftOffset = 
+        Distance.ofRelativeUnits(1, Inches); // UNMEASURED
+    public static final Distance kScoreCoralRightOffset = 
+        Distance.ofRelativeUnits(-15, Inches); // UNMEASURED
+
+    public static final Distance kCameraForwardOffset =
+        Distance.ofRelativeUnits(10, Inches);  // NEEDS TO BE MEASURED
+    public static final Distance kCameraSideOffset =
+        Distance.ofRelativeUnits(-3.25, Inches);
+    public static final Distance kCameraUpOffest =
+        Distance.ofRelativeUnits(1, Inches);
+    public static final Distance kCameraRollOffset =
+        Distance.ofRelativeUnits(0, Inches);
+    public static final Distance kCameraPitchOffset =
+        Distance.ofRelativeUnits(0, Inches);
+    public static final Distance kCameraYawOffset =
+        Distance.ofRelativeUnits(0, Inches);
   }
 
   // Constants specifically for Swerve Module
