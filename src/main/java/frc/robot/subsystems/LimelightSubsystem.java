@@ -167,11 +167,13 @@ public class LimelightSubsystem extends SubsystemBase {
     } else {
       LimelightHelpers.setLEDMode_PipelineControl("");
     }
-    SmartDashboard.putNumber("Current Apriltag ID", LimelightHelpers.getFiducialID(""));
-    SmartDashboard.putNumber("X Distance", getPose2dMegaTag2().pose.getX());
-    SmartDashboard.putNumber("Y Distance", getPose2dMegaTag2().pose.getY());
-    SmartDashboard.putNumber(
-        "Rotation in Rads", getPose2dMegaTag2().pose.getRotation().getRadians());
+    if (isAprilTag("")) {
+      SmartDashboard.putNumber("Current Apriltag ID", LimelightHelpers.getFiducialID(""));
+      SmartDashboard.putNumber("X Distance", getPose2dMegaTag2().pose.getX());
+      SmartDashboard.putNumber("Y Distance", getPose2dMegaTag2().pose.getY());
+      SmartDashboard.putNumber(
+          "Rotation in Rads", getPose2dMegaTag2().pose.getRotation().getRadians());
+    }
 
     if (isAprilTag("")) {
       Pose2d curP = getPose2dMegaTag2().pose;
