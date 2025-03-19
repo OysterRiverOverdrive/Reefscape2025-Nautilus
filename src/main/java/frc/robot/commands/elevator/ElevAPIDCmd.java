@@ -5,25 +5,16 @@
 package frc.robot.commands.elevator;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ElevAPIDCmd extends Command {
   private ElevatorSubsystem elevator;
+  private ProfiledPIDController elevatorPID;
   private double setpoint;
   private double error;
   private double priorSet;
   private boolean rising;
-
-  private final ProfiledPIDController elevatorPID =
-      new ProfiledPIDController(
-          PIDConstants.kElevatorRP,
-          PIDConstants.kElevatorRI,
-          PIDConstants.kElevatorRD,
-          new TrapezoidProfile.Constraints(
-              PIDConstants.kElevatorRMaxV, PIDConstants.kElevatorRMaxA));
 
   /**
    * Autonomous Method of moving elevator
@@ -35,6 +26,7 @@ public class ElevAPIDCmd extends Command {
   public ElevAPIDCmd(ElevatorSubsystem elevator, double setpoint, double error) {
     this.elevator = elevator;
     this.setpoint = setpoint;
+    this.elevatorPID = elevator.elevatorPID;
     this.error = error;
     addRequirements(elevator);
   }
