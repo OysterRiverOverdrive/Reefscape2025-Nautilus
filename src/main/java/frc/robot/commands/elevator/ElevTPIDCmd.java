@@ -5,9 +5,7 @@
 package frc.robot.commands.elevator;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ElevTPIDCmd extends Command {
