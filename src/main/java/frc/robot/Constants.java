@@ -118,7 +118,7 @@ public final class Constants {
       public static final double kElevL2Ht = 38;
       public static final double kElevL3Ht = 54;
       public static final double kElevL4Ht = 78.5;
-      public static final double kElevIntakeHt = 25.5;
+      public static final double kElevIntakeHt = 23.5;
       public static final double kElevatorAboveIntakeHeightDifference = 8;
 
       public static final double kElevatorReefOffset = -2;
