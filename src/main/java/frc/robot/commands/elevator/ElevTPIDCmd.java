@@ -14,17 +14,11 @@ public class ElevTPIDCmd extends Command {
   private ElevatorSubsystem elevator;
   private double safetysetpoint; // Calculated Max Height
   private double location;
-
-  private final ProfiledPIDController elevatorRisePID =
-      new ProfiledPIDController(
-          PIDConstants.kElevatorRP,
-          PIDConstants.kElevatorRI,
-          PIDConstants.kElevatorRD,
-          new TrapezoidProfile.Constraints(
-              PIDConstants.kElevatorRMaxV, PIDConstants.kElevatorRMaxA));
+  private ProfiledPIDController elevatorPID;
 
   public ElevTPIDCmd(ElevatorSubsystem elevator) {
     this.elevator = elevator;
+    this.elevatorPID = elevator.elevatorPID;
     addRequirements(elevator);
   }
 
@@ -44,9 +38,8 @@ public class ElevTPIDCmd extends Command {
       elevator.safetyActive = false;
     }
     double elevatorSpeed;
-    elevatorRisePID.setGoal(location);
-    elevatorSpeed = elevatorRisePID.calculate(elevator.getHeight());
-
+    elevatorPID.setGoal(location);
+    elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
     elevator.setElevatorSpeed(elevatorSpeed);
   }
 

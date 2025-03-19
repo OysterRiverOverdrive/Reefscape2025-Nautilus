@@ -10,6 +10,9 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -53,6 +56,14 @@ public class ElevatorSubsystem extends SubsystemBase {
   private static final NetworkTableEntry timestampEntry = table.getEntry("Timestamp");
   private static final NetworkTableEntry setpointEntry = table.getEntry("Setpoint");
   private static final NetworkTableEntry actualEntry = table.getEntry("ActualValue");
+
+  public final ProfiledPIDController elevatorPID =
+      new ProfiledPIDController(
+          PIDConstants.kElevatorRP,
+          PIDConstants.kElevatorRI,
+          PIDConstants.kElevatorRD,
+          new TrapezoidProfile.Constraints(
+              PIDConstants.kElevatorRMaxV, PIDConstants.kElevatorRMaxA));
 
   public ElevatorSubsystem(DrivetrainSubsystem drivetrain) {
     WeightedObservedPoints elevSafetyPoints = new WeightedObservedPoints();
