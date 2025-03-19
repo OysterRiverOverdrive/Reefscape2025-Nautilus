@@ -137,13 +137,13 @@ public final class Constants {
         {0.1, 74.0},
         // {0.2, 60.0},
         // {0.3, 36.0},
-        // {0.4, 34.0},
+        {0.4, 25.0},
         // {0.5, 32.0},
         // {0.6, 30.0},
         // {0.7, 28.0},
         // {0.8, 26.0},
         // {0.9, 23.0},
-        {1.0, 20.0}
+        // {1.0, 20.0}
       };
 
       // Polynomial degree (adjust as needed)
@@ -156,7 +156,7 @@ public final class Constants {
 
     // Elevator PID
     // Don't change these values unless you know what you're doing - Robot may Self-Destruct
-    public static final double kElevatorRP = 0.1;
+    public static final double kElevatorRP = 0.05;
     public static final double kElevatorRI = 0.00;
     public static final double kElevatorRD = 0.00;
     public static final double kElevatorRMaxV = 10000; // m/s
