@@ -13,6 +13,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.auto.AutoCreationCmd;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -22,15 +23,14 @@ import java.util.List;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
+public class AutoToAprilTagRightCmd extends ParallelCommandGroup {
 
   boolean cmdFinished = false;
   double speed = 0.0;
   final double speedKp = -0.01;
   final double turnRateKp = 0.015;
 
-  // FOR TESTING ONLY!!!
-  public AutoMoveToAprilTagCmd(LimelightSubsystem limelightsub, DrivetrainSubsystem drivetrain) {
+  public AutoToAprilTagRightCmd(LimelightSubsystem limelightsub, DrivetrainSubsystem drivetrain) {
     AutoCreationCmd autodrive = new AutoCreationCmd();
     LimelightSubsystem limelight = limelightsub;
     DrivetrainSubsystem drive = drivetrain;
@@ -50,16 +50,25 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
               new Rotation2d(0));
       Pose2d tagPoseOutset = tagPose.transformBy(outset);
 
-      Transform2d motion = tagPoseOutset.minus(curP);
+      Transform2d rightOffset =
+          new Transform2d(
+              Distance.ofRelativeUnits(0, Inches),
+              LimelightConstants.kScoreCoralRightOffset,
+              new Rotation2d(0));
 
-      Pose2d motionPose = new Pose2d(motion.getTranslation(), motion.getRotation());
+      Pose2d rightPose = tagPoseOutset.transformBy(rightOffset);
 
-      Command toAprilTag =
-          autodrive.AutoDriveCmd(drive, List.of(motionPose.div(2).getTranslation()), motionPose);
+      Transform2d rightMotion = rightPose.minus(curP);
 
-      SmartDashboard.putNumber("CenterFinX", motion.getX());
-      SmartDashboard.putNumber("CenterFinY", motion.getY());
-      SmartDashboard.putNumber("CenterFinRot", motion.getRotation().getRadians());
+      Pose2d rightMotionPose = new Pose2d(rightMotion.getTranslation(), rightMotion.getRotation());
+
+      Command toAprilTagRight =
+          autodrive.AutoDriveCmd(
+              drive, List.of(rightMotionPose.div(2).getTranslation()), rightMotionPose);
+
+      SmartDashboard.putNumber("RightFinX", rightMotion.getX());
+      SmartDashboard.putNumber("RightFinY", rightMotion.getY());
+      SmartDashboard.putNumber("RightFinRot", rightMotion.getRotation().getRadians());
     } else {
       System.out.println("Nothing executed.");
     }
