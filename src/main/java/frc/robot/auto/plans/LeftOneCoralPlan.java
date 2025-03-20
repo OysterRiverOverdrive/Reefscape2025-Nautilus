@@ -41,6 +41,9 @@ public class LeftOneCoralPlan extends ParallelCommandGroup {
             .andThen(
                 new ElevAPIDCmd(elevator, Constants.RobotConstants.ElevatorConstants.kElevL4Ht, 3))
             .andThen(new AutoSleepCmd(3))
-            .andThen(new AutoCoralSpinForwardCmd(intake, 1)));
+            .andThen(new AutoCoralSpinForwardCmd(intake, 1))
+            .andThen(
+                new ElevAPIDCmd(elevator, Constants.RobotConstants.ElevatorConstants.kElevL3Ht, 3))
+            .andThen(new AutoSleepCmd(30000000)));
   }
 }

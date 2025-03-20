@@ -5,8 +5,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.Constants;
-import frc.robot.auto.AutoCoralSpinForwardCmd;
+import frc.robot.Constants.RobotConstants.ElevatorConstants;
+import frc.robot.auto.AutoCoralSpinReverseCmd;
 import frc.robot.auto.AutoCreationCmd;
 import frc.robot.auto.AutoSleepCmd;
 import frc.robot.commands.elevator.ElevAPIDCmd;
@@ -32,15 +32,19 @@ public class RightOneCoralPlan extends ParallelCommandGroup {
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(3, 0.3)),
-            new Pose2d(3.75, -0.01, new Rotation2d(-Math.PI * 2 / 3)));
+            new Pose2d(3.55, -0.06, new Rotation2d(-Math.PI * 2 / 3)));
     // Place coral
 
     // Driving groups
     addCommands(
         toReef
             .andThen(
-                new ElevAPIDCmd(elevator, Constants.RobotConstants.ElevatorConstants.kElevL4Ht, 3))
+                new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht, 3))
             .andThen(new AutoSleepCmd(3))
-            .andThen(new AutoCoralSpinForwardCmd(intake, 1)));
+            .andThen(new AutoCoralSpinReverseCmd(intake, 1))
+            .andThen(
+                new ElevAPIDCmd(elevator, ElevatorConstants.kElevLowHt, 3))
+            .andThen(new AutoSleepCmd(10))
+            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevIntakeHt, 3)));
   }
 }

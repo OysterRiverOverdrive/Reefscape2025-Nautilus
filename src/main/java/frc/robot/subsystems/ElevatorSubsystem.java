@@ -166,6 +166,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     return elevatorPIDSetPoint;
   }
 
+  public void setSetPoint(double value) {
+    elevatorPIDSetPoint = value;
+  }
+
   public void setElevatorSpeed(double speed) {
     m_elevator1SparkMax.set(speed);
   }
