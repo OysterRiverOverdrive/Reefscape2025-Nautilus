@@ -109,7 +109,7 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // Coral Intake constants
-    public static final double kCoralIntakeSpeed = 0.4;
+    public static final double kCoralIntakeSpeed = 0.25;
 
     // Hang Arm Constants
     public static final double kClimberSpeed = 0.7;
