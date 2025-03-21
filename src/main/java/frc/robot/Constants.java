@@ -97,6 +97,8 @@ public final class Constants {
 
     public static final int kCoralIntakeCanId = 12;
 
+    public static final int kClimberCanId = 13;
+
     // Used to declare Navx as upside down
     public static final boolean kGyroReversed = true;
 
@@ -109,17 +111,19 @@ public final class Constants {
     // Coral Intake constants
     public static final double kCoralIntakeSpeed = 0.4;
 
+    // Hang Arm Constants
+    public static final double kClimberSpeed = 0.7;
+
     public static final class ElevatorConstants {
 
       public static final double kElevatorHeightToRot = 10;
 
       public static final double kElevLowHt = 18;
-      public static final double kElevL1Ht = 28;
+      public static final double kElevL1Ht = 30;
       public static final double kElevL2Ht = 38;
       public static final double kElevL3Ht = 54;
       public static final double kElevL4Ht = 78.5;
-      public static final double kElevIntakeHt = 23.5;
-      public static final double kElevatorAboveIntakeHeightDifference = 8;
+      public static final double kElevIntakeHt = 21.5;
 
       public static final double kElevatorReefOffset = -2;
       // Coral bucket downward angle from flat, degrees
@@ -137,7 +141,7 @@ public final class Constants {
         {0.1, 74.0},
         // {0.2, 60.0},
         // {0.3, 36.0},
-        {0.4, 25.0},
+        {0.35, 25.0},
         // {0.5, 32.0},
         // {0.6, 30.0},
         // {0.7, 28.0},

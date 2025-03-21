@@ -15,6 +15,7 @@ import frc.robot.auto.plans.*;
 import frc.robot.commands.TeleopCmd;
 import frc.robot.commands.coralIntake.*;
 import frc.robot.commands.elevator.*;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -43,6 +44,7 @@ public class RobotContainer {
   private final ElevatorSubsystem elevator = new ElevatorSubsystem(drivetrain);
   private final CoralIntakeSubsystem coralIntake = new CoralIntakeSubsystem();
   private final PowerSubsystem battery = new PowerSubsystem();
+  private final ClimberSubsystem climber = new ClimberSubsystem();
 
   // Commands
   private final TeleopCmd teleopCmd =
@@ -125,6 +127,16 @@ public class RobotContainer {
         .triggerSupplier(Controllers.xbox_rt, 0.2, DriveConstants.joysticks.OPERATOR)
         .onTrue(new CoralIntakeReverseCommand(coralIntake))
         .onFalse(new CoralIntakeStopCommand(coralIntake));
+
+    // Climber Bindings
+    cutil
+        .triggerSupplier(Controllers.xbox_rt, 0.2, DriveConstants.joysticks.DRIVER)
+        .onTrue(new InstantCommand(() -> climber.climberForwardCmd()))
+        .onFalse(new InstantCommand(() -> climber.climberStopCmd()));
+    cutil
+        .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.DRIVER)
+        .onTrue(new InstantCommand(() -> climber.climberReverseCmd()))
+        .onFalse(new InstantCommand(() -> climber.climberStopCmd()));
   }
 
   public Command getAutonomousCommand() {
