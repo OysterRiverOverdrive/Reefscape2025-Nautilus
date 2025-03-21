@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.TimerConstants;
 
 public final class DashboardSubsystem {
-  // determinew what timer is enabled
+  // determine what timer is enabled
   static boolean TeleOpStartTimerEnabled = false;
   static boolean TeleOpEndTimerEnabled = false;
   static boolean AutoTimerEnabled = false;
