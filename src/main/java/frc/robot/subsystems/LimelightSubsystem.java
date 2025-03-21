@@ -4,10 +4,13 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Inches;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -41,16 +44,13 @@ public class LimelightSubsystem extends SubsystemBase {
     // makes camera poses returned relative to the robots pose
     LimelightHelpers.setCameraPose_RobotSpace(
         "",
-        LimelightConstants.CameraForwardOffset,
-        LimelightConstants.CameraSideOffset,
-        LimelightConstants.CameraUpOffest,
-        LimelightConstants.CameraRollOffset,
-        LimelightConstants.CameraPitchOffset,
-        LimelightConstants.CameraYawOffset);
-
-    fieldmap =
-        AprilTagFieldLayout.loadField(
-            AprilTagFields.k2025Reefscape); // creates the field of april tags
+        LimelightConstants.kCameraForwardOffset.in(Inches),
+        LimelightConstants.kCameraSideOffset.in(Inches),
+        LimelightConstants.kCameraUpOffest.in(Inches),
+        LimelightConstants.kCameraRollOffset.in(Inches),
+        LimelightConstants.kCameraPitchOffset.in(Inches),
+        LimelightConstants.kCameraYawOffset.in(Inches));
+    fieldmap.loadField(AprilTagFields.k2025Reefscape);
   }
 
   // PoseEstimator PEstimator = new PoseEstimator<>(null, null, null, null); Pose Estimator, idk.
@@ -133,13 +133,28 @@ public class LimelightSubsystem extends SubsystemBase {
     return LimelightHelpers.getTV(limelight);
   }
 
+  /**
+   * Returns an April Tag Pose, rotated so the Rotation2D faces toward the april tag. The native
+   * Rotation2D faces outward from the April Tag, so the native pose is deconstructed, and a rotated
+   * pose is constructed with the same Translation (x and y), and the Rotation is the native
+   * rotation plus PI to fully flip the direction.
+   *
+   * @param ID april tage ID
+   * @return tag pose relative to origin
+   */
+  public Pose2d FieldApriltagPose(int ID) {
+    Pose2d tagPose = fieldmap.getTagPose(ID).get().toPose2d();
+    Pose2d tagPoseRotated =
+        new Pose2d(tagPose.getTranslation(), tagPose.getRotation().plus(new Rotation2d(Math.PI)));
+    return tagPoseRotated;
+  }
+
   public double FieldApriltagX(int ID) {
-    return fieldmap.getTagPose(ID).get().getX();
+    return FieldApriltagPose(ID).getX();
   }
 
   public double FieldApriltagY(int ID) {
-
-    return fieldmap.getTagPose(ID).get().getY();
+    return FieldApriltagPose(ID).getY();
   }
 
   @Override
@@ -151,6 +166,42 @@ public class LimelightSubsystem extends SubsystemBase {
       LimelightHelpers.setLEDMode_ForceOn("");
     } else {
       LimelightHelpers.setLEDMode_PipelineControl("");
+    }
+    if (isAprilTag("")) {
+      SmartDashboard.putNumber("Current Apriltag ID", LimelightHelpers.getFiducialID(""));
+      SmartDashboard.putNumber("X Distance", getPose2dMegaTag2().pose.getX());
+      SmartDashboard.putNumber("Y Distance", getPose2dMegaTag2().pose.getY());
+      SmartDashboard.putNumber(
+          "Rotation in Rads", getPose2dMegaTag2().pose.getRotation().getRadians());
+    }
+
+    if (isAprilTag("")) {
+      Pose2d curP = getPose2dMegaTag2().pose;
+      double xDist = curP.getX();
+      double yDist = curP.getY();
+      Rotation2d origAngle = curP.getRotation();
+
+      double curTag = LimelightHelpers.getFiducialID("");
+
+      // placeholder 6 apriltag ~position
+      double tagX = 113;
+      double tagY = 162;
+
+      double moveX = tagX - xDist;
+      double moveY = tagY - yDist;
+      double mag = Math.hypot(tagX, tagY);
+
+      Rotation2d rot = new Rotation2d(Math.atan2(moveY, moveX));
+
+      double finalXD = mag * Math.cos(rot.minus(origAngle).getRadians());
+      double finalYD = mag * Math.sin(rot.minus(origAngle).getRadians());
+      Pose2d finalPose = new Pose2d(finalXD, finalYD, new Rotation2d(origAngle.getRadians()));
+
+      // Auto Driving Commands
+
+      SmartDashboard.putNumber("finalPoseX", finalXD);
+      SmartDashboard.putNumber("finalPoseY", finalYD);
+      SmartDashboard.putNumber("newPoseRotation", rot.minus(origAngle).getRadians());
     }
   }
 }
