@@ -53,7 +53,9 @@ public class AutoToAprilTagRightCmd extends ParallelCommandGroup {
       Transform2d rightOffset =
           new Transform2d(
               Distance.ofRelativeUnits(0, Inches),
-              LimelightConstants.kScoreCoralRightOffset,
+              LimelightConstants.kCoralPostOffset
+                  .unaryMinus()
+                  .minus(LimelightConstants.kIntakeOffset),
               new Rotation2d(0));
 
       Pose2d rightPose = tagPoseOutset.transformBy(rightOffset);

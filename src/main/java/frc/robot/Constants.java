@@ -175,19 +175,13 @@ public final class Constants {
     // <DistanceName>.in(<unit>) returns a double if the unit is imported.
 
     // Offset of coral posts from AprilTag center on reef
-    public static final Distance kCoralPostOffset = Distance.ofRelativeUnits(5.5, Inches);
+    public static final Distance kCoralPostOffset = Distance.ofRelativeUnits(6.5, Inches);
 
-    // Offsets for robot to score at both reef posts. This is the distance from the center
-    // of the AprilTag to the center of the robot, widthwise on the reef, so not depth.
-    public static final Distance kScoreCoralLeftOffset =
-        Distance.ofRelativeUnits(-2, Inches); // UNMEASURED
-    public static final Distance kScoreCoralRightOffset =
-        Distance.ofRelativeUnits(-13, Inches); // UNMEASURED
+    // Offset of intake center from center of robot
+    public static final Distance kIntakeOffset = Distance.ofRelativeUnits(10.25, Inches);
 
-    public static final Distance kCameraForwardOffset =
-        Distance.ofRelativeUnits(10, Inches); // NEEDS TO BE MEASURED
-    public static final Distance kCameraSideOffset =
-        Distance.ofRelativeUnits(-3.25, Inches); // SHOULD BE REMEASURED
+    public static final Distance kCameraForwardOffset = Distance.ofRelativeUnits(11.75, Inches);
+    public static final Distance kCameraSideOffset = Distance.ofRelativeUnits(2.75, Inches);
     public static final Distance kCameraUpOffest = Distance.ofRelativeUnits(1, Inches);
     public static final Distance kCameraRollOffset = Distance.ofRelativeUnits(0, Inches);
     public static final Distance kCameraPitchOffset = Distance.ofRelativeUnits(0, Inches);
