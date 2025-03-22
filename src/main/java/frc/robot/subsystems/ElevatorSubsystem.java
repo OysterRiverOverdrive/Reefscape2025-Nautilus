@@ -155,13 +155,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     checkdir(prev, elevatorPIDSetPoint);
   }
 
-  public void toAboveIntake() {
-    double prev = elevatorPIDSetPoint;
-    elevatorPIDSetPoint =
-        (ElevatorConstants.kElevIntakeHt + ElevatorConstants.kElevatorAboveIntakeHeightDifference);
-    checkdir(prev, elevatorPIDSetPoint);
-  }
-
   public double getSetPoint() {
     return elevatorPIDSetPoint;
   }

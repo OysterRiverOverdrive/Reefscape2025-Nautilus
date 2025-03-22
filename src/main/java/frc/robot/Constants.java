@@ -107,7 +107,7 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // Coral Intake constants
-    public static final double kCoralIntakeSpeed = 0.4;
+    public static final double kCoralIntakeSpeed = 0.25;
 
     public static final class ElevatorConstants {
 
@@ -119,7 +119,6 @@ public final class Constants {
       public static final double kElevL3Ht = 54;
       public static final double kElevL4Ht = 78.5;
       public static final double kElevIntakeHt = 23.5;
-      public static final double kElevatorAboveIntakeHeightDifference = 8;
 
       public static final double kElevatorReefOffset = -2;
       // Coral bucket downward angle from flat, degrees
@@ -134,7 +133,7 @@ public final class Constants {
       public static final double[][] ELEV_SAFETY_POINTS = {
         // {0.0, 78.0},
         // {0.05, 76.0},
-        {0.1, 74.0},
+        {0.08, 74.0},
         // {0.2, 60.0},
         // {0.3, 36.0},
         {0.4, 25.0},
