@@ -38,9 +38,9 @@ public class RightOneCoralPlan extends ParallelCommandGroup {
     // Driving groups
     addCommands(
         toReef
-            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht, 0.5))
+            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht, 1))
             .andThen(new AutoSleepCmd(1.5))
             .andThen(new AutoCoralSpinReverseCmd(intake, 1))
-            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevLowHt, 2)));
+            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevLowHt, 1)));
   }
 }

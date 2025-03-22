@@ -32,17 +32,15 @@ public class LeftOneCoralPlan extends ParallelCommandGroup {
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(3, -0.3)),
-            new Pose2d(3.75, 0.01, new Rotation2d(-Math.PI * 2 / 3)));
+            new Pose2d(3.55, 0.06, new Rotation2d(Math.PI * 2 / 3)));
     // Place coral
 
     // Driving groups
     addCommands(
         toReef
-            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht, 3))
+            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht, 1))
             .andThen(new AutoSleepCmd(1.5))
             .andThen(new AutoCoralSpinReverseCmd(intake, 1))
-            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevLowHt, 3))
-            .andThen(new AutoSleepCmd(2))
-            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevIntakeHt, 3)));
+            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevLowHt, 1)));
   }
 }
