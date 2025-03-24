@@ -109,7 +109,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public double getHeight() {
     // Function to convert Encoder to Carriage Height approximately in inches
-    return (0.548*getEncoder() + 17.6);
+    return (0.548 * getEncoder() + 17.6);
   }
 
   // Calculated equation based on demo speeds and heights
