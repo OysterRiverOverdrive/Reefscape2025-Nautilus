@@ -160,11 +160,11 @@ public final class Constants {
 
     // Elevator PID
     // Don't change these values unless you know what you're doing - Robot may Self-Destruct
-    public static final double kElevatorRP = 0.05;
+    public static final double kElevatorRP = 0.08;
     public static final double kElevatorRI = 0.00;
     public static final double kElevatorRD = 0.00;
     public static final double kElevatorRMaxV = 10000; // m/s
-    public static final double kElevatorRMaxA = 27.5; // m/s^2
+    public static final double kElevatorRMaxA = 35; // m/s^2
   }
 
   public static final class LimelightConstants {
