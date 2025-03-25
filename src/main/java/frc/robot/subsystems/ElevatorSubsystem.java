@@ -109,7 +109,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public double getHeight() {
     // Function to convert Encoder to Carriage Height approximately in inches
-    return (0.555 * getEncoder() + 17.7);
+    return (0.548 * getEncoder() + 17.6);
   }
 
   // Calculated equation based on demo speeds and heights
@@ -155,16 +155,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     checkdir(prev, elevatorPIDSetPoint);
   }
 
-  // public void toAboveIntake() {
-  //   double prev = elevatorPIDSetPoint;
-  //   elevatorPIDSetPoint =
-  //       (ElevatorConstants.kElevIntakeHt +
-  // ElevatorConstants.kElevatorAboveIntakeHeightDifference);
-  //   checkdir(prev, elevatorPIDSetPoint);
-  // }
-
   public double getSetPoint() {
     return elevatorPIDSetPoint;
+  }
+
+  public void setSetPoint(double value) {
+    elevatorPIDSetPoint = value;
   }
 
   public void setElevatorSpeed(double speed) {
@@ -205,5 +201,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Safety Active", safetyActive);
     SmartDashboard.putNumber("Elev Height", getHeight());
     SmartDashboard.putNumber("Elev Setpoint", elevatorPIDSetPoint);
+    SmartDashboard.putNumber("Elev Rot", getEncoder());
   }
 }

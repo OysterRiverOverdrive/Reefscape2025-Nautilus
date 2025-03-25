@@ -109,10 +109,10 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // Coral Intake constants
-    public static final double kCoralIntakeSpeed = 0.4;
+    public static final double kCoralIntakeSpeed = 0.25;
 
     // Hang Arm Constants
-    public static final double kClimberSpeed = 0.7;
+    public static final double kClimberSpeed = 0.85;
 
     public static final class ElevatorConstants {
 
@@ -138,7 +138,7 @@ public final class Constants {
       public static final double[][] ELEV_SAFETY_POINTS = {
         // {0.0, 78.0},
         // {0.05, 76.0},
-        {0.1, 74.0},
+        {0.08, 74.0},
         // {0.2, 60.0},
         // {0.3, 36.0},
         {0.35, 25.0},
@@ -160,11 +160,11 @@ public final class Constants {
 
     // Elevator PID
     // Don't change these values unless you know what you're doing - Robot may Self-Destruct
-    public static final double kElevatorRP = 0.05;
+    public static final double kElevatorRP = 0.08;
     public static final double kElevatorRI = 0.00;
     public static final double kElevatorRD = 0.00;
     public static final double kElevatorRMaxV = 10000; // m/s
-    public static final double kElevatorRMaxA = 27.5; // m/s^2
+    public static final double kElevatorRMaxA = 35; // m/s^2
   }
 
   public static final class LimelightConstants {

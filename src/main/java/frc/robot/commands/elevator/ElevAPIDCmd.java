@@ -34,13 +34,14 @@ public class ElevAPIDCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevatorPID.setGoal(setpoint);
+    elevator.setSetPoint(setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double elevatorSpeed;
+    elevatorPID.setGoal(elevator.getSetPoint());
     elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
     elevator.setElevatorSpeed(elevatorSpeed);
   }
