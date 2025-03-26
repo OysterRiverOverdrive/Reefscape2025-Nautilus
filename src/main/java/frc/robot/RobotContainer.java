@@ -137,6 +137,11 @@ public class RobotContainer {
         .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.DRIVER)
         .onTrue(new InstantCommand(() -> climber.climberReverseCmd()))
         .onFalse(new InstantCommand(() -> climber.climberStopCmd()));
+
+    // Elevator PID Toggle
+    cutil
+        .supplier(Controllers.xbox_x, DriveConstants.joysticks.OPERATOR)
+        .onTrue(new InstantCommand(() -> elevator.toggleElevPID()));
   }
 
   public Command getAutonomousCommand() {

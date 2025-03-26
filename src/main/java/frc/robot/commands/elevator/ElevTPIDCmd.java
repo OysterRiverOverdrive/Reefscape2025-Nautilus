@@ -38,7 +38,9 @@ public class ElevTPIDCmd extends Command {
     double elevatorSpeed;
     elevatorPID.setGoal(location);
     elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
-    elevator.setElevatorSpeed(elevatorSpeed);
+    if (elevator.activePID) {
+      elevator.setElevatorSpeed(elevatorSpeed);
+    }
   }
 
   // Called once the command ends or is interrupted.
