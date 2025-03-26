@@ -32,6 +32,7 @@ public class AutoToAprilTagLeftCmd extends ParallelCommandGroup {
               limelight.ScoreLeftMotion()));
     } else {
       System.out.println("Nothing executed.");
+      addCommands(null);
     }
   }
 }

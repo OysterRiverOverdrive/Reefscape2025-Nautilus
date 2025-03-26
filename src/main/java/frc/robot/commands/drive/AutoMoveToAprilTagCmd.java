@@ -33,6 +33,7 @@ public class AutoMoveToAprilTagCmd extends ParallelCommandGroup {
               limelight.AprilTagCenterMotion()));
     } else {
       System.out.println("Nothing executed.");
+      addCommands(null);
     }
   }
 }
