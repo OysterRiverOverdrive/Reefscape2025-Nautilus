@@ -11,6 +11,8 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -157,6 +159,71 @@ public class LimelightSubsystem extends SubsystemBase {
     return FieldApriltagPose(ID).getY();
   }
 
+  public Pose2d AprilTagOutsetPose() {
+    int curTag = (int) LimelightHelpers.getFiducialID("");
+
+    Pose2d tagPose = FieldApriltagPose(curTag);
+
+    // tagPose, offset so as to put the center of the robot outside of the bounds of the reef
+    // This distance is 16.75 inches
+    Transform2d outset =
+        new Transform2d(
+            Distance.ofRelativeUnits(-16.75, Inches),
+            Distance.ofRelativeUnits(0, Inches),
+            new Rotation2d(0));
+    Pose2d tagPoseOutset = tagPose.transformBy(outset);
+    return tagPoseOutset;
+  }
+
+  // For Testing
+  public Pose2d AprilTagCenterMotion() {
+    Pose2d curP = getPose2dMegaTag2().pose;
+    Transform2d motion = AprilTagOutsetPose().minus(curP);
+    Pose2d motionPose = new Pose2d(motion.getTranslation(), motion.getRotation());
+    return motionPose;
+  }
+
+  // Since scoring may happen on either the left or the right, there must be two
+  // different locations, leftPose and rightPose
+  public Pose2d ScoreLeftPose() {
+    Transform2d leftOffset =
+        new Transform2d(
+            Distance.ofRelativeUnits(0, Inches),
+            LimelightConstants.kCoralPostOffset.minus(LimelightConstants.kIntakeOffset),
+            new Rotation2d(0));
+
+    Pose2d leftPose = AprilTagOutsetPose().transformBy(leftOffset);
+    return leftPose;
+  }
+
+  public Pose2d ScoreRightPose() {
+    Transform2d rightOffset =
+        new Transform2d(
+            Distance.ofRelativeUnits(0, Inches),
+            LimelightConstants.kCoralPostOffset
+                .unaryMinus()
+                .minus(LimelightConstants.kIntakeOffset),
+            new Rotation2d(0));
+
+    Pose2d rightPose = AprilTagOutsetPose().transformBy(rightOffset);
+    return rightPose;
+  }
+
+  // Need different motions for different end positions
+  public Pose2d ScoreLeftMotion() {
+    Pose2d curP = getPose2dMegaTag2().pose;
+    Transform2d leftMotion = ScoreLeftPose().minus(curP);
+    Pose2d leftMotionPose = new Pose2d(leftMotion.getTranslation(), leftMotion.getRotation());
+    return leftMotionPose;
+  }
+
+  public Pose2d ScoreRightMotion() {
+    Pose2d curP = getPose2dMegaTag2().pose;
+    Transform2d rightMotion = ScoreRightPose().minus(curP);
+    Pose2d rightMotionPose = new Pose2d(rightMotion.getTranslation(), rightMotion.getRotation());
+    return rightMotionPose;
+  }
+
   @Override
   public void periodic() {
     // Turn camera LEDs off or on
@@ -167,41 +234,9 @@ public class LimelightSubsystem extends SubsystemBase {
     } else {
       LimelightHelpers.setLEDMode_PipelineControl("");
     }
+    SmartDashboard.putBoolean("Is April Tag", isAprilTag(""));
     if (isAprilTag("")) {
       SmartDashboard.putNumber("Current Apriltag ID", LimelightHelpers.getFiducialID(""));
-      SmartDashboard.putNumber("X Distance", getPose2dMegaTag2().pose.getX());
-      SmartDashboard.putNumber("Y Distance", getPose2dMegaTag2().pose.getY());
-      SmartDashboard.putNumber(
-          "Rotation in Rads", getPose2dMegaTag2().pose.getRotation().getRadians());
-    }
-
-    if (isAprilTag("")) {
-      Pose2d curP = getPose2dMegaTag2().pose;
-      double xDist = curP.getX();
-      double yDist = curP.getY();
-      Rotation2d origAngle = curP.getRotation();
-
-      double curTag = LimelightHelpers.getFiducialID("");
-
-      // placeholder 6 apriltag ~position
-      double tagX = 113;
-      double tagY = 162;
-
-      double moveX = tagX - xDist;
-      double moveY = tagY - yDist;
-      double mag = Math.hypot(tagX, tagY);
-
-      Rotation2d rot = new Rotation2d(Math.atan2(moveY, moveX));
-
-      double finalXD = mag * Math.cos(rot.minus(origAngle).getRadians());
-      double finalYD = mag * Math.sin(rot.minus(origAngle).getRadians());
-      Pose2d finalPose = new Pose2d(finalXD, finalYD, new Rotation2d(origAngle.getRadians()));
-
-      // Auto Driving Commands
-
-      SmartDashboard.putNumber("finalPoseX", finalXD);
-      SmartDashboard.putNumber("finalPoseY", finalYD);
-      SmartDashboard.putNumber("newPoseRotation", rot.minus(origAngle).getRadians());
     }
   }
 }
