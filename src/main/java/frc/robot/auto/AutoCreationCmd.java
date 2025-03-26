@@ -88,8 +88,8 @@ public class AutoCreationCmd {
         new TrajectoryConfig(maxSpeed, AutoConstants.kMaxAccelerationMetersPerSecondSquared)
             .setKinematics(DriveConstants.kDriveKinematics);
     // Define PID controllers for tracking trajectory
-    PIDController xController = new PIDController(AutoConstants.kPXController, 0.01, 0);
-    PIDController yController = new PIDController(AutoConstants.kPYController, 0.01, 0);
+    PIDController xController = new PIDController(AutoConstants.kPXController, 0.005, 0);
+    PIDController yController = new PIDController(AutoConstants.kPYController, 0.005, 0);
     ProfiledPIDController thetaController =
         new ProfiledPIDController(
             AutoConstants.kPThetaController, 0.01, 0, AutoConstants.kThetaControllerConstraints);

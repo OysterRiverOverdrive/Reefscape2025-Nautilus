@@ -152,6 +152,8 @@ public final class Constants {
 
       // Polynomial degree (adjust as needed)
       public static final int POLYNOMIAL_DEGREE = 1;
+
+      public static final double kElevError = 2.0;
     }
   }
 
