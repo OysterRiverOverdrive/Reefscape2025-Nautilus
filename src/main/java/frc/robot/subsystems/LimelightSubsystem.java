@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
 import frc.utils.LimelightHelpers;
+import frc.utils.LimelightHelpers.PoseEstimate;
 import java.util.Optional;
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -78,11 +79,31 @@ public class LimelightSubsystem extends SubsystemBase {
     }
   }
 
+  // Coordinates will be relative to blue alliance 0,0
+  // If starting side is blue we will be facing blue alliance wall
+  // so we turn around the pose so that the pose is relative to the
+  // Blue Alliance 0,0.
   public LimelightHelpers.PoseEstimate getPose2dMegaTag2() {
+    PoseEstimate gotPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
+    Pose2d rotPose2d =
+        new Pose2d(
+            gotPose.pose.getTranslation(),
+            gotPose.pose.getRotation().plus(new Rotation2d(Math.PI)));
+    PoseEstimate rotPose =
+        new PoseEstimate(
+            rotPose2d,
+            gotPose.timestampSeconds,
+            gotPose.latency,
+            gotPose.tagCount,
+            gotPose.tagSpan,
+            gotPose.avgTagDist,
+            gotPose.avgTagArea,
+            gotPose.rawFiducials,
+            gotPose.isMegaTag2);
     if (DriverStation.getAlliance().equals(Optional.of(Alliance.Blue))) {
-      return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
+      return rotPose;
     } else {
-      return LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2("");
+      return gotPose;
     }
   }
 
