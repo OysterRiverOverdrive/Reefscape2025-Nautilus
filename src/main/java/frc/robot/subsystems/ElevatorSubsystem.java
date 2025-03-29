@@ -155,6 +155,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevator1SparkMax.set(speed);
   }
 
+  public void setElevatorStopped() {
+    m_elevator1SparkMax.stopMotor();
+  }
+
   public void toggleElevPID() {
     activePID = !activePID; // Invert PID Override
   }

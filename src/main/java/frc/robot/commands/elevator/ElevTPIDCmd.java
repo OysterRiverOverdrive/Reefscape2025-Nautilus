@@ -36,10 +36,14 @@ public class ElevTPIDCmd extends Command {
       elevator.safetyActive = false;
     }
     double elevatorSpeed;
-    elevatorPID.setGoal(location);
-    elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
     if (elevator.activePID) {
+      elevatorPID.setGoal(location);
+      elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
       elevator.setElevatorSpeed(elevatorSpeed);
+    } else {
+      elevatorPID.setGoal(elevator.getHeight());
+      elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
+      elevator.setElevatorStopped();
     }
   }
 
