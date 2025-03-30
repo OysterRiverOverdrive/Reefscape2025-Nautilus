@@ -6,6 +6,7 @@ package frc.robot.commands.elevator;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.RobotConstants.ElevatorConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ElevAPIDCmd extends Command {
@@ -13,8 +14,6 @@ public class ElevAPIDCmd extends Command {
   private ProfiledPIDController elevatorPID;
   private double setpoint;
   private double error;
-  private double priorSet;
-  private boolean rising;
 
   /**
    * Autonomous Method of moving elevator
@@ -28,6 +27,20 @@ public class ElevAPIDCmd extends Command {
     this.setpoint = setpoint;
     this.elevatorPID = elevator.elevatorPID;
     this.error = error;
+    addRequirements(elevator);
+  }
+
+  /**
+   * Autonomous Method of moving elevator
+   *
+   * @param elevators instance of elevator subsystem
+   * @param setpoint (inches) set height (use elevator constants)
+   */
+  public ElevAPIDCmd(ElevatorSubsystem elevator, double setpoint) {
+    this.elevator = elevator;
+    this.setpoint = setpoint;
+    this.elevatorPID = elevator.elevatorPID;
+    this.error = ElevatorConstants.kElevError;
     addRequirements(elevator);
   }
 

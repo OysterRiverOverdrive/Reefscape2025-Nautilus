@@ -15,8 +15,6 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import java.util.List;
 
-// STARTS ON THE RIGHT SIDE
-
 public class MiddleOneCoralPlan extends ParallelCommandGroup {
 
   public MiddleOneCoralPlan(
@@ -32,16 +30,14 @@ public class MiddleOneCoralPlan extends ParallelCommandGroup {
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(0.5, 0.01)),
-            new Pose2d(1.45, .02, new Rotation2d(0)));
-    // Place coral
+            new Pose2d(1.53, .1, new Rotation2d(0)));
 
     // Driving groups
     addCommands(
         centerDrive
-            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht, 2))
+            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht))
             .andThen(new AutoSleepCmd(.5))
-            .andThen(new AutoCoralSpinReverseCmd(intake, 1.5))
-            .andThen(new AutoSleepCmd(.5))
-            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevLowHt, 2)));
+            .andThen(new AutoCoralSpinReverseCmd(intake, 1))
+            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevLowHt)));
   }
 }
