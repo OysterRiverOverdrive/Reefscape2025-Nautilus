@@ -131,12 +131,15 @@ public class RobotContainer {
     // Climber Bindings
     cutil
         .triggerSupplier(Controllers.xbox_rt, 0.2, DriveConstants.joysticks.DRIVER)
-        .onTrue(new InstantCommand(() -> climber.climberForwardCmd()))
+        .onTrue(new InstantCommand(() -> climber.climbUpCmd()))
         .onFalse(new InstantCommand(() -> climber.climberStopCmd()));
     cutil
         .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.DRIVER)
-        .onTrue(new InstantCommand(() -> climber.climberReverseCmd()))
+        .onTrue(new InstantCommand(() -> climber.climbDownCmd()))
         .onFalse(new InstantCommand(() -> climber.climberStopCmd()));
+    cutil
+        .supplier(Controllers.xbox_a, DriveConstants.joysticks.DRIVER)
+        .onTrue(new AutoClimberOutCmd(climber));
 
     // Elevator PID Toggle
     cutil
