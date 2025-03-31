@@ -13,6 +13,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
 import frc.robot.auto.plans.*;
 import frc.robot.commands.TeleopCmd;
+import frc.robot.commands.climber.climbDownCmd;
+import frc.robot.commands.climber.climbUpCmd;
 import frc.robot.commands.coralIntake.*;
 import frc.robot.commands.elevator.*;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -131,11 +133,11 @@ public class RobotContainer {
     // Climber Bindings
     cutil
         .triggerSupplier(Controllers.xbox_rt, 0.2, DriveConstants.joysticks.DRIVER)
-        .onTrue(new InstantCommand(() -> climber.climbUpCmd()))
+        .onTrue(new climbUpCmd(climber))
         .onFalse(new InstantCommand(() -> climber.climberStopCmd()));
     cutil
         .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.DRIVER)
-        .onTrue(new InstantCommand(() -> climber.climbDownCmd()))
+        .onTrue(new climbDownCmd(climber))
         .onFalse(new InstantCommand(() -> climber.climberStopCmd()));
     cutil
         .supplier(Controllers.xbox_a, DriveConstants.joysticks.DRIVER)
