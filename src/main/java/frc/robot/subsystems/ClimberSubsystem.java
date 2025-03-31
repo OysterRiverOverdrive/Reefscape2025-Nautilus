@@ -21,9 +21,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void climbUpCmd() {
-    if (getClimberRot() > RobotConstants.kClimberMaxRotIn) {
-      climber.stopMotor();
-    } else if (getClimberRot() > RobotConstants.kClimberSlowRot) {
+    if (getClimberRot() > RobotConstants.kClimberSlowRot) {
       climber.set(RobotConstants.kClimberSpeedLow);
     } else {
       climber.set(RobotConstants.kClimberSpeedHigh);
@@ -32,9 +30,9 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void climbDownCmd() {
     if (getClimberRot() < RobotConstants.kClimberSlowRot) {
-      climber.set(-1 * RobotConstants.kClimberSpeedHigh);
+      climber.set(-1 *RobotConstants.kClimberSpeedHigh);
     } else {
-      climber.set(-1 * RobotConstants.kClimberSpeedLow);
+      climber.set(-1 *RobotConstants.kClimberSpeedLow);
     }
   }
 
@@ -43,7 +41,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public double getClimberRot() {
-    return (1 - climberAbsEnc.getPosition());
+    return (1-climberAbsEnc.getPosition());
   }
 
   @Override
