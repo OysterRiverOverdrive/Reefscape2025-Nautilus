@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -53,7 +54,7 @@ public class LimelightSubsystem extends SubsystemBase {
         LimelightConstants.kCameraRollOffset.in(Inches),
         LimelightConstants.kCameraPitchOffset.in(Inches),
         LimelightConstants.kCameraYawOffset.in(Inches));
-    fieldmap.loadField(AprilTagFields.k2025Reefscape);
+    fieldmap = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
   }
 
   // PoseEstimator PEstimator = new PoseEstimator<>(null, null, null, null); Pose Estimator, idk.
@@ -83,8 +84,8 @@ public class LimelightSubsystem extends SubsystemBase {
   // If starting side is blue we will be facing blue alliance wall
   // so we turn around the pose so that the pose is relative to the
   // Blue Alliance 0,0.
-  public LimelightHelpers.PoseEstimate getPose2dMegaTag2() {
-    PoseEstimate gotPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
+  public PoseEstimate getPose2dMegaTag2() {
+    PoseEstimate gotPose = LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2("");
     Pose2d rotPose2d =
         new Pose2d(
             gotPose.pose.getTranslation(),
@@ -258,6 +259,13 @@ public class LimelightSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Is April Tag", isAprilTag(""));
     if (isAprilTag("")) {
       SmartDashboard.putNumber("Current Apriltag ID", LimelightHelpers.getFiducialID(""));
+
+      SmartDashboard.putNumber("RobotX", getPose2dMegaTag2().pose.getMeasureX().in(Meters));
+      SmartDashboard.putNumber("RobotY", getPose2dMegaTag2().pose.getMeasureY().in(Meters));
+      SmartDashboard.putNumber("apriltagX", AprilTagOutsetPose().getMeasureX().in(Meters));
+      SmartDashboard.putNumber("apriltagY", AprilTagOutsetPose().getMeasureY().in(Meters));
+      SmartDashboard.putNumber("apriltagMotionX", AprilTagCenterMotion().getMeasureX().in(Meters));
+      SmartDashboard.putNumber("apriltagMotionY", AprilTagCenterMotion().getMeasureY().in(Meters));
     }
   }
 }

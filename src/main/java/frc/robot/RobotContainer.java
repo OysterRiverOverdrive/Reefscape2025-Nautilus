@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.auto.*;
+// import frc.robot.auto.*;
 import frc.robot.auto.plans.*;
 import frc.robot.commands.TeleopCmd;
 import frc.robot.commands.coralIntake.*;
-import frc.robot.commands.drive.*;
+// import frc.robot.commands.drive.*;
 import frc.robot.commands.elevator.*;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
@@ -102,15 +102,15 @@ public class RobotContainer {
     cutil
         .supplier(Controllers.ps4_RB, DriveConstants.joysticks.DRIVER)
         .onTrue(new InstantCommand(() -> drivetrain.zeroHeading()));
-    cutil
-        .supplier(Controllers.xbox_a, DriveConstants.joysticks.DRIVER)
-        .onTrue(new AutoMoveToAprilTagCmd(limelight, drivetrain));
-    cutil
-        .supplier(Controllers.xbox_b, DriveConstants.joysticks.DRIVER)
-        .onTrue(new AutoToAprilTagRightCmd(limelight, drivetrain));
-    cutil
-        .supplier(Controllers.xbox_x, DriveConstants.joysticks.DRIVER)
-        .onTrue(new AutoToAprilTagLeftCmd(limelight, drivetrain));
+    // cutil
+    //     .supplier(Controllers.xbox_a, DriveConstants.joysticks.DRIVER)
+    //     .onTrue(new AutoMoveToAprilTagCmd(limelight, drivetrain));
+    // cutil
+    //     .supplier(Controllers.xbox_b, DriveConstants.joysticks.DRIVER)
+    //     .onTrue(new AutoToAprilTagRightCmd(limelight, drivetrain));
+    // cutil
+    //     .supplier(Controllers.xbox_x, DriveConstants.joysticks.DRIVER)
+    //     .onTrue(new AutoToAprilTagLeftCmd(limelight, drivetrain));
 
     // Elevator Bindings
     cutil.POVsupplier(0, DriveConstants.joysticks.OPERATOR)
