@@ -21,9 +21,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void climbUpCmd() {
-    if (getClimberRot() > RobotConstants.kClimberMaxRotIn) {
-      climber.stopMotor();
-    } else if (getClimberRot() > RobotConstants.kClimberSlowRot) {
+    if (getClimberRot() > RobotConstants.kClimberSlowRot) {
       climber.set(RobotConstants.kClimberSpeedLow);
     } else {
       climber.set(RobotConstants.kClimberSpeedHigh);
