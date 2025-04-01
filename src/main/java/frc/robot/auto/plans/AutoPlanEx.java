@@ -15,7 +15,7 @@ public class AutoPlanEx extends ParallelCommandGroup {
 
     AutoCreationCmd autodrive = new AutoCreationCmd();
 
-    Ex.
+    Ex. (we have reverted back to translation2d, so dont use list.of(new Pose2d(x, y, rot)))
     Command MoveToReef =
     autodrive.AutoDriveCmd(drivetrain, list.of(
     new Pose2d(325.68, 158.515, new Rotation2d(0)),
