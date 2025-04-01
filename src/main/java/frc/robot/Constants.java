@@ -113,10 +113,10 @@ public final class Constants {
 
     // Hang Arm Constants
     public static final double kClimberSpeedHigh = 0.95;
-    public static final double kClimberSpeedLow = 0.45;
+    public static final double kClimberSpeedLow = 0.75;
 
     public static final double kClimberSlowRot = 0.06;
-    public static final double kClimberMaxRotIn = 0.08;
+    public static final double kClimberMaxRotIn = 0.082;
     public static final double kClimberMaxRotOut = 0.0;
 
     public static final class ElevatorConstants {
