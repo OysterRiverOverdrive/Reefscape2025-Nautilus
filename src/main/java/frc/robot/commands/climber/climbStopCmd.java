@@ -11,6 +11,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class climbStopCmd extends Command {
   /** Creates a new climbStopCmd. */
   private ClimberSubsystem climber;
+
   public climbStopCmd(ClimberSubsystem climber) {
     this.climber = climber;
     addRequirements(climber);
