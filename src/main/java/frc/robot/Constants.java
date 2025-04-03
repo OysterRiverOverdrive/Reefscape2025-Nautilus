@@ -116,7 +116,7 @@ public final class Constants {
     public static final double kClimberSpeedLow = 0.75;
 
     public static final double kClimberSlowRot = 0.06;
-    public static final double kClimberMaxRotIn = 0.082;
+    public static final double kClimberMaxRotIn = 0.1;
     public static final double kClimberMaxRotOut = 0.0;
 
     public static final class ElevatorConstants {

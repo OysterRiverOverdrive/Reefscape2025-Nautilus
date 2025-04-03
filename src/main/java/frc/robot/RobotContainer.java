@@ -44,7 +44,7 @@ public class RobotContainer {
   // Subsystems
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
   private final LimelightSubsystem limelight = new LimelightSubsystem(drivetrain);
-  private final ElevatorSubsystem elevator = new ElevatorSubsystem(drivetrain);
+  public final ElevatorSubsystem elevator = new ElevatorSubsystem(drivetrain);
   private final CoralIntakeSubsystem coralIntake = new CoralIntakeSubsystem();
   private final PowerSubsystem battery = new PowerSubsystem();
   private final ClimberSubsystem climber = new ClimberSubsystem();
