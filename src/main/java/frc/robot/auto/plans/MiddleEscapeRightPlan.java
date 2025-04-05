@@ -15,38 +15,43 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import java.util.List;
 
-// STARTS ON THE RIGHT SIDE
+public class MiddleEscapeRightPlan extends ParallelCommandGroup {
 
-public class RightOneCoralPlan extends ParallelCommandGroup {
-
-  public RightOneCoralPlan(
+  public MiddleEscapeRightPlan(
       DrivetrainSubsystem drivetrain,
       ElevatorSubsystem elevatorsub,
       CoralIntakeSubsystem intakesub) {
     AutoCreationCmd autodrive = new AutoCreationCmd();
     ElevatorSubsystem elevator = elevatorsub;
     CoralIntakeSubsystem intake = intakesub;
-
     // Auto Driving Commands
-    Command toReef =
+
+    Command centerDrive = // goes from the middle to the middle
         autodrive.AutoDriveCmd(
             drivetrain,
-            List.of(new Translation2d(3, 0.3)),
-            new Pose2d(3.55, -0.06, new Rotation2d(-Math.PI * 2 / 3)));
-    // Place coral
-    Command recenter = // goes backwards to get coral, turns to face the coral getting place
-        autodrive.AutoDriveCmd(
-            drivetrain,
-            List.of(new Translation2d(-1, 0)),
-            new Pose2d(-2, 1, new Rotation2d(-Math.PI / 3)));
+            List.of(new Translation2d(0.5, 0.0)),
+            new Pose2d(1.53, 0, new Rotation2d(0)));
+
+    Command escapeout = // goes from the middle to the middle
+            autodrive.AutoDriveCmd(
+                drivetrain,
+                List.of(new Translation2d(0, 0.5)),
+                new Pose2d(0, 2.7, new Rotation2d(Math.PI/2)));
+
+    Command escapeintake = // goes from the middle to the middle
+                autodrive.AutoDriveCmd(
+                    drivetrain,
+                    List.of(new Translation2d(0, -0.5)),
+                    new Pose2d(0, -3, new Rotation2d(Math.PI/2)));
 
     // Driving groups
     addCommands(
-        toReef
+        centerDrive
             .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht-1))
-            .andThen(new AutoSleepCmd(0.5))
+            .andThen(new AutoSleepCmd(.5))
             .andThen(new AutoCoralSpinReverseCmd(intake, 1))
-            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevLowHt, 4))
-            .andThen(recenter));
+            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevLowHt))
+            .andThen(escapeout)
+            .andThen(escapeintake));
   }
 }

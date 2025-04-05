@@ -67,6 +67,10 @@ public class RobotContainer {
       new MiddleOneCoralPlan(drivetrain, elevator, coralIntake);
   private final LeftOneCoralPlan leftOneCoralPlan =
       new LeftOneCoralPlan(drivetrain, elevator, coralIntake);
+  private final MiddleEscapeRightPlan middleEscapeRightPlan =
+      new MiddleEscapeRightPlan(drivetrain, elevator, coralIntake);
+  private final MiddleEscapeLeftPlan middleEscapeLeftPlan =
+      new MiddleEscapeLeftPlan(drivetrain, elevator, coralIntake);
 
   public RobotContainer() {
 
@@ -78,13 +82,13 @@ public class RobotContainer {
     // coralIntake.setDefaultCommand(new CoralIntakeStopCommand(coralIntake));
 
     // Add Auto options to dropdown and push to dashboard
-    m_chooser.setDefaultOption("RightThreeCoralPlan", rightThree);
+    m_chooser.setDefaultOption("RightIntakePlan", rightThree);
     m_chooser.addOption("RightOneCoralPlan", rightOne);
-    m_chooser.addOption("LeftThreeCoralPlan", leftThree);
+    m_chooser.addOption("LeftIntakePlan", leftThree);
     m_chooser.addOption("MiddleOneCoralPlan", middleOne);
     m_chooser.addOption("LeftOneCoralPlan", leftOne);
-    m_chooser.addOption("Auto[Rename Me]", auto6);
-    m_chooser.addOption("Auto[Rename Me]", auto7);
+    m_chooser.addOption("Escape Right", auto6);
+    m_chooser.addOption("Escape Left", auto7);
     SmartDashboard.putData("Auto Selector", m_chooser);
     SmartDashboard.putNumber("Auto Wait Time (Sec)", 0);
 
@@ -172,8 +176,10 @@ public class RobotContainer {
         auto = middleOneCoralPlan;
         break;
       case auto6:
+        auto = middleEscapeRightPlan;
         break;
       case auto7:
+        auto = middleEscapeLeftPlan;
         break;
     }
     return auto;
