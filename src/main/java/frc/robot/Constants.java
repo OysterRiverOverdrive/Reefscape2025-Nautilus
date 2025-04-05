@@ -109,14 +109,14 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // Coral Intake constants
-    public static final double kCoralIntakeSpeed = 0.25;
+    public static final double kCoralIntakeSpeed = 0.22;
 
     // Hang Arm Constants
     public static final double kClimberSpeedHigh = 0.95;
     public static final double kClimberSpeedLow = 0.75;
 
     public static final double kClimberSlowRot = 0.06;
-    public static final double kClimberMaxRotIn = 0.082;
+    public static final double kClimberMaxRotIn = 0.1;
     public static final double kClimberMaxRotOut = 0.0;
 
     public static final class ElevatorConstants {

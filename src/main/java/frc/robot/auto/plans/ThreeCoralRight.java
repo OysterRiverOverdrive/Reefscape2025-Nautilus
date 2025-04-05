@@ -34,39 +34,27 @@ public class ThreeCoralRight extends ParallelCommandGroup {
             List.of(new Translation2d(3, 0.3)),
             new Pose2d(3.55, -0.06, new Rotation2d(-Math.PI * 2 / 3)));
     // Place coral and get algae
-    Command toFeeder1 = // goes backwards to get coral, turns to face the coral getting place
+    Command toFeeder1 =
         autodrive.AutoDriveCmd(
             drivetrain,
-            List.of(new Translation2d(-2, 1)),
-            new Pose2d(-3.5, 1.5, new Rotation2d(Math.PI / 2 - Math.toRadians(6))));
+            List.of(new Translation2d(-2.5, 1.5)),
+            new Pose2d(-3, 1.5, new Rotation2d(Math.PI / 2 + Math.toRadians(6))));
     // Get coral
-    Command toReef1 = // goes back to the reef and turns to face the reef again (it's the same
-        // thing)
+    Command center =
         autodrive.AutoDriveCmd(
             drivetrain,
-            List.of(new Translation2d(-2, 1)),
-            new Pose2d(-2.7, 1.7, new Rotation2d(Math.PI)));
-    // after going back, place coral
-
-    Command toFeeder2 = // andthen doesn't like mutliple of the same command
-        autodrive.AutoDriveCmd(
-            drivetrain,
-            List.of(new Translation2d(-2, 1)),
-            new Pose2d(-2.7, 1.7, new Rotation2d(Math.PI)));
-    Command toReef2 =
-        autodrive.AutoDriveCmd(
-            drivetrain,
-            List.of(new Translation2d(-2, 1)),
-            new Pose2d(-2.7, 1.7, new Rotation2d(Math.PI)));
+            List.of(new Translation2d(0, -0.5)),
+            new Pose2d(0, 1, new Rotation2d(-Math.toRadians(144))));
 
     // Driving groups
     addCommands(
         toReef
-            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht))
+            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht - 1))
             .andThen(new AutoSleepCmd(0.5))
             .andThen(new AutoCoralSpinReverseCmd(intake, 1))
             .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevLowHt, 4))
-            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevIntakeHt))
-            .andThen(toFeeder1));
+            .andThen(toFeeder1)
+            .andThen(new AutoSleepCmd(2))
+            .andThen(center));
   }
 }
