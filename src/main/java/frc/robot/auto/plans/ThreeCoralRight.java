@@ -34,13 +34,13 @@ public class ThreeCoralRight extends ParallelCommandGroup {
             List.of(new Translation2d(3, 0.3)),
             new Pose2d(3.55, -0.06, new Rotation2d(-Math.PI * 2 / 3)));
     // Place coral and get algae
-    Command toFeeder1 = 
+    Command toFeeder1 =
         autodrive.AutoDriveCmd(
             drivetrain,
-            List.of(new Translation2d(-2.5,1.5)),
+            List.of(new Translation2d(-2.5, 1.5)),
             new Pose2d(-3, 1.5, new Rotation2d(Math.PI / 2 + Math.toRadians(6))));
     // Get coral
-    Command center = 
+    Command center =
         autodrive.AutoDriveCmd(
             drivetrain,
             List.of(new Translation2d(0, -0.5)),
@@ -49,7 +49,7 @@ public class ThreeCoralRight extends ParallelCommandGroup {
     // Driving groups
     addCommands(
         toReef
-            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht-1))
+            .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevL4Ht - 1))
             .andThen(new AutoSleepCmd(0.5))
             .andThen(new AutoCoralSpinReverseCmd(intake, 1))
             .andThen(new ElevAPIDCmd(elevator, ElevatorConstants.kElevLowHt, 4))
