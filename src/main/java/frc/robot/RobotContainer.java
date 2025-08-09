@@ -23,6 +23,7 @@ import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PowerSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.utils.ControllerUtils;
 
 public class RobotContainer {
@@ -46,6 +47,7 @@ public class RobotContainer {
   private final CoralIntakeSubsystem coralIntake = new CoralIntakeSubsystem();
   private final PowerSubsystem battery = new PowerSubsystem();
   private final ClimberSubsystem climber = new ClimberSubsystem();
+  private final VisionSubsystem vision = new VisionSubsystem();
 
   // Commands
   private final TeleopCmd teleopCmd =

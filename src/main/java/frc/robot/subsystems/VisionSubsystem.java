@@ -4,43 +4,40 @@
 
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Meters;
-
-import edu.wpi.first.apriltag.AprilTagDetection;
-import edu.wpi.first.apriltag.AprilTagDetector;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonTrackedTarget;
+import frc.robot.Constants;
+import frc.robot.Constants.Vision;
 
 public class VisionSubsystem extends SubsystemBase {
-    PhotonCamera camera = new PhotonCamera("Camera1");
+
+    public Pose3d getPoseEstimate() {
+        for (int i = 0; i < length(cameras); i++) {
+            PhotonCamera cam = cameras[i];
+            var result = cam.getLatestResult();
+            if (result.hasTargets()) {
+                PhotonTrackedTarget target = result.getBestTarget();
+                int targetID = target.getFiducialId();
+                
+            }
+        }
+    }
 
 
-    public void periodic(){
-        // Query the latest result from PhotonVision
-        var result = camera.getLatestResult();
 
-        boolean hastarget = result.hasTargets();
+  public void periodic() {
+    // Query the latest result from PhotonVision
+    var result = camera.getLatestResult();
 
-        if (hastarget == true){
-            // Get the current best target.
-            PhotonTrackedTarget target = result.getBestTarget();
-            
-            int targetID = target.getFiducialId();
-            
-            SmartDashboard.putNumber("Fiducial ID", targetID);
+    if (result.hasTargets()) {
+      // Get the current best target.
+        PhotonTrackedTarget target = result.getBestTarget();
+        int targetID = target.getFiducialId();
+
+        SmartDashboard.putNumber("Fiducial ID", targetID);
         }
     }
 }
