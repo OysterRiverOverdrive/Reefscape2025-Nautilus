@@ -47,7 +47,14 @@ public class RobotContainer {
   private final CoralIntakeSubsystem coralIntake = new CoralIntakeSubsystem();
   private final PowerSubsystem battery = new PowerSubsystem();
   private final ClimberSubsystem climber = new ClimberSubsystem();
-  private final VisionSubsystem vision = new VisionSubsystem();
+  private final VisionSubsystem vision =
+      new VisionSubsystem(
+          (pose, timestamp, stdDevs) -> {
+            // Handle the estimated pose here
+            // For example, pass it to a pose estimator or log it ( this was copilot generated.
+            // Update later, experimenting rn )
+            System.out.println("Vision Pose: " + pose + " at time " + timestamp);
+          });
 
   // Commands
   private final TeleopCmd teleopCmd =

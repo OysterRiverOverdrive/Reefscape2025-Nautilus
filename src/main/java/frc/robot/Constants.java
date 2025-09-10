@@ -5,20 +5,18 @@
 package frc.robot;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -46,15 +44,22 @@ public final class Constants {
   }
 
   public static class Vision {
-    public String kName;
-    public Transform3d kOffset;
-    public Vision(String name, Transform3d offset) {
-      kName = name;
-      kOffset = offset;
-    }
-  }
+    // Offset, not measured so a transform of zero
 
-  public static final Vision[] cameras = {new Vision("Camera1", new Transform3d(0,0,0,new Rotation3d()))};
+    public static final Transform3d kRobotToCam =
+        new Transform3d(
+            Distance.ofRelativeUnits(0, Units.Meters),
+            Distance.ofRelativeUnits(0, Units.Meters),
+            Distance.ofRelativeUnits(0, Units.Meters),
+            new Rotation3d(
+                Angle.ofRelativeUnits(0, Units.Degrees),
+                Angle.ofRelativeUnits(0, Units.Degrees),
+                Angle.ofRelativeUnits(0, Units.Degrees)));
+    // The standard deviations of our vision estimated poses, which affect correction rate
+    // (Fake values. Experiment and determine estimation noise on an actual robot.)
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+  }
 
   // Constants specifically for Driving & Operation
   public static class DriveConstants {
@@ -86,9 +91,11 @@ public final class Constants {
     public static final double kRotationalSlewRate = 5; // percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(26.5);
+    public static final double kTrackWidth =
+        Distance.ofRelativeUnits(26.5, Units.Inches).in(Units.Meters);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(26.5);
+    public static final double kWheelBase =
+        Distance.ofRelativeUnits(26.5, Units.Inches).in(Units.Meters);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics =
         new SwerveDriveKinematics(
