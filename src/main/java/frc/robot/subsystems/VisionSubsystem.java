@@ -10,7 +10,6 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -33,9 +32,18 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class VisionSubsystem extends SubsystemBase {
   PhotonCamera camera1;
   PhotonCamera camera2;
-  List<PhotonCamera> cameras = new ArrayList<>();
+  PhotonCamera camera3;
+  PhotonCamera camera4;
 
-  PhotonPoseEstimator photonEstimator;
+  ArrayList<PhotonCamera> cameras = new ArrayList<>();
+
+  PhotonPoseEstimator photonEstimatorCam1;
+  PhotonPoseEstimator photonEstimatorCam2;
+  PhotonPoseEstimator photonEstimatorCam3;
+  PhotonPoseEstimator photonEstimatorCam4;
+
+  ArrayList<PhotonPoseEstimator> photonEstimators = new ArrayList<>();
+
   private Matrix<N3, N1> curStdDevs;
   private final EstimateConsumer estConsumer;
 
@@ -50,15 +58,35 @@ public class VisionSubsystem extends SubsystemBase {
     camera1 = new PhotonCamera("Camera1");
     camera2 = new PhotonCamera("Camera2");
 
+    // Add other cameras once they are added to robot
     cameras.add(camera1);
     cameras.add(camera2);
 
     fieldmap = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
-    photonEstimator =
+    photonEstimatorCam1 =
         new PhotonPoseEstimator(
-            fieldmap, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
-    photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+            fieldmap, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Vision.kRobotToCam1);
+    photonEstimatorCam1.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+    photonEstimatorCam2 =
+        new PhotonPoseEstimator(
+            fieldmap, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Vision.kRobotToCam2);
+    photonEstimatorCam2.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+    photonEstimatorCam3 =
+        new PhotonPoseEstimator(
+            fieldmap, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Vision.kRobotToCam3);
+    photonEstimatorCam3.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+    photonEstimatorCam4 =
+        new PhotonPoseEstimator(
+            fieldmap, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Vision.kRobotToCam4);
+    photonEstimatorCam4.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+    // Add other photonEstimators when other cameras are added
+    photonEstimators.add(photonEstimatorCam1);
+    photonEstimators.add(photonEstimatorCam2);
 
     // ----- Simulation
     if (Robot.isSimulation()) {
@@ -77,7 +105,7 @@ public class VisionSubsystem extends SubsystemBase {
       // targets.
       cameraSim = new PhotonCameraSim(camera1, cameraProp);
       // Add the simulated camera to view the targets on this simulated field.
-      visionSim.addCamera(cameraSim, Vision.kRobotToCam);
+      visionSim.addCamera(cameraSim, Vision.kRobotToCam1);
 
       cameraSim.enableDrawWireframe(true);
     }
@@ -85,9 +113,10 @@ public class VisionSubsystem extends SubsystemBase {
 
   public void periodic() {
     Optional<EstimatedRobotPose> visionEst = Optional.empty();
-    for (PhotonCamera camera : cameras) {
+    for (int i = 0; i < 4; i++) {
+      PhotonCamera camera = cameras.get(i);
       for (var change : camera.getAllUnreadResults()) {
-        visionEst = photonEstimator.update(change);
+        visionEst = photonEstimators.get(i).update(change);
         updateEstimationStdDevs(visionEst, change.getTargets());
 
         if (Robot.isSimulation()) {
@@ -132,15 +161,17 @@ public class VisionSubsystem extends SubsystemBase {
 
       // Precalculation - see how many tags we found, and calculate an average-distance metric
       for (var tgt : targets) {
-        var tagPose = photonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
-        if (tagPose.isEmpty()) continue;
-        numTags++;
-        avgDist +=
-            tagPose
-                .get()
-                .toPose2d()
-                .getTranslation()
-                .getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
+        for (int i = 0; i < 4; i++) {
+          var tagPose = photonEstimators.get(i).getFieldTags().getTagPose(tgt.getFiducialId());
+          if (tagPose.isEmpty()) continue;
+          numTags++;
+          avgDist +=
+              tagPose
+                  .get()
+                  .toPose2d()
+                  .getTranslation()
+                  .getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
+        }
       }
 
       if (numTags == 0) {

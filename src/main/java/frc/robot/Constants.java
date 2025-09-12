@@ -44,17 +44,49 @@ public final class Constants {
   }
 
   public static class Vision {
-    // Offset, not measured so a transform of zero
-
-    public static final Transform3d kRobotToCam =
+    // Offsets, not measured so a transform of zero
+    // Positive x is forward, positive y is left, positive z is up
+    // As of 9/12/2025, back left is camera 1, and back right is camera 2
+    public static final Transform3d kRobotToCam1 =
         new Transform3d(
-            Distance.ofRelativeUnits(0, Units.Meters),
-            Distance.ofRelativeUnits(0, Units.Meters),
-            Distance.ofRelativeUnits(0, Units.Meters),
+            Distance.ofRelativeUnits(-11, Units.Inches),
+            Distance.ofRelativeUnits(11, Units.Inches),
+            Distance.ofRelativeUnits(0, Units.Inches),
+            new Rotation3d(
+                Angle.ofRelativeUnits(0, Units.Degrees),
+                Angle.ofRelativeUnits(10, Units.Degrees),
+                Angle.ofRelativeUnits(135, Units.Degrees)));
+
+    public static final Transform3d kRobotToCam2 =
+        new Transform3d(
+            Distance.ofRelativeUnits(-11.5, Units.Inches),
+            Distance.ofRelativeUnits(-11.5, Units.Inches),
+            Distance.ofRelativeUnits(0, Units.Inches),
+            new Rotation3d(
+                Angle.ofRelativeUnits(0, Units.Degrees),
+                Angle.ofRelativeUnits(10, Units.Degrees),
+                Angle.ofRelativeUnits(225, Units.Degrees)));
+
+    public static final Transform3d kRobotToCam3 =
+        new Transform3d(
+            Distance.ofRelativeUnits(0, Units.Inches),
+            Distance.ofRelativeUnits(0, Units.Inches),
+            Distance.ofRelativeUnits(0, Units.Inches),
             new Rotation3d(
                 Angle.ofRelativeUnits(0, Units.Degrees),
                 Angle.ofRelativeUnits(0, Units.Degrees),
                 Angle.ofRelativeUnits(0, Units.Degrees)));
+
+    public static final Transform3d kRobotToCam4 =
+        new Transform3d(
+            Distance.ofRelativeUnits(0, Units.Inches),
+            Distance.ofRelativeUnits(0, Units.Inches),
+            Distance.ofRelativeUnits(0, Units.Inches),
+            new Rotation3d(
+                Angle.ofRelativeUnits(0, Units.Degrees),
+                Angle.ofRelativeUnits(0, Units.Degrees),
+                Angle.ofRelativeUnits(0, Units.Degrees)));
+
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
