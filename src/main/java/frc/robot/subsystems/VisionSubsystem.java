@@ -113,7 +113,7 @@ public class VisionSubsystem extends SubsystemBase {
 
   public void periodic() {
     Optional<EstimatedRobotPose> visionEst = Optional.empty();
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 2; i++) {
       PhotonCamera camera = cameras.get(i);
       for (var change : camera.getAllUnreadResults()) {
         visionEst = photonEstimators.get(i).update(change);
@@ -161,7 +161,7 @@ public class VisionSubsystem extends SubsystemBase {
 
       // Precalculation - see how many tags we found, and calculate an average-distance metric
       for (var tgt : targets) {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 2; i++) {
           var tagPose = photonEstimators.get(i).getFieldTags().getTagPose(tgt.getFiducialId());
           if (tagPose.isEmpty()) continue;
           numTags++;
