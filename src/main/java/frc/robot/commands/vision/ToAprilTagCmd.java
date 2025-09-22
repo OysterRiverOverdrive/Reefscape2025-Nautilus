@@ -4,8 +4,8 @@
 
 package frc.robot.commands.vision;
 
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.auto.AutoCreationCmd;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -22,17 +22,17 @@ public class ToAprilTagCmd extends ParallelCommandGroup {
   final double speedKp = -0.01;
   final double turnRateKp = 0.015;
 
-  Pose3d tagPose = new Pose3d(13.7244729, 2.87331191, 0, new Rotation3d(0, 0, 2 * Math.PI / 3))
+  Pose2d tagPose = new Pose2d(13.7244729, 2.87331191, new Rotation2d(2 * Math.PI / 3));
 
   // FOR TESTING ONLY!!!
   public ToAprilTagCmd(VisionSubsystem visionsub, DrivetrainSubsystem drivetrain) {
-  AutoCreationCmd autodrive = new AutoCreationCmd();
-  VisionSubsystem vision = visionsub;
-  DrivetrainSubsystem drive = drivetrain;
+    AutoCreationCmd autodrive = new AutoCreationCmd();
+    VisionSubsystem vision = visionsub;
+    DrivetrainSubsystem drive = drivetrain;
     addCommands(
         autodrive.AutoDriveCmd(
             drive,
-            List.of(limelight.AprilTagCenterMotion().div(2).getTranslation()),
-            ));  
+            List.of(tagPose.minus(vision.estConsumer.getPose2d()).div(2).getTranslation()),
+            (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d()))));
   }
 }

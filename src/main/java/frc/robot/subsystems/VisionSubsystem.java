@@ -45,7 +45,7 @@ public class VisionSubsystem extends SubsystemBase {
   ArrayList<PhotonPoseEstimator> photonEstimators = new ArrayList<>();
 
   private Matrix<N3, N1> curStdDevs;
-  private final EstimateConsumer estConsumer;
+  public final EstimateConsumer estConsumer;
 
   // Simulation
   private PhotonCameraSim cameraSim;
@@ -216,10 +216,5 @@ public class VisionSubsystem extends SubsystemBase {
   public Field2d getSimDebugField() {
     if (!Robot.isSimulation()) return null;
     return visionSim.getDebugField();
-  }
-
-  @FunctionalInterface
-  public static interface EstimateConsumer {
-    public void accept(Pose2d pose, double timestamp, Matrix<N3, N1> estimationStdDevs);
   }
 }
