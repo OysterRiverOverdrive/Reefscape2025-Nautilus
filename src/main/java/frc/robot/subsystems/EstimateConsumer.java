@@ -17,6 +17,10 @@ public class EstimateConsumer {
   }
 
   public Pose2d getPose2d() {
-    return pose;
+    if (pose != null) {
+      return pose;
+    } else {
+      return new Pose2d();
+    }
   }
 }
