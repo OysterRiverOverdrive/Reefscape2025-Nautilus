@@ -7,6 +7,7 @@ package frc.robot.commands.vision;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.auto.AutoCreationCmd;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -17,6 +18,7 @@ public class AprilTagCmd extends Command {
   private final VisionSubsystem vision;
   private final DrivetrainSubsystem drive;
   private final AutoCreationCmd autodrive;
+  private Command auto;
   Pose2d tagPose = new Pose2d(13.7244729, 2.87331191, new Rotation2d(2 * Math.PI / 3));
   boolean kIsFinished;
 
@@ -25,6 +27,7 @@ public class AprilTagCmd extends Command {
     vision = visionsub;
     drive = drivetrain;
     autodrive = new AutoCreationCmd();
+    auto = new Command() {};
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(vision);
     addRequirements(drive);
@@ -32,22 +35,17 @@ public class AprilTagCmd extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    auto = autodrive.AutoDriveCmd(
+      drive,
+      List.of(tagPose.minus(vision.estConsumer.getPose2d()).div(2).getTranslation()),
+      (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d())));
+    CommandScheduler.getInstance().schedule(auto);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    autodrive.AutoDriveCmd(
-        drive,
-        List.of(tagPose.minus(vision.estConsumer.getPose2d()).div(2).getTranslation()),
-        (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d())));
-    kIsFinished =
-        autodrive.AutoDriveCmd(
-                drive,
-                List.of(tagPose.minus(vision.estConsumer.getPose2d()).div(2).getTranslation()),
-                (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d())))
-            .isFinished();
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -56,9 +54,6 @@ public class AprilTagCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (kIsFinished != true) {
-      return false;
-    }
-    return true;
+    return auto.isFinished();
   }
 }
