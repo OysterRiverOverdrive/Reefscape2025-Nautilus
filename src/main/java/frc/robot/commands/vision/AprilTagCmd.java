@@ -36,10 +36,11 @@ public class AprilTagCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    auto = autodrive.AutoDriveCmd(
-      drive,
-      List.of(tagPose.minus(vision.estConsumer.getPose2d()).div(2).getTranslation()),
-      (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d())));
+    auto =
+        autodrive.AutoDriveCmd(
+            drive,
+            List.of(tagPose.minus(vision.estConsumer.getPose2d()).div(2).getTranslation()),
+            (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d())));
     CommandScheduler.getInstance().schedule(auto);
   }
 
