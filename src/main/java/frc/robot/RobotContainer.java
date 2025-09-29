@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.littletonrobotics.urcl.URCL;
+
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -71,6 +73,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     DataLogManager.start();
+    URCL.start();
 
     // Default Commands to be run all the time, only one per subsystem
     drivetrain.setDefaultCommand(teleopCmd);
