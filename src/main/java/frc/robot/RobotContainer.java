@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import org.littletonrobotics.urcl.URCL;
-
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,6 +25,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PowerSubsystem;
 import frc.utils.ControllerUtils;
+import org.littletonrobotics.urcl.URCL;
 
 public class RobotContainer {
   // Controller Utils Instance
