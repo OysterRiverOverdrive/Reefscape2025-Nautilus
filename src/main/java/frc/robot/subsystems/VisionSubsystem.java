@@ -143,6 +143,14 @@ public class VisionSubsystem extends SubsystemBase {
     if (!(visionEst.isEmpty())) {
       SmartDashboard.putNumber("Robot X", visionEst.get().estimatedPose.getX());
       SmartDashboard.putNumber("Robot Y", visionEst.get().estimatedPose.getY());
+      SmartDashboard.putNumber(
+          "Robot Rotation",
+          visionEst.get().estimatedPose.getRotation().toRotation2d().getDegrees());
+
+      // Pose2d relPose = (new Pose2d()).plus(AprilTagCmd.tagPose.minus(estConsumer.getPose2d()));
+      // SmartDashboard.putNumber("Rel X", relPose.getX());
+      // SmartDashboard.putNumber("Rel Y", relPose.getY());
+      // SmartDashboard.putNumber("Rel Rot", relPose.getRotation().getDegrees());
     }
     ;
   }

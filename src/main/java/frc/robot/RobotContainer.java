@@ -106,9 +106,9 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> drivetrain.zeroHeading()));
 
     // Auto test binding
-    cutil
-        .supplier(Controllers.xbox_y, DriveConstants.joysticks.DRIVER)
-        .onTrue(new AprilTagCmd(vision, drivetrain));
+    // cutil
+    //     .supplier(Controllers.xbox_y, DriveConstants.joysticks.DRIVER)
+    //     .onTrue(new AprilTagCmd(vision, drivetrain));
 
     // Elevator Bindings
     cutil.POVsupplier(0, DriveConstants.joysticks.OPERATOR)
