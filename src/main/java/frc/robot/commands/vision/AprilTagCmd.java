@@ -47,7 +47,7 @@ public class AprilTagCmd extends Command {
     // SmartDashboard.putNumber("Rel X", relPose.getX());
     // SmartDashboard.putNumber("Rel Y", relPose.getY());
     // SmartDashboard.putNumber("Rel Rot", relPose.getRotation().getDegrees());
-    // CommandScheduler.getInstance().schedule(auto);
+    CommandScheduler.getInstance().schedule(auto);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
