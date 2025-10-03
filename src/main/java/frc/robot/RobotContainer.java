@@ -13,17 +13,17 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.auto.*;
 import frc.robot.auto.plans.*;
 import frc.robot.commands.TeleopCmd;
-import frc.robot.commands.climber.climbDownCmd;
-import frc.robot.commands.climber.climbStopCmd;
-import frc.robot.commands.climber.climbUpCmd;
+import frc.robot.commands.climber.*;
 import frc.robot.commands.coralIntake.*;
 import frc.robot.commands.elevator.*;
+import frc.robot.commands.vision.*;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.EstimateConsumer;
 import frc.robot.subsystems.PowerSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.utils.ControllerUtils;
 import org.littletonrobotics.urcl.URCL;
 
@@ -44,11 +44,11 @@ public class RobotContainer {
 
   // Subsystems
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
-  private final LimelightSubsystem limelight = new LimelightSubsystem(drivetrain);
   private final ElevatorSubsystem elevator = new ElevatorSubsystem(drivetrain);
   private final CoralIntakeSubsystem coralIntake = new CoralIntakeSubsystem();
   private final PowerSubsystem battery = new PowerSubsystem();
   private final ClimberSubsystem climber = new ClimberSubsystem();
+  private final VisionSubsystem vision = new VisionSubsystem(new EstimateConsumer());
 
   // Commands
   private final TeleopCmd teleopCmd =
@@ -106,6 +106,11 @@ public class RobotContainer {
     cutil
         .supplier(Controllers.ps4_RB, DriveConstants.joysticks.DRIVER)
         .onTrue(new InstantCommand(() -> drivetrain.zeroHeading()));
+
+    // Auto test binding
+    // cutil
+    //     .supplier(Controllers.xbox_y, DriveConstants.joysticks.DRIVER)
+    //     .onTrue(new AprilTagCmd(vision, drivetrain));
 
     // Elevator Bindings
     cutil.POVsupplier(0, DriveConstants.joysticks.OPERATOR)

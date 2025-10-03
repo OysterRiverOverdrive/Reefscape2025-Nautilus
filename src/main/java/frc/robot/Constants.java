@@ -5,10 +5,18 @@
 package frc.robot;
 
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -33,6 +41,56 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
         new TrapezoidProfile.Constraints(
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared);
+  }
+
+  public static class Vision {
+    // Offsets, not measured so a transform of zero
+    // Positive x is forward, positive y is left, positive z is up
+    // As of 9/12/2025, back left is camera 1, and back right is camera 2
+    public static final Transform3d kRobotToCam1 =
+        new Transform3d(
+            Distance.ofRelativeUnits(-11, Units.Inches),
+            Distance.ofRelativeUnits(11, Units.Inches),
+            Distance.ofRelativeUnits(0, Units.Inches),
+            new Rotation3d(
+                Angle.ofRelativeUnits(0, Units.Degrees),
+                Angle.ofRelativeUnits(10, Units.Degrees),
+                Angle.ofRelativeUnits(135, Units.Degrees)));
+
+    public static final Transform3d kRobotToCam2 =
+        new Transform3d(
+            Distance.ofRelativeUnits(-11.5, Units.Inches),
+            Distance.ofRelativeUnits(-11.5, Units.Inches),
+            Distance.ofRelativeUnits(0, Units.Inches),
+            new Rotation3d(
+                Angle.ofRelativeUnits(0, Units.Degrees),
+                Angle.ofRelativeUnits(10, Units.Degrees),
+                Angle.ofRelativeUnits(225, Units.Degrees)));
+
+    public static final Transform3d kRobotToCam3 =
+        new Transform3d(
+            Distance.ofRelativeUnits(0, Units.Inches),
+            Distance.ofRelativeUnits(0, Units.Inches),
+            Distance.ofRelativeUnits(0, Units.Inches),
+            new Rotation3d(
+                Angle.ofRelativeUnits(0, Units.Degrees),
+                Angle.ofRelativeUnits(0, Units.Degrees),
+                Angle.ofRelativeUnits(0, Units.Degrees)));
+
+    public static final Transform3d kRobotToCam4 =
+        new Transform3d(
+            Distance.ofRelativeUnits(0, Units.Inches),
+            Distance.ofRelativeUnits(0, Units.Inches),
+            Distance.ofRelativeUnits(0, Units.Inches),
+            new Rotation3d(
+                Angle.ofRelativeUnits(0, Units.Degrees),
+                Angle.ofRelativeUnits(0, Units.Degrees),
+                Angle.ofRelativeUnits(0, Units.Degrees)));
+
+    // The standard deviations of our vision estimated poses, which affect correction rate
+    // (Fake values. Experiment and determine estimation noise on an actual robot.)
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
   }
 
   // Constants specifically for Driving & Operation
@@ -65,9 +123,11 @@ public final class Constants {
     public static final double kRotationalSlewRate = 5; // percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(26.5);
+    public static final double kTrackWidth =
+        Distance.ofRelativeUnits(26.5, Units.Inches).in(Units.Meters);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(26.5);
+    public static final double kWheelBase =
+        Distance.ofRelativeUnits(26.5, Units.Inches).in(Units.Meters);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics =
         new SwerveDriveKinematics(
@@ -172,18 +232,6 @@ public final class Constants {
     public static final double kElevatorRD = 0.00;
     public static final double kElevatorRMaxV = 10000; // m/s
     public static final double kElevatorRMaxA = 35; // m/s^2
-  }
-
-  public static final class LimelightConstants {
-    // Offset of coral posts from AprilTag center on reef (inches*in. to meters conversion)
-    public static final double kCoralPostOffset = 5.5 * 0.0254;
-
-    public static final double CameraForwardOffset = 10 * 0.0254; // NEEDS TO BE MEASURED
-    public static final double CameraSideOffset = -3.25 * 0.0254;
-    public static final double CameraUpOffest = 1 * 0.0254;
-    public static final double CameraRollOffset = 0;
-    public static final double CameraPitchOffset = 0;
-    public static final double CameraYawOffset = 0;
   }
 
   // Constants specifically for Swerve Module
