@@ -25,6 +25,7 @@ import frc.robot.subsystems.EstimateConsumer;
 import frc.robot.subsystems.PowerSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.utils.ControllerUtils;
+import org.littletonrobotics.urcl.URCL;
 
 public class RobotContainer {
   // Controller Utils Instance
@@ -71,6 +72,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     DataLogManager.start();
+    URCL.start();
 
     // Default Commands to be run all the time, only one per subsystem
     drivetrain.setDefaultCommand(teleopCmd);
