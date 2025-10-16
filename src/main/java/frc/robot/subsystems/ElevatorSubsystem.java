@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.*;
 import frc.robot.Constants.RobotConstants.ElevatorConstants;
+import java.util.ArrayList;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 import org.apache.commons.math3.fitting.PolynomialCurveFitter;
 import org.apache.commons.math3.fitting.WeightedObservedPoints;
@@ -48,6 +49,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final PolynomialFunction polynomial; // Max Height Function
   public boolean safetyActive = false; // Bool for dashboard on height override
   public boolean activePID = true; // Bool for safety override on PID
+
+  // List of past encoder values to detect encoder disconnection
+  private ArrayList<Double> pastEncoderValues = new ArrayList<>();
+
+  // Boolean for whether the encoder is connected
+  private boolean encoderConnected = true;
 
   // PID Network Table
   private static final NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -100,6 +107,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Set starting height to bottom height
     toBase();
+
+    // Adding junk values to fill list with 3 values
+    pastEncoderValues.add(-1000000.0);
+    pastEncoderValues.add(-2000000.0);
+    pastEncoderValues.add(-3000000.0);
   }
 
   public double getEncoder() {
@@ -163,6 +175,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     activePID = !activePID; // Invert PID Override
   }
 
+  public void overridePID() {
+    activePID = false; // Override PID, ignoring current override state
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -182,9 +198,24 @@ public class ElevatorSubsystem extends SubsystemBase {
     setpointEntry.setDouble(elevatorPIDSetPoint);
     actualEntry.setDouble(getHeight());
 
+    // PID failsafe
+    pastEncoderValues.remove(0); // Remove oldest value
+    pastEncoderValues.add(m_elevator1Encoder.getPosition()); // Add current value at the end
+    // If all three past encoder values are equal, then the encoder is not giving updated values,
+    // and is disconnected in some way, so the PID is overridden
+    if ((pastEncoderValues.get(0) == pastEncoderValues.get(1))
+        && (pastEncoderValues.get(0) == pastEncoderValues.get(2))) {
+      overridePID();
+      // The encoder is disconnected
+      encoderConnected = false;
+    } else {
+      encoderConnected = true;
+    }
+
     SmartDashboard.putBoolean("Safety Active", safetyActive);
     SmartDashboard.putNumber("Elev Height", getHeight());
     SmartDashboard.putNumber("Elev Setpoint", elevatorPIDSetPoint);
     SmartDashboard.putBoolean("PID Overrided", !activePID); // Inverted for clarity
+    SmartDashboard.putBoolean("Elev Encoder Connected", encoderConnected);
   }
 }
