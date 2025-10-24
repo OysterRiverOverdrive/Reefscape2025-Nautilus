@@ -5,7 +5,6 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.RobotConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -38,10 +37,10 @@ public class climbUpCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (climber.getClimberRot() > RobotConstants.kClimberMaxRotIn) {
-      return true;
-    } else {
-      return false;
-    }
+    // if (climber.getClimberRot() > RobotConstants.kClimberMaxRotIn) {
+    //   return true;
+    // } else {
+    return false;
+    // }
   }
 }

@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -74,9 +75,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
           });
 
+  private static final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private static final String max = "1";
+  private static final String high = "2";
+  private static final String medium = "3";
+  private static final String low = "4";
+
   /** Creates a new DriveSubsystem. */
   public DrivetrainSubsystem() {
     zeroHeading();
+    m_chooser.setDefaultOption("100%", max);
+    m_chooser.addOption("75%", high);
+    m_chooser.addOption("50%", medium);
+    m_chooser.addOption("25%", low);
+    SmartDashboard.putData("Drive Speed", m_chooser);
   }
 
   /**
@@ -110,8 +122,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeedDelivered, ySpeedDelivered, rotDelivered, getRotation2d()));
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, getTeleopMaxSpeed());
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
@@ -148,8 +159,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
             new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, getTeleopMaxSpeed());
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
@@ -171,8 +181,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param desiredStates The desired SwerveModule states.
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, getTeleopMaxSpeed());
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
     m_rearLeft.setDesiredState(desiredStates[2]);
@@ -252,6 +261,26 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate() * (RobotConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  public static double getTeleopMaxSpeed() {
+    double speed = 0;
+    switch (m_chooser.getSelected()) {
+      default:
+      case max:
+        speed = DriveConstants.kMaxSpeedMetersPerSecond;
+        break;
+      case high:
+        speed = 0.75 * DriveConstants.kMaxSpeedMetersPerSecond;
+        break;
+      case medium:
+        speed = 0.5 * DriveConstants.kMaxSpeedMetersPerSecond;
+        break;
+      case low:
+        speed = 0.25 * DriveConstants.kMaxSpeedMetersPerSecond;
+        break;
+    }
+    return speed;
   }
 
   @Override
