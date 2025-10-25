@@ -223,8 +223,8 @@ public class ElevatorSubsystem extends SubsystemBase {
             && (pastEncoderValues.get(0) == pastEncoderValues.get(2)));
     SmartDashboard.putBoolean(
         "Elev Connect 3",
-        (pastEncoderValues.get(0) - pastEncoderValues.get(1)) < 0.00001
-            && (pastEncoderValues.get(0) - pastEncoderValues.get(2)) < 0.00001);
+        Math.abs(pastEncoderValues.get(0) - pastEncoderValues.get(1)) < 0.00001
+            && Math.abs(pastEncoderValues.get(0) - pastEncoderValues.get(2)) < 0.00001);
     SmartDashboard.putNumber("Elev Past 1", pastEncoderValues.get(0));
     SmartDashboard.putNumber("Elev Past 2", pastEncoderValues.get(1));
     SmartDashboard.putNumber("Elev Past 3", pastEncoderValues.get(2));

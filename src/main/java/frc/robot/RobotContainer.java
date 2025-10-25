@@ -147,9 +147,9 @@ public class RobotContainer {
         .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.DRIVER)
         .onTrue(new climbDownCmd(climber))
         .onFalse(new climbStopCmd(climber));
-    cutil
-        .supplier(Controllers.xbox_a, DriveConstants.joysticks.DRIVER)
-        .onTrue(new AutoClimberOutCmd(climber));
+    // cutil
+    //     .supplier(Controllers.xbox_a, DriveConstants.joysticks.DRIVER)
+    //     .onTrue(new AutoClimberOutCmd(climber));
 
     // Elevator PID Toggle
     cutil
