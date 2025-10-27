@@ -203,8 +203,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     pastEncoderValues.add(m_elevator1Encoder.getPosition()); // Add current value at the end
     // If all three past encoder values are equal, then the encoder is not giving updated values,
     // and is disconnected in some way, so the PID is overridden
-    if ((pastEncoderValues.get(0) == pastEncoderValues.get(1))
-        && (pastEncoderValues.get(0) == pastEncoderValues.get(2))) {
+    if ((pastEncoderValues.get(0).equals(pastEncoderValues.get(1)))
+        && (pastEncoderValues.get(0).equals(pastEncoderValues.get(2)))) {
       overridePID();
       // The encoder is disconnected
       encoderConnected = false;
@@ -219,12 +219,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Elev Connect", encoderConnected);
     SmartDashboard.putBoolean(
         "Elev Connect 2",
-        (pastEncoderValues.get(0) == pastEncoderValues.get(1))
-            && (pastEncoderValues.get(0) == pastEncoderValues.get(2)));
+        (pastEncoderValues.get(0).equals(pastEncoderValues.get(1)))
+            && (pastEncoderValues.get(0).equals(pastEncoderValues.get(2))));
     SmartDashboard.putBoolean(
         "Elev Connect 3",
-        Math.abs(pastEncoderValues.get(0) - pastEncoderValues.get(1)) < 0.00001
-            && Math.abs(pastEncoderValues.get(0) - pastEncoderValues.get(2)) < 0.00001);
+        Math.abs(pastEncoderValues.get(0) - pastEncoderValues.get(1)) < 0.0000001
+            && Math.abs(pastEncoderValues.get(0) - pastEncoderValues.get(2)) < 0.0000001);
     SmartDashboard.putNumber("Elev Past 1", pastEncoderValues.get(0));
     SmartDashboard.putNumber("Elev Past 2", pastEncoderValues.get(1));
     SmartDashboard.putNumber("Elev Past 3", pastEncoderValues.get(2));
