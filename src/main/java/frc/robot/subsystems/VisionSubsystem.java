@@ -59,15 +59,19 @@ public class VisionSubsystem extends SubsystemBase {
     this.estConsumer = estConsumer;
     camera1 = new PhotonCamera("Camera1");
     camera2 = new PhotonCamera("Camera2");
+    camera3 = new PhotonCamera("Camera3");
+    camera4 = new PhotonCamera("Camera4");
 
     // Add other cameras once they are added to robot
     cameras.add(camera1);
     cameras.add(camera2);
+    cameras.add(camera3);
+    cameras.add(camera4);
 
     // initialize fields for pose estimate display/logging
     for (int i = 0; i < 4; i++) {
       poseEstField[i] = new Field2d();
-      SmartDashboard.putData("Camera" + i, poseEstField[i]);
+      SmartDashboard.putData("Camera " + (i + 1), poseEstField[i]);
     }
 
     fieldmap = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
@@ -95,6 +99,8 @@ public class VisionSubsystem extends SubsystemBase {
     // Add other photonEstimators when other cameras are added
     photonEstimators.add(photonEstimatorCam1);
     photonEstimators.add(photonEstimatorCam2);
+    photonEstimators.add(photonEstimatorCam3);
+    photonEstimators.add(photonEstimatorCam4);
 
     // ----- Simulation
     if (Robot.isSimulation()) {
@@ -121,7 +127,7 @@ public class VisionSubsystem extends SubsystemBase {
 
   public void periodic() {
     Optional<EstimatedRobotPose> visionEst = Optional.empty();
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 4; i++) {
       PhotonCamera camera = cameras.get(i);
       for (var change : camera.getAllUnreadResults()) {
         visionEst = photonEstimators.get(i).update(change);
@@ -180,7 +186,7 @@ public class VisionSubsystem extends SubsystemBase {
 
       // Precalculation - see how many tags we found, and calculate an average-distance metric
       for (var tgt : targets) {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 4; i++) {
           var tagPose = photonEstimators.get(i).getFieldTags().getTagPose(tgt.getFiducialId());
           if (tagPose.isEmpty()) continue;
           numTags++;
