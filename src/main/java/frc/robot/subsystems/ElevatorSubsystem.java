@@ -108,10 +108,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Set starting height to bottom height
     toBase();
 
-    // Adding junk values to fill list with 3 values
+    // Adding junk values to fill list with 5 values
     pastEncoderValues.add(-1000000.0);
     pastEncoderValues.add(-2000000.0);
     pastEncoderValues.add(-3000000.0);
+    pastEncoderValues.add(-4000000.0);
+    pastEncoderValues.add(-5000000.0);
   }
 
   public double getEncoder() {
@@ -201,10 +203,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     // PID failsafe
     pastEncoderValues.remove(0); // Remove oldest value
     pastEncoderValues.add(m_elevator1Encoder.getPosition()); // Add current value at the end
-    // If all three past encoder values are equal, then the encoder is not giving updated values,
+    // If all five past encoder values are equal, then the encoder is not giving updated values,
     // and is disconnected in some way, so the PID is overridden
     if ((pastEncoderValues.get(0).equals(pastEncoderValues.get(1)))
-        && (pastEncoderValues.get(0).equals(pastEncoderValues.get(2)))) {
+        && (pastEncoderValues.get(0).equals(pastEncoderValues.get(2)))
+        && (pastEncoderValues.get(0).equals(pastEncoderValues.get(3)))
+        && (pastEncoderValues.get(0).equals(pastEncoderValues.get(4)))) {
       overridePID();
       // The encoder is disconnected
       encoderConnected = false;
