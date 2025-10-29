@@ -44,6 +44,8 @@ public class VisionSubsystem extends SubsystemBase {
 
   ArrayList<PhotonPoseEstimator> photonEstimators = new ArrayList<>();
 
+  Field2d[] poseEstField = new Field2d[4];
+
   private Matrix<N3, N1> curStdDevs;
   public final EstimateConsumer estConsumer;
 
@@ -61,6 +63,12 @@ public class VisionSubsystem extends SubsystemBase {
     // Add other cameras once they are added to robot
     cameras.add(camera1);
     cameras.add(camera2);
+
+    // initialize fields for pose estimate display/logging
+    for (int i = 0; i < 4; i++) {
+      poseEstField[i] = new Field2d();
+      SmartDashboard.putData("Camera" + i, poseEstField[i]);
+    }
 
     fieldmap = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
@@ -130,8 +138,11 @@ public class VisionSubsystem extends SubsystemBase {
               });
         }
 
+        // the index variable needs to be final to use in ifPresent
+        final int fi = i;
         visionEst.ifPresent(
             est -> {
+              poseEstField[fi].setRobotPose(est.estimatedPose.toPose2d());
               // Change our trust in the measurement based on the tags we can see
               var estStdDevs = getEstimationStdDevs();
 
