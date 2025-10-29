@@ -232,5 +232,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Elev Past 1", pastEncoderValues.get(0));
     SmartDashboard.putNumber("Elev Past 2", pastEncoderValues.get(1));
     SmartDashboard.putNumber("Elev Past 3", pastEncoderValues.get(2));
+    SmartDashboard.putNumber("Elev Past 4", pastEncoderValues.get(3));
+    SmartDashboard.putNumber("Elev Past 5", pastEncoderValues.get(4));
   }
 }
