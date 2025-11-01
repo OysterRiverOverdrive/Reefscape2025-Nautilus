@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -17,10 +18,14 @@ public class EstimateConsumer {
   }
 
   public Pose2d getPose2d() {
-    if (pose != null) {
-      return pose;
-    } else {
-      return new Pose2d();
-    }
+    return pose;
+  }
+
+  public Matrix<N3, N1> getStdDevs() {
+    return estimationStdDevs;
+  }
+
+  public double getTimeStamp() {
+    return timestamp;
   }
 }
