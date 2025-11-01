@@ -209,7 +209,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         && (pastEncoderValues.get(0).equals(pastEncoderValues.get(2)))
         && (pastEncoderValues.get(0).equals(pastEncoderValues.get(3)))
         && (pastEncoderValues.get(0).equals(pastEncoderValues.get(4)))) {
-      overridePID();
+      //overridePID();
       // The encoder is disconnected
       encoderConnected = false;
     } else {
@@ -221,18 +221,5 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Elev Setpoint", elevatorPIDSetPoint);
     SmartDashboard.putBoolean("PID Overrided", !activePID); // Inverted for clarity
     SmartDashboard.putBoolean("Elev Connect", encoderConnected);
-    SmartDashboard.putBoolean(
-        "Elev Connect 2",
-        (pastEncoderValues.get(0).equals(pastEncoderValues.get(1)))
-            && (pastEncoderValues.get(0).equals(pastEncoderValues.get(2))));
-    SmartDashboard.putBoolean(
-        "Elev Connect 3",
-        Math.abs(pastEncoderValues.get(0) - pastEncoderValues.get(1)) < 0.0000001
-            && Math.abs(pastEncoderValues.get(0) - pastEncoderValues.get(2)) < 0.0000001);
-    SmartDashboard.putNumber("Elev Past 1", pastEncoderValues.get(0));
-    SmartDashboard.putNumber("Elev Past 2", pastEncoderValues.get(1));
-    SmartDashboard.putNumber("Elev Past 3", pastEncoderValues.get(2));
-    SmartDashboard.putNumber("Elev Past 4", pastEncoderValues.get(3));
-    SmartDashboard.putNumber("Elev Past 5", pastEncoderValues.get(4));
   }
 }

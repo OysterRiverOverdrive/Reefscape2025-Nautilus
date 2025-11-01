@@ -43,12 +43,12 @@ public class RobotContainer {
   Command auto;
 
   // Subsystems
-  private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
+  private final VisionSubsystem vision = new VisionSubsystem(new EstimateConsumer());
+  private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem(vision);
   private final ElevatorSubsystem elevator = new ElevatorSubsystem(drivetrain);
   private final CoralIntakeSubsystem coralIntake = new CoralIntakeSubsystem();
   private final PowerSubsystem battery = new PowerSubsystem();
   private final ClimberSubsystem climber = new ClimberSubsystem();
-  private final VisionSubsystem vision = new VisionSubsystem(new EstimateConsumer());
 
   // Commands
   private final TeleopCmd teleopCmd =

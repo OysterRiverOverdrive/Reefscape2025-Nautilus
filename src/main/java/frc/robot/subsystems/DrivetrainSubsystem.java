@@ -6,6 +6,9 @@ package frc.robot.subsystems;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
+
+import edu.wpi.first.math.MathSharedStore;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -75,6 +79,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
           });
 
+  SwerveDrivePoseEstimator m_visionOdometry =
+      new SwerveDrivePoseEstimator(
+          DriveConstants.kDriveKinematics,
+          Rotation2d.fromDegrees(getHeading()),
+          new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+          },
+          new Pose2d(10, 2, new Rotation2d()));
+
+  private int tick = 0;
+  private VisionSubsystem vision;
+
+  Field2d visionPose;
+
   private static final SendableChooser<String> m_chooser = new SendableChooser<>();
   private static final String max = "1";
   private static final String high = "2";
@@ -82,13 +103,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private static final String low = "4";
 
   /** Creates a new DriveSubsystem. */
-  public DrivetrainSubsystem() {
+  public DrivetrainSubsystem(VisionSubsystem vision) {
     zeroHeading();
     m_chooser.setDefaultOption("100%", max);
     m_chooser.addOption("75%", high);
     m_chooser.addOption("50%", medium);
     m_chooser.addOption("25%", low);
     SmartDashboard.putData("Drive Speed", m_chooser);
+
+    this.vision = vision;
+
+    visionPose = new Field2d();
+    SmartDashboard.putData("Vision Pose", visionPose);
   }
 
   /**
@@ -298,5 +324,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
         });
+    
+    m_visionOdometry.update(
+        Rotation2d.fromDegrees(getHeading()),
+        new SwerveModulePosition[] {
+          m_frontLeft.getPosition(),
+          m_frontRight.getPosition(),
+          m_rearLeft.getPosition(),
+          m_rearRight.getPosition()
+        });
+
+    tick++;
+
+    if(tick == 10) {
+      tick = 0;
+      m_visionOdometry.addVisionMeasurement(vision.estConsumer.getPose2d(), MathSharedStore.getTimestamp());
+    }
+    visionPose.setRobotPose(m_visionOdometry.getEstimatedPosition());
   }
 }
