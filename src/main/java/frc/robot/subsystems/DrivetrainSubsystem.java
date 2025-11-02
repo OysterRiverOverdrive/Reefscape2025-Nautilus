@@ -6,8 +6,6 @@ package frc.robot.subsystems;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
-
-import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -324,7 +322,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
         });
-    
+
     m_visionOdometry.update(
         Rotation2d.fromDegrees(getHeading()),
         new SwerveModulePosition[] {
@@ -336,9 +334,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     tick++;
 
-    if(tick == 10) {
+    if (tick == 10) {
       tick = 0;
-      m_visionOdometry.addVisionMeasurement(vision.estConsumer.getPose2d(), vision.estConsumer.getTimeStamp(), vision.estConsumer.getStdDevs());
+      m_visionOdometry.addVisionMeasurement(
+          vision.estConsumer.getPose2d(),
+          vision.estConsumer.getTimeStamp(),
+          vision.estConsumer.getStdDevs());
     }
     visionPose.setRobotPose(m_visionOdometry.getEstimatedPosition());
   }

@@ -231,5 +231,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Elev Setpoint", elevatorPIDSetPoint);
     SmartDashboard.putBoolean("PID Overrided", !activePID); // Inverted for clarity
     SmartDashboard.putBoolean("Elev Connect", encoderConnected);
+    SmartDashboard.putBoolean("Sensor Fault", m_elevator1SparkMax.getFaults().sensor);
   }
 }
