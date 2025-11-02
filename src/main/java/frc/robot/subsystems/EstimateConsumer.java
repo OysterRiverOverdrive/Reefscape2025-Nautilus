@@ -9,11 +9,13 @@ public class EstimateConsumer {
   Pose2d pose;
   double timestamp;
   Matrix<N3, N1> estimationStdDevs;
+  boolean initialized = false;
 
   public void accept(Pose2d pose, double timestamp, Matrix<N3, N1> estimationStdDevs) {
     this.pose = pose;
     this.timestamp = timestamp;
     this.estimationStdDevs = estimationStdDevs;
+    initialized = true;
   }
 
   public Pose2d getPose2d() {

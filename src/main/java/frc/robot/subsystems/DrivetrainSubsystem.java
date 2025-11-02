@@ -334,7 +334,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     tick++;
 
-    if (tick == 10) {
+    if (tick == 10 && vision.estConsumer.initialized) {
       tick = 0;
       m_visionOdometry.addVisionMeasurement(
           vision.estConsumer.getPose2d(),
