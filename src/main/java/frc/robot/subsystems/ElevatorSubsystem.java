@@ -114,6 +114,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     pastEncoderValues.add(-3000000.0);
     pastEncoderValues.add(-4000000.0);
     pastEncoderValues.add(-5000000.0);
+    pastEncoderValues.add(-6000000.0);
+    pastEncoderValues.add(-7000000.0);
+    pastEncoderValues.add(-8000000.0);
+    pastEncoderValues.add(-9000000.0);
+    pastEncoderValues.add(-10000000.0);
   }
 
   public double getEncoder() {
@@ -208,8 +213,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     if ((pastEncoderValues.get(0).equals(pastEncoderValues.get(1)))
         && (pastEncoderValues.get(0).equals(pastEncoderValues.get(2)))
         && (pastEncoderValues.get(0).equals(pastEncoderValues.get(3)))
-        && (pastEncoderValues.get(0).equals(pastEncoderValues.get(4)))) {
-      //overridePID();
+        && (pastEncoderValues.get(0).equals(pastEncoderValues.get(4)))
+        && (pastEncoderValues.get(0).equals(pastEncoderValues.get(5)))
+        && (pastEncoderValues.get(0).equals(pastEncoderValues.get(6)))
+        && (pastEncoderValues.get(0).equals(pastEncoderValues.get(7)))
+        && (pastEncoderValues.get(0).equals(pastEncoderValues.get(8)))
+        && (pastEncoderValues.get(0).equals(pastEncoderValues.get(9)))) {
+      overridePID();
       // The encoder is disconnected
       encoderConnected = false;
     } else {

@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -72,6 +73,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
     URCL.start();
 
     // Default Commands to be run all the time, only one per subsystem
