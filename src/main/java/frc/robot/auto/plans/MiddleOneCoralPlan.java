@@ -27,7 +27,7 @@ public class MiddleOneCoralPlan extends ParallelCommandGroup {
     // Auto Driving Commands
 
     Command centerDrive = // goes from the middle to the middle
-        autodrive.AutoDriveCmd(
+        autodrive.AutoRobotDriveCmd(
             drivetrain,
             List.of(new Translation2d(0.5, 0.01)),
             new Pose2d(1.53, .1, new Rotation2d(0)));

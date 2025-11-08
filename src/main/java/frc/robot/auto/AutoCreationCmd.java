@@ -64,7 +64,7 @@ public class AutoCreationCmd {
     SwerveControllerCommand swerveControllerCommand =
         new SwerveControllerCommand(
             trajectory,
-            drivetrain::getPose,
+            () -> new Pose2d(),
             DriveConstants.kDriveKinematics,
             xController,
             yController,
