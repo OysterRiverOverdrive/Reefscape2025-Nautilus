@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Vision;
+import frc.robot.commands.vision.AprilTagCmd;
 import frc.robot.Robot;
 import java.util.ArrayList;
 import java.util.List;
@@ -164,10 +165,10 @@ public class VisionSubsystem extends SubsystemBase {
           "Robot Rotation",
           visionEst.get().estimatedPose.getRotation().toRotation2d().getDegrees());
 
-      // Pose2d relPose = (new Pose2d()).plus(AprilTagCmd.tagPose.minus(estConsumer.getPose2d()));
-      // SmartDashboard.putNumber("Rel X", relPose.getX());
-      // SmartDashboard.putNumber("Rel Y", relPose.getY());
-      // SmartDashboard.putNumber("Rel Rot", relPose.getRotation().getDegrees());
+      Pose2d relPose = (new Pose2d()).plus(AprilTagCmd.tagPose.minus(estConsumer.getPose2d()));
+      SmartDashboard.putNumber("Rel X", relPose.getX());
+      SmartDashboard.putNumber("Rel Y", relPose.getY());
+      SmartDashboard.putNumber("Rel Rot", relPose.getRotation().getDegrees());
     }
     ;
   }

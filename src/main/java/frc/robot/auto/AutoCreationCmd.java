@@ -26,6 +26,8 @@ public class AutoCreationCmd {
 
   /**
    * Method to autonomously drive the robot (ALL MEASUREMENTS IN METERS)
+   * All coordinates should be robot oriented (the robot's facing direction is angle 0,
+   * The robot's coordinates are (0, 0))
    *
    * @param _drivetrain Swerve Drivetrain Subsystem Instance
    * @param waypoints A list of points the robot should travel through
@@ -37,9 +39,67 @@ public class AutoCreationCmd {
    *
    * @return A Command variable telling the robot to drive
    */
-  public Command AutoDriveCmd(
-      DrivetrainSubsystem _drivetrain, List<Translation2d> waypoints, Pose2d finalrest) {
-    drivetrain = _drivetrain;
+  public Command AutoRobotDriveCmd(
+      DrivetrainSubsystem drivetrain, List<Translation2d> waypoints, Pose2d finalrest) {
+    this.drivetrain = drivetrain;
+
+    TrajectoryConfig trajectoryConfig =
+        new TrajectoryConfig(
+                AutoConstants.kMaxSpeedMetersPerSecond,
+                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(DriveConstants.kDriveKinematics);
+    // Define PID controllers for tracking trajectory
+    PIDController xController = new PIDController(AutoConstants.kPXController, 0.1, 0.05);
+    PIDController yController = new PIDController(AutoConstants.kPYController, 0.1, 0.05);
+    ProfiledPIDController thetaController =
+        new ProfiledPIDController(
+            AutoConstants.kPThetaController, 0.1, 0.05, AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    // Generate trajectory
+    Trajectory trajectory =
+        TrajectoryGenerator.generateTrajectory(
+            new Pose2d(), waypoints, finalrest, trajectoryConfig);
+
+    // Construct command to follow trajectory
+    SwerveControllerCommand swerveControllerCommand =
+        new SwerveControllerCommand(
+            trajectory,
+            drivetrain::getPose,
+            DriveConstants.kDriveKinematics,
+            xController,
+            yController,
+            thetaController,
+            drivetrain::setModuleStates,
+            drivetrain);
+
+    // Add some init and wrap-up, and return everything
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> drivetrain.resetOdometry(trajectory.getInitialPose())),
+        swerveControllerCommand,
+        new InstantCommand(() -> drivetrain.stopModules()));
+  }
+
+  /**
+   * Method to autonomously drive the robot (ALL MEASUREMENTS IN METERS)
+   * All coordinates should be field oriented (the robot's facing direction is angle 0,
+   * The robot's coordinates are (0, 0))
+   * 
+   * DO NOT USE CURRENTLY! Currently, this method uses drivetrain.getPose(),
+   * which is inaccurate due to being relative to robot start position
+   *
+   * @param _drivetrain Swerve Drivetrain Subsystem Instance
+   * @param waypoints A list of points the robot should travel through
+   *     <pre>List.of(new Translation2d(0, 1), new Translation2d(1, 1), new Translation2d(1, 0))
+   *     </pre>
+   *
+   * @param finalrest Pose2d of what the robot's final resting position should be
+   *     <pre>new Pose2d(x-offset, y-offset, new Rotation2d(rotationRadians))</pre>
+   *
+   * @return A Command variable telling the robot to drive
+   */
+  public Command AutoFieldDriveCmd(
+      DrivetrainSubsystem drivetrain, List<Translation2d> waypoints, Pose2d finalrest) {
+    this.drivetrain = drivetrain;
 
     TrajectoryConfig trajectoryConfig =
         new TrajectoryConfig(
@@ -77,6 +137,17 @@ public class AutoCreationCmd {
         new InstantCommand(() -> drivetrain.stopModules()));
   }
 
+  /**
+   * I believe this is a version of autodrive, with the ability to use your own speed,
+   * but currently this won't work right due to the use of drivetrain.getPose(),
+   * which is inaccurate and neither field nor robot oriented
+   * 
+   * @param maxSpeed
+   * @param _drivetrain
+   * @param waypoints
+   * @param finalrest
+   * @return
+   */
   public Command AutoDriveSpeedVar(
       Double maxSpeed,
       DrivetrainSubsystem _drivetrain,
