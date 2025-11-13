@@ -68,11 +68,19 @@ public class RobotContainer {
       new MiddleOneCoralPlan(drivetrain, elevator, coralIntake);
   private final LeftOneCoralPlan leftOneCoralPlan =
       new LeftOneCoralPlan(drivetrain, elevator, coralIntake);
+  private static final String[] GIT_FLAG = {"clean", "dirty"};
 
   public RobotContainer() {
 
     DataLogManager.start();
     URCL.start();
+
+    // log build information
+    DataLogManager.log("Git branch: " + BuildConstants.GIT_BRANCH);
+    DataLogManager.log("Git date: " + BuildConstants.GIT_DATE);
+    DataLogManager.log("Git hash: " + BuildConstants.GIT_SHA);
+    DataLogManager.log("Git branch status: " + GIT_FLAG[BuildConstants.DIRTY]);
+    DataLogManager.log("Build date: " + BuildConstants.BUILD_DATE);
 
     // Default Commands to be run all the time, only one per subsystem
     drivetrain.setDefaultCommand(teleopCmd);
