@@ -6,7 +6,7 @@ package frc.robot.commands.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.auto.AutoCreationCmd;
@@ -38,11 +38,16 @@ public class AprilTagCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (vision.estConsumer.isInitialized()) {
     auto =
         autodrive.AutoDriveCmd(
-            drive, List.of(new Translation2d(.5, -0.01)), new Pose2d(1.0, 0.01, new Rotation2d()));
-    // List.of(tagPose.minus(vision.estConsumer.getPose2d()).div(2).getTranslation()),
-    //         (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d())));
+            drive,
+            List.of(tagPose.minus(vision.estConsumer.getPose2d()).div(2).getTranslation()),
+            (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d())));
+    }
+    else {
+      SmartDashboard.putBoolean("ahhh it no workeee", true);
+    }
     // Pose2d relPose = (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d()));
     // SmartDashboard.putNumber("Rel X", relPose.getX());
     // SmartDashboard.putNumber("Rel Y", relPose.getY());

@@ -10,12 +10,26 @@ public class EstimateConsumer {
   double timestamp;
   Matrix<N3, N1> estimationStdDevs;
   boolean initialized = false;
+  boolean stale = true;
 
   public void accept(Pose2d pose, double timestamp, Matrix<N3, N1> estimationStdDevs) {
     this.pose = pose;
     this.timestamp = timestamp;
     this.estimationStdDevs = estimationStdDevs;
     initialized = true;
+    stale = false;
+  }
+
+  public void setStale() {
+    stale = true;
+  }
+
+  public boolean isInitialized() {
+    return initialized;
+  }
+
+  public boolean isStale() {
+    return stale;
   }
 
   public Pose2d getPose2d() {

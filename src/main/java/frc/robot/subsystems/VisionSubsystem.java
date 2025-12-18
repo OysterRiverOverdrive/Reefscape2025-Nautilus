@@ -154,6 +154,9 @@ public class VisionSubsystem extends SubsystemBase {
 
               estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
             });
+        if (visionEst.isPresent() == false) {
+          estConsumer.setStale();
+        }
       }
     }
 
@@ -168,8 +171,8 @@ public class VisionSubsystem extends SubsystemBase {
       // SmartDashboard.putNumber("Rel X", relPose.getX());
       // SmartDashboard.putNumber("Rel Y", relPose.getY());
       // SmartDashboard.putNumber("Rel Rot", relPose.getRotation().getDegrees());
-    }
-    ;
+    };
+    SmartDashboard.putBoolean("Stale Vision", estConsumer.isStale());
   }
 
   private void updateEstimationStdDevs(
