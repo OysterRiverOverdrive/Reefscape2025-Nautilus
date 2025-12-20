@@ -39,15 +39,17 @@ public class AprilTagCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    auto =
-        autodrive.AutoRobotDriveCmd(
-            drive, List.of(tagPose.minus(vision.estConsumer.getPose2d()).div(2).getTranslation()),
-            (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d())));
-    // Pose2d relPose = (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d()));
-    // SmartDashboard.putNumber("Rel X", relPose.getX());
-    // SmartDashboard.putNumber("Rel Y", relPose.getY());
-    // SmartDashboard.putNumber("Rel Rot", relPose.getRotation().getDegrees());
-    CommandScheduler.getInstance().schedule(auto);
+    if (vision.estConsumer.isInitialized()) {
+      auto =
+          autodrive.AutoRobotDriveCmd(
+              drive, List.of(tagPose.minus(vision.estConsumer.getPose2d()).div(2).getTranslation()),
+              (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d())));
+      // Pose2d relPose = (new Pose2d()).plus(tagPose.minus(vision.estConsumer.getPose2d()));
+      // SmartDashboard.putNumber("Rel X", relPose.getX());
+      // SmartDashboard.putNumber("Rel Y", relPose.getY());
+      // SmartDashboard.putNumber("Rel Rot", relPose.getRotation().getDegrees());
+      CommandScheduler.getInstance().schedule(auto);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

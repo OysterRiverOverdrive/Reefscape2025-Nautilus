@@ -18,6 +18,10 @@ public class EstimateConsumer {
     initialized = true;
   }
 
+  public boolean isInitialized() {
+    return initialized;
+  }
+
   public Pose2d getPose2d() {
     return pose;
   }

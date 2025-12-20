@@ -46,17 +46,17 @@ public final class Constants {
   public static class Vision {
     // Offsets, not measured so a transform of zero
     // Positive x is forward, positive y is left, positive z is up
-    // As of 10/29/2025, back right is camera 1, and back left is camera 2,
-    // front left is camera 3, front right is camera 4 (Nautilus)
+    // Our official configuration has, front left is camera 1, and back left is camera 2,
+    // back right is camera 3, front right is camera 4
     public static final Transform3d kRobotToCam1 =
         new Transform3d(
-            Distance.ofRelativeUnits(-11, Units.Inches),
-            Distance.ofRelativeUnits(-11, Units.Inches),
+            Distance.ofRelativeUnits(11, Units.Inches),
+            Distance.ofRelativeUnits(11, Units.Inches),
             Distance.ofRelativeUnits(24, Units.Centimeters),
             new Rotation3d(
                 Angle.ofRelativeUnits(0, Units.Degrees),
                 Angle.ofRelativeUnits(30, Units.Degrees),
-                Angle.ofRelativeUnits(225, Units.Degrees)));
+                Angle.ofRelativeUnits(45, Units.Degrees)));
 
     public static final Transform3d kRobotToCam2 =
         new Transform3d(
@@ -70,13 +70,13 @@ public final class Constants {
 
     public static final Transform3d kRobotToCam3 =
         new Transform3d(
-            Distance.ofRelativeUnits(11, Units.Inches),
-            Distance.ofRelativeUnits(11, Units.Inches),
+            Distance.ofRelativeUnits(-11, Units.Inches),
+            Distance.ofRelativeUnits(-11, Units.Inches),
             Distance.ofRelativeUnits(24, Units.Centimeters),
             new Rotation3d(
                 Angle.ofRelativeUnits(0, Units.Degrees),
                 Angle.ofRelativeUnits(30, Units.Degrees),
-                Angle.ofRelativeUnits(45, Units.Degrees)));
+                Angle.ofRelativeUnits(225, Units.Degrees)));
 
     public static final Transform3d kRobotToCam4 =
         new Transform3d(
