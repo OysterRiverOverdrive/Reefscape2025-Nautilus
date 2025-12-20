@@ -158,12 +158,12 @@ public class VisionSubsystem extends SubsystemBase {
       }
     }
 
-    if (!(visionEst.isEmpty())) {
-      SmartDashboard.putNumber("Robot X", visionEst.get().estimatedPose.getX());
-      SmartDashboard.putNumber("Robot Y", visionEst.get().estimatedPose.getY());
+    if (estConsumer.isInitialized()) {
+      SmartDashboard.putNumber("Robot X", estConsumer.getPose2d().getX());
+      SmartDashboard.putNumber("Robot Y", estConsumer.getPose2d().getY());
       SmartDashboard.putNumber(
           "Robot Rotation",
-          visionEst.get().estimatedPose.getRotation().toRotation2d().getDegrees());
+          estConsumer.getPose2d().getRotation().getDegrees());
 
       Pose2d relPose = (new Pose2d()).plus(AprilTagCmd.tagPose.minus(estConsumer.getPose2d()));
       SmartDashboard.putNumber("Rel X", relPose.getX());
