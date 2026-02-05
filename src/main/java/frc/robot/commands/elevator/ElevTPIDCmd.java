@@ -1,59 +1,59 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// // Copyright (c) FIRST and other WPILib contributors.
+// // Open Source Software; you can modify and/or share it under the terms of
+// // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.elevator;
+// package frc.robot.commands.elevator;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ElevatorSubsystem;
+// import edu.wpi.first.math.controller.ProfiledPIDController;
+// import edu.wpi.first.wpilibj2.command.Command;
+// import frc.robot.subsystems.ElevatorSubsystem;
 
-public class ElevTPIDCmd extends Command {
-  private ElevatorSubsystem elevator;
-  private double safetysetpoint; // Calculated Max Height
-  private double location;
-  private ProfiledPIDController elevatorPID;
+// public class ElevTPIDCmd extends Command {
+//   private ElevatorSubsystem elevator;
+//   private double safetysetpoint; // Calculated Max Height
+//   private double location;
+//   private ProfiledPIDController elevatorPID;
 
-  public ElevTPIDCmd(ElevatorSubsystem elevator) {
-    this.elevator = elevator;
-    this.elevatorPID = elevator.elevatorPID;
-    addRequirements(elevator);
-  }
+//   public ElevTPIDCmd(ElevatorSubsystem elevator) {
+//     this.elevator = elevator;
+//     this.elevatorPID = elevator.elevatorPID;
+//     addRequirements(elevator);
+//   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+//   // Called when the command is initially scheduled.
+//   @Override
+//   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    safetysetpoint = elevator.safetyheight();
-    if (safetysetpoint < elevator.getSetPoint()) {
-      location = safetysetpoint;
-      elevator.safetyActive = true;
-    } else {
-      location = elevator.getSetPoint();
-      elevator.safetyActive = false;
-    }
-    double elevatorSpeed;
-    if (elevator.activePID) {
-      elevatorPID.setGoal(location);
-      elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
-      elevator.setElevatorSpeed(elevatorSpeed);
-    } else {
-      elevatorPID.setGoal(elevator.getHeight());
-      elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
-      elevator.setElevatorStopped();
-    }
-  }
+//   // Called every time the scheduler runs while the command is scheduled.
+//   @Override
+//   public void execute() {
+//     safetysetpoint = elevator.safetyheight();
+//     if (safetysetpoint < elevator.getSetPoint()) {
+//       location = safetysetpoint;
+//       elevator.safetyActive = true;
+//     } else {
+//       location = elevator.getSetPoint();
+//       elevator.safetyActive = false;
+//     }
+//     double elevatorSpeed;
+//     if (elevator.activePID) {
+//       elevatorPID.setGoal(location);
+//       elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
+//       elevator.setElevatorSpeed(elevatorSpeed);
+//     } else {
+//       elevatorPID.setGoal(elevator.getHeight());
+//       elevatorSpeed = elevatorPID.calculate(elevator.getHeight());
+//       elevator.setElevatorStopped();
+//     }
+//   }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
+//   // Called once the command ends or is interrupted.
+//   @Override
+//   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
-}
+//   // Returns true when the command should end.
+//   @Override
+//   public boolean isFinished() {
+//     return false;
+//   }
+// }

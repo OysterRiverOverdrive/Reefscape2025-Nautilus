@@ -62,7 +62,7 @@ public class VisionSubsystem extends SubsystemBase {
     cameras.add(camera1);
     cameras.add(camera2);
 
-    fieldmap = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    fieldmap = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
     photonEstimatorCam1 =
         new PhotonPoseEstimator(

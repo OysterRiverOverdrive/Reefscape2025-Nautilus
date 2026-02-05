@@ -20,7 +20,7 @@ import frc.robot.commands.vision.*;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
+//import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EstimateConsumer;
 import frc.robot.subsystems.PowerSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -44,7 +44,7 @@ public class RobotContainer {
 
   // Subsystems
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
-  private final ElevatorSubsystem elevator = new ElevatorSubsystem(drivetrain);
+  //private final ElevatorSubsystem elevator = new ElevatorSubsystem(drivetrain);
   private final CoralIntakeSubsystem coralIntake = new CoralIntakeSubsystem();
   private final PowerSubsystem battery = new PowerSubsystem();
   private final ClimberSubsystem climber = new ClimberSubsystem();
@@ -55,19 +55,19 @@ public class RobotContainer {
       new TeleopCmd(
           drivetrain,
           () -> cutil.Boolsupplier(Controllers.xbox_lb, DriveConstants.joysticks.DRIVER));
-  private final ElevTPIDCmd elevTPIDCmd = new ElevTPIDCmd(elevator);
+  //private final ElevTPIDCmd elevTPIDCmd = new ElevTPIDCmd(elevator);
 
   // AUTOS
-  private final ThreeCoralRight rightThreeCoralPlan =
-      new ThreeCoralRight(drivetrain, elevator, coralIntake);
-  private final RightOneCoralPlan rightOneCoralPlan =
-      new RightOneCoralPlan(drivetrain, elevator, coralIntake);
-  private final ThreeCoralLeft leftThreeCoralPlan =
-      new ThreeCoralLeft(drivetrain, elevator, coralIntake);
-  private final MiddleOneCoralPlan middleOneCoralPlan =
-      new MiddleOneCoralPlan(drivetrain, elevator, coralIntake);
-  private final LeftOneCoralPlan leftOneCoralPlan =
-      new LeftOneCoralPlan(drivetrain, elevator, coralIntake);
+  // private final ThreeCoralRight rightThreeCoralPlan =
+  //     new ThreeCoralRight(drivetrain, elevator, coralIntake);
+  // private final RightOneCoralPlan rightOneCoralPlan =
+  //     new RightOneCoralPlan(drivetrain, elevator, coralIntake);
+  // private final ThreeCoralLeft leftThreeCoralPlan =
+  //     new ThreeCoralLeft(drivetrain, elevator, coralIntake);
+  // private final MiddleOneCoralPlan middleOneCoralPlan =
+  //     new MiddleOneCoralPlan(drivetrain, elevator, coralIntake);
+  // private final LeftOneCoralPlan leftOneCoralPlan =
+  //     new LeftOneCoralPlan(drivetrain, elevator, coralIntake);
 
   public RobotContainer() {
 
@@ -76,7 +76,7 @@ public class RobotContainer {
 
     // Default Commands to be run all the time, only one per subsystem
     drivetrain.setDefaultCommand(teleopCmd);
-    elevator.setDefaultCommand(elevTPIDCmd);
+    //elevator.setDefaultCommand(elevTPIDCmd);
     // coralIntake.setDefaultCommand(new CoralIntakeStopCommand(coralIntake));
 
     // Add Auto options to dropdown and push to dashboard
@@ -95,9 +95,9 @@ public class RobotContainer {
   }
 
   // Continuation of method to prevent double instanciation
-  public void toBase() {
-    elevator.toBase();
-  }
+  // public void toBase() {
+  //   elevator.toBase();
+  // }
 
   private void configureBindings() {
     // Configure buttons
@@ -113,20 +113,20 @@ public class RobotContainer {
     //     .onTrue(new AprilTagCmd(vision, drivetrain));
 
     // Elevator Bindings
-    cutil.POVsupplier(0, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> elevator.toL1()));
-    cutil.POVsupplier(90, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> elevator.toL2()));
-    cutil.POVsupplier(180, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> elevator.toL3()));
-    cutil.POVsupplier(270, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> elevator.toL4()));
-    cutil
-        .supplier(Controllers.xbox_share, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> elevator.toBase()));
-    cutil
-        .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> elevator.toIntake()));
+    // cutil.POVsupplier(0, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new InstantCommand(() -> elevator.toL1()));
+    // cutil.POVsupplier(90, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new InstantCommand(() -> elevator.toL2()));
+    // cutil.POVsupplier(180, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new InstantCommand(() -> elevator.toL3()));
+    // cutil.POVsupplier(270, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new InstantCommand(() -> elevator.toL4()));
+    // cutil
+    //     .supplier(Controllers.xbox_share, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new InstantCommand(() -> elevator.toBase()));
+    // cutil
+    //     .triggerSupplier(Controllers.xbox_lt, 0.2, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new InstantCommand(() -> elevator.toIntake()));
 
     // Coral Intake Bindings
     cutil
@@ -152,9 +152,9 @@ public class RobotContainer {
         .onTrue(new AutoClimberOutCmd(climber));
 
     // Elevator PID Toggle
-    cutil
-        .supplier(Controllers.xbox_x, DriveConstants.joysticks.OPERATOR)
-        .onTrue(new InstantCommand(() -> elevator.toggleElevPID()));
+    // cutil
+    //     .supplier(Controllers.xbox_x, DriveConstants.joysticks.OPERATOR)
+    //     .onTrue(new InstantCommand(() -> elevator.toggleElevPID()));
   }
 
   public Command getAutonomousCommand() {
@@ -164,19 +164,19 @@ public class RobotContainer {
     switch (m_chooser.getSelected()) {
       default:
       case rightThree:
-        auto = rightThreeCoralPlan;
+        //auto = rightThreeCoralPlan;
         break;
       case leftThree:
-        auto = leftThreeCoralPlan;
+        //auto = leftThreeCoralPlan;
         break;
       case rightOne:
-        auto = rightOneCoralPlan;
+        //auto = rightOneCoralPlan;
         break;
       case leftOne:
-        auto = leftOneCoralPlan;
+        //auto = leftOneCoralPlan;
         break;
       case middleOne:
-        auto = middleOneCoralPlan;
+        //auto = middleOneCoralPlan;
         break;
       case auto6:
         break;

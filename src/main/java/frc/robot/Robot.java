@@ -79,7 +79,7 @@ public class Robot extends TimedRobot {
     }
 
     // Sets elevator to bottom at the beginning of teleop
-    m_robotContainer.toBase();
+    //m_robotContainer.toBase();
   }
 
   /** This function is called periodically during operator control. */
